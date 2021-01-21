@@ -1,0 +1,131 @@
+object FormTerminal: TFormTerminal
+  Left = 105
+  Height = 392
+  Top = 262
+  Width = 543
+  Caption = 'FormTerminal'
+  ClientHeight = 392
+  ClientWidth = 543
+  OnCloseQuery = FormCloseQuery
+  LCLVersion = '2.1.0.0'
+  object PanelButton: TPanel
+    Left = 453
+    Height = 392
+    Top = 0
+    Width = 90
+    Align = alRight
+    ClientHeight = 392
+    ClientWidth = 90
+    TabOrder = 0
+    object ToggleBoxConnect: TToggleBox
+      Left = 8
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'Connect'
+      OnChange = ToggleBoxConnectChange
+      TabOrder = 0
+    end
+    object ButtonPreferences: TButton
+      Left = 8
+      Height = 25
+      Top = 40
+      Width = 75
+      Action = ActionPreferences
+      OnClick = ButtonPreferencesClick
+      TabOrder = 1
+    end
+    object ButtonFlash: TButton
+      Left = 8
+      Height = 25
+      Top = 72
+      Width = 75
+      Action = ActionFlash
+      TabOrder = 2
+    end
+  end
+  object PanelBody: TPanel
+    Left = 0
+    Height = 392
+    Top = 0
+    Width = 453
+    Align = alClient
+    ClientHeight = 392
+    ClientWidth = 453
+    TabOrder = 1
+    object MemoTTY: TMemo
+      AnchorSideRight.Side = asrBottom
+      Left = 8
+      Height = 352
+      Top = 8
+      Width = 437
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Color = clInfoBk
+      Font.Color = clInfoText
+      Font.Height = -16
+      Font.Name = 'Ubuntu Mono'
+      OnKeyPress = MemoTTYKeyPress
+      OnKeyUp = MemoTTYKeyUp
+      OnMouseDown = MemoTTYMouseDown
+      OnMouseUp = MemoTTYMouseUp
+      ParentFont = False
+      ReadOnly = True
+      ScrollBars = ssBoth
+      TabOrder = 0
+      WordWrap = False
+    end
+    object EditLastKeys: TEdit
+      AnchorSideRight.Side = asrBottom
+      Left = 8
+      Height = 26
+      Top = 361
+      Width = 437
+      Anchors = [akLeft, akRight, akBottom]
+      Color = clInfoBk
+      Font.Color = clInfoText
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 1
+    end
+  end
+  object Serial: TLazSerial
+    Active = False
+    BaudRate = br__9600
+    DataBits = db8bits
+    Parity = pNone
+    FlowControl = fcNone
+    StopBits = sbOne
+    Device = '/dev/ttyACM0'
+    RcvLineCRLF = False
+    OnRxData = SerialRxData
+    OnStatus = SerialStatus
+    Left = 16
+    Top = 8
+  end
+  object ProcessTimer: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = ProcessTimerTimer
+    Left = 93
+    Top = 14
+  end
+  object ActionList: TActionList
+    Left = 200
+    Top = 16
+    object ActionConnect: TAction
+      Caption = 'Connect'
+      OnExecute = ActionConnectExecute
+      OnUpdate = ActionConnectUpdate
+    end
+    object ActionPreferences: TAction
+      Caption = 'Preferences'
+      OnExecute = ActionPreferencesExecute
+      OnUpdate = ActionPreferencesUpdate
+    end
+    object ActionFlash: TAction
+      Caption = 'Flash'
+      OnExecute = ActionFlashExecute
+      OnUpdate = ActionFlashUpdate
+    end
+  end
+end

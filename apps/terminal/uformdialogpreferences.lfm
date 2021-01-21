@@ -1,0 +1,183 @@
+object FormDialogPreferences: TFormDialogPreferences
+  Left = 363
+  Height = 184
+  Top = 246
+  Width = 373
+  BorderStyle = bsDialog
+  Caption = 'Preferences'
+  ClientHeight = 184
+  ClientWidth = 373
+  Position = poMainFormCenter
+  LCLVersion = '2.1.0.0'
+  Scaled = False
+  object PanelBody: TPanel
+    Left = 0
+    Height = 184
+    Top = 0
+    Width = 373
+    Align = alClient
+    ClientHeight = 184
+    ClientWidth = 373
+    TabOrder = 0
+    object ButtonPanel: TButtonPanel
+      Left = 7
+      Height = 35
+      Top = 142
+      Width = 359
+      OKButton.Name = 'OKButton'
+      OKButton.DefaultCaption = True
+      HelpButton.Name = 'HelpButton'
+      HelpButton.DefaultCaption = True
+      CloseButton.Name = 'CloseButton'
+      CloseButton.DefaultCaption = True
+      CancelButton.Name = 'CancelButton'
+      CancelButton.DefaultCaption = True
+      TabOrder = 0
+      ShowButtons = [pbOK, pbCancel]
+    end
+    object ComboBoxTTY: TComboBox
+      Left = 56
+      Height = 29
+      Top = 8
+      Width = 296
+      ItemHeight = 0
+      Style = csDropDownList
+      TabOrder = 1
+    end
+    object LabelTTY: TLabel
+      AnchorSideTop.Control = ComboBoxTTY
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = ComboBoxTTY
+      Left = 35
+      Height = 17
+      Top = 14
+      Width = 21
+      Anchors = [akTop, akRight]
+      Caption = 'TTY'
+      ParentColor = False
+    end
+    object EditConfigPath: TEdit
+      AnchorSideLeft.Control = EditAvrdude
+      AnchorSideTop.Control = EditAvrdude
+      AnchorSideTop.Side = asrBottom
+      Left = 56
+      Height = 26
+      Top = 73
+      Width = 264
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 5
+      ParentFont = False
+      TabOrder = 2
+    end
+    object ButtonConfigPath: TButton
+      AnchorSideTop.Control = EditConfigPath
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = ComboBoxTTY
+      AnchorSideRight.Side = asrBottom
+      Left = 320
+      Height = 25
+      Top = 74
+      Width = 32
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 5
+      Caption = '...'
+      OnClick = ButtonConfigPathClick
+      TabOrder = 3
+    end
+    object LabelConfigPath: TLabel
+      AnchorSideTop.Control = EditConfigPath
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = EditConfigPath
+      Left = 20
+      Height = 17
+      Top = 78
+      Width = 36
+      Anchors = [akTop, akRight]
+      Caption = 'Config'
+      ParentColor = False
+    end
+    object LabelBinPath: TLabel
+      AnchorSideTop.Control = EditBinPath
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = EditBinPath
+      Left = 38
+      Height = 17
+      Top = 109
+      Width = 18
+      Anchors = [akTop, akRight]
+      Caption = 'Bin'
+      ParentColor = False
+    end
+    object EditBinPath: TEdit
+      AnchorSideLeft.Control = ComboBoxTTY
+      AnchorSideTop.Control = EditConfigPath
+      AnchorSideTop.Side = asrBottom
+      Left = 56
+      Height = 26
+      Top = 104
+      Width = 264
+      BorderSpacing.Top = 5
+      ParentFont = False
+      TabOrder = 4
+    end
+    object ButtonBinPath: TButton
+      AnchorSideLeft.Control = EditBinPath
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = EditBinPath
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Side = asrBottom
+      Left = 320
+      Height = 25
+      Top = 105
+      Width = 32
+      BorderSpacing.Top = 5
+      Caption = '...'
+      OnClick = ButtonBinPathClick
+      TabOrder = 5
+    end
+    object LabelAvrdude: TLabel
+      AnchorSideTop.Control = EditAvrdude
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = EditAvrdude
+      Left = 10
+      Height = 17
+      Top = 47
+      Width = 46
+      Anchors = [akTop, akRight]
+      Caption = 'avrdude'
+      ParentColor = False
+    end
+    object EditAvrdude: TEdit
+      AnchorSideLeft.Control = ComboBoxTTY
+      AnchorSideTop.Control = ComboBoxTTY
+      AnchorSideTop.Side = asrBottom
+      Left = 56
+      Height = 26
+      Top = 42
+      Width = 264
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 5
+      ParentFont = False
+      TabOrder = 6
+    end
+    object ButtonAvrdude: TButton
+      AnchorSideTop.Control = ComboBoxTTY
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = ComboBoxTTY
+      AnchorSideRight.Side = asrBottom
+      Left = 320
+      Height = 25
+      Top = 42
+      Width = 32
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 5
+      Caption = '...'
+      OnClick = ButtonAvrdudeClick
+      TabOrder = 7
+    end
+  end
+  object OpenDialog: TOpenDialog
+    Left = 24
+    Top = 16
+  end
+end
