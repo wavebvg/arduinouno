@@ -18,6 +18,7 @@ type
   TAVRPort = (avrpUndefined, avrpA, avrpB, avrpC, avrpD, avrpE, avrpF, avrpG, avrpH,
     avrpNone, avrpJ, avrpK, avrpL);
   TAVRTimer = (avrtNo, avrt0A, avrt0B, avrt1A, avrt1B, avrt2A, avrt2B);
+  TAVRPinMode = (avrmOutput, avrmInput);
 
 { begin pins_arduino.h }
 const
@@ -77,15 +78,15 @@ const
     avrtNo, (* 0 - port D *)
     avrtNo,
     avrtNo,
-    avrt2B,
+    avrt2B, (* 3 *)
     avrtNo,
-    avrt0B,
-    avrt0A,
+    avrt0B, (* 5 *)
+    avrt0A, (* 6 *)
     avrtNo,
     avrtNo, (* 8 - port B *)
-    avrt1A,
-    avrt1B,
-    avrt2A,
+    avrt1A, (* 9 *)
+    avrt1B, (* 10 *)
+    avrt2A, (* 11 *)
     avrtNo,
     avrtNo,
     avrtNo, (* 14 - port C *)
@@ -122,29 +123,29 @@ const
 
   { digital_pin_to_bit_mask_PGM }
   DigitalPinToBitMaskPGM: array[0..19] of Byte = (
-    0 shl 0, (* 0 - port D *)
-    0 shl 1,
-    0 shl 2,
-    0 shl 3,
-    0 shl 4,
-    0 shl 5,
-    0 shl 6,
-    0 shl 7,
-    0 shl 0, (* 8 - port B *)
-    0 shl 1,
-    0 shl 2,
-    0 shl 3,
-    0 shl 4,
-    0 shl 5,
-    0 shl 0, (* 14 - port C *)
-    0 shl 1,
-    0 shl 2,
-    0 shl 3,
-    0 shl 4,
-    0 shl 5
+    1 shl 0, (* 0 - port D *)
+    1 shl 1,
+    1 shl 2,
+    1 shl 3,
+    1 shl 4,
+    1 shl 5,
+    1 shl 6,
+    1 shl 7,
+    1 shl 0, (* 8 - port B *)
+    1 shl 1,
+    1 shl 2,
+    1 shl 3,
+    1 shl 4,
+    1 shl 5,
+    1 shl 0, (* 14 - port C *)
+    1 shl 1,
+    1 shl 2,
+    1 shl 3,
+    1 shl 4,
+    1 shl 5
     );
 
-  TimerCounterControlRegister_PGM: array[TAVRTimer] of PByte = (
+  TimerCounterControlRegister: array[TAVRTimer] of PByte = (
     {avrtNo}nil,
     {avrt0A}@TCCR0A,
     {avrt0B}@TCCR0A,
@@ -154,25 +155,36 @@ const
     {avrt2B}@TCCR2A
     );
 
-  TimerOutputCompareRegister_PGM: array[TAVRTimer] of PByte = (
+  TimerClockControlRegister: array[TAVRTimer] of PByte = (
+    {avrtNo}nil,
+    {avrt0A}@TCCR0B,
+    {avrt0B}@TCCR0B,
+    {avrt1A}@TCCR1B,
+    {avrt1B}@TCCR1B,
+    {avrt2A}@TCCR2B,
+    {avrt2B}@TCCR2B
+    );
+
+  TimerOutputCompareRegister: array[TAVRTimer] of PByte = (
     {avrtNo}nil,
     {avrt0A}@OCR0A,
-    {avrt0B}@OCR0A,
+    {avrt0B}@OCR0B,
     {avrt1A}@OCR1A,
     {avrt1B}@OCR1B,
     {avrt2A}@OCR2A,
     {avrt2B}@OCR2B
     );
 
-  TimerRegisterOutputMode_PGM: array[TAVRTimer] of Byte = (
-    {avrtNo}0,
-    {avrt0A}COM0A,
-    {avrt0B}COM0B,
-    {avrt1A}COM1A,
-    {avrt1B}COM1B,
-    {avrt2A}COM2A,
-    {avrt2B}COM2B
-    ); 
+  TimerRegisterOutputMode: array[TAVRTimer] of Byte = (
+    {avrtNo} 0,
+    {avrt0A} COM0A,
+    {avrt0B} COM0B,
+    {avrt1A} COM1A,
+    {avrt1B} COM1B,
+    {avrt2A} COM2A,
+    {avrt2B} COM2B
+    );
+
 { end pins_arduino.h }
 
   DigitalPinToPortMask: array[0..19] of Byte = (
@@ -197,27 +209,44 @@ const
     4,
     5
     );
+  //
+  //TimerOutputCompareRegister_PGM: array[TAVRTimer] of PByte = (
+  //  {avrtNo}nil,
+  //  {avrt0A}@OCR0A,
+  //  {avrt0B}@OCR0A,
+  //  {avrt1A}@OCR1A,
+  //  {avrt1B}@OCR1B,
+  //  {avrt2A}@OCR2A,
+  //  {avrt2B}@OCR2B
+  //  );
+  //
 
-        
+             
+procedure sbi(const AAddr: PByte; const ABit: Byte); inline;
+procedure cbi(const AAddr: PByte; const ABit: Byte); inline;
 procedure UARTInit;
 procedure UARTWrite(s: String); overload;
 procedure UARTWriteLn(s: String);
 procedure UARTWrite(c: Char);overload;
 function UARTReadChar: Char;
 //
+procedure ArduinoInit;
 procedure ADCInit;
-procedure PinMode(const APin: Byte; const AHasInput: Boolean);
+procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
 function DigitalRead(const APin: Byte): Boolean;
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
 function AnalogRead(const APin: Byte): Word;
-procedure AnalogWrite(const APin: Byte; const AValue: Byte);
+procedure AnalogWrite(const APin: Byte; const AValue: Integer);
 procedure Sleep10ms(Time: Byte);
 procedure Wait(Time: Byte);
-procedure SleepMillisecs(Time: LongInt);
-function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Byte): Byte; 
+procedure SleepMicroSecs(Time: LongInt);
+function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(AValue: longint): string;
 
-implementation   
+implementation
+
+uses
+  UInterrupts;
 
 function IntToStr(AValue: longint): string;
 var
@@ -249,28 +278,12 @@ begin
   Result[l + VLessZero + 1] := #0;
 end;
 
-procedure PinMode(const APin: Byte; const AHasInput: Boolean);
-var
-  VPin: Byte;
-begin
-  VPin := APin mod 8;
-  case APin of
-    0, 1, 2, 3, 4, 5, 6, 7:
-      if AHasInput then
-        DDRD := DDRD or (Byte(1) shl VPin)
-      else
-        DDRD := DDRD and not (1 shl VPin);
-    8, 9, 10, 11, 12, 13:
-      if AHasInput then
-        DDRB := DDRB or (Byte(1) shl VPin)
-      else
-        DDRB := DDRB and not (1 shl VPin);
-    14, 15, 16, 17, 18, 19:
-      if AHasInput then
-        DDRC := DDRC or (Byte(1) shl VPin)
-      else
-        DDRC := DDRC and not (1 shl VPin);
-  end;
+procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
+begin          
+  if AMode = avrmOutput then
+    sbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin])
+  else
+    cbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin]);
 end;
 
 function DigitalRead(const APin: Byte): Boolean;
@@ -305,55 +318,164 @@ begin
   //UARTWriteLn('DigitalWrite PORT ' + IntToStr(byte(PortToOutputPGM[DigitalPinToPortPGM[APin]])) +
   //  ' PIN ' + IntToStr(DigitalPinToBitMaskPGM[APin]));
   if AValue then
-    sbi(PortToOutputPGM[DigitalPinToPortPGM[APin]], DigitalPinToBitMaskPGM[APin])
+    sbi(PortToOutputPGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin])
   else
-    cbi(PortToOutputPGM[DigitalPinToPortPGM[APin]], DigitalPinToBitMaskPGM[APin]);
+    cbi(PortToOutputPGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin]);
 end;
 
 function pgm_read_byte(const AFlash: Word): Byte;
 begin
   Result := AFlash and $00FF;
+end;   
+
+procedure ArduinoInit1;
+begin
+  InterruptsEnable;
+  sbi(@TCCR0A, WGM0);
+  sbi(@TCCR2B, CS2);
+  sbi(@TCCR2A, WGM2);
+end;
+
+procedure ArduinoInit2;
+begin               
+
+  InterruptsDisable;  //stop interrupts
+
+//set timer0 interrupt at 2kHz
+  TCCR0A := 0;// set entire TCCR0A register to 0
+  TCCR0B := 0;// same for TCCR0B
+  TCNT0  := 0;//initialize counter value to 0
+  // set compare match register for 2khz increments
+  OCR0A := 124;// = (16*10^6) / (2000*64) - 1 (must be <256)
+  // turn on CTC mode
+  TCCR0A := TCCR0A or (1 shl 1);
+  // Set CS01 and CS00 bits for 64 prescaler
+  TCCR0B :=  TCCR0B or (1 shl 1) or (1 shl 0);
+  // enable timer compare interrupt
+  TIMSK0 := TIMSK0 or (1 shl OCIE0A);
+
+//set timer1 interrupt at 1Hz
+  TCCR1A := 0;// set entire TCCR1A register to 0
+  TCCR1B := 0;// same for TCCR1B
+  TCNT1  := 0;//initialize counter value to 0
+  // set compare match register for 1hz increments
+  OCR1A := 15624;// = (16*10^6) / (1*1024) - 1 (must be <65536)
+  // turn on CTC mode
+  TCCR1B := TCCR1B or (1 shl 3);
+  // Set CS10 and CS12 bits for 1024 prescaler
+  TCCR1B := TCCR1B or (1 shl 2) or (1 shl 0);
+  // enable timer compare interrupt
+  TIMSK1 := TIMSK1 or (1 shl OCIE1A);
+
+//set timer2 interrupt at 8kHz
+  TCCR2A := 0;// set entire TCCR2A register to 0
+  TCCR2B := 0;// same for TCCR2B
+  TCNT2  := 0;//initialize counter value to 0
+  // set compare match register for 8khz increments
+  OCR2A := 249;// = (16*10^6) / (8000*8) - 1 (must be <256)
+  // turn on CTC mode
+  TCCR2A := TCCR2A or (1 shl 1);
+  // Set CS21 bit for 8 prescaler
+  TCCR2B := TCCR2B or (1 shl 1);
+  // enable timer compare interrupt
+  TIMSK2 := TIMSK2 or (1 shl OCIE2A);
+
+
+  InterruptsEnable;  //allow interrupts
+end;
+
+procedure ArduinoInit;
+begin
+  asm
+    sei
+    in	r24, 0x24	// 36
+    ori	r24, 0x02	// 2
+    out	0x24, r24	// 36
+    in	r24, 0x24	// 36
+    ori	r24, 0x01	// 1
+    out	0x24, r24	// 36
+    in	r24, 0x25	// 37
+    ori	r24, 0x02	// 2
+    out	0x25, r24	// 37
+    in	r24, 0x25	// 37
+    ori	r24, 0x01	// 1
+    out	0x25, r24	// 37
+    lds	r24, 0x006E	// 0x80006e <__DATA_REGION_ORIGIN__+0xe>
+    ori	r24, 0x01	// 1
+    sts	0x006E, r24	// 0x80006e <__DATA_REGION_ORIGIN__+0xe>
+    sts	0x0081, r1	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+    lds	r24, 0x0081	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+    ori	r24, 0x02	// 2
+    sts	0x0081, r24	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+    lds	r24, 0x0081	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+    ori	r24, 0x01	// 1
+    sts	0x0081, r24	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+    lds	r24, 0x0080	// 0x800080 <__DATA_REGION_ORIGIN__+0x20>
+    ori	r24, 0x01	// 1
+    sts	0x0080, r24	// 0x800080 <__DATA_REGION_ORIGIN__+0x20>
+    lds	r24, 0x00B1	// 0x8000b1 <__DATA_REGION_ORIGIN__+0x51>
+    ori	r24, 0x04	// 4
+    sts	0x00B1, r24	// 0x8000b1 <__DATA_REGION_ORIGIN__+0x51>
+    lds	r24, 0x00B0	// 0x8000b0 <__DATA_REGION_ORIGIN__+0x50>
+    ori	r24, 0x01	// 1
+    sts	0x00B0, r24	// 0x8000b0 <__DATA_REGION_ORIGIN__+0x50>
+    lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+    ori	r24, 0x04	// 4
+    sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+    lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+    ori	r24, 0x02	// 2
+    sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+    lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+    ori	r24, 0x01	// 1
+    sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+    lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+    ori	r24, 0x80	// 128
+    sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+    sts	0x00C1, r1	// 0x8000c1 <__DATA_REGION_ORIGIN__+0x61>
+    ldi	r30, 0xAF	// 175
+    ldi	r31, 0x00	// 0
+    lpm	r18, Z
+    ldi	r30, 0x9B	// 155
+    ldi	r31, 0x00	// 0
+    lpm	r24, Z
+    and	r24, r24
+    breq	38     	// 0x312 <main+0xbc>
+    ldi	r25, 0x00	// 0
+    add	r24, r24
+    adc	r25, r25
+    movw	r30, r24
+    subi	r30, 0x7A	// 122
+    sbci	r31, 0xFF	// 255
+    lpm	r26, Z+
+    lpm	r27, Z
+    movw	r30, r24
+    subi	r30, 0x84	// 132
+    sbci	r31, 0xFF	// 255
+    lpm	r24, Z+
+    lpm	r25, Z
+    in	r24, 0x3f	// 63
+    cli
+    ld	r30, X
+    or	r30, r18
+    st	X, r30
+    out	0x3f, r24	// 63
+    ldi	r24, 0x0B	// 11
+  end;
 end;
 
 procedure ADCInit;
+const
+  Port = 0;
 begin
-  ADMUX := 1 shl REFS;            // Use AVcc for reference
-  ADCSRA := (1 shl ADEN) or %111; // Switch on converter, divider 128
+  ADMUX := (1 shl REFS) or (Port and $0F);
+  ADCSRA := %111 or (1 shl ADEN) or (1 shl ADSC) or (1 shl ADIE);
 end;
-  //    TimerCounterControlRegister_PGM: array[TAVRTimer] of PByte = (
-  //  {avrtNo}nil,
-  //  {avrt0A}@TCCR0A,
-  //  {avrt0B}@TCCR0A,
-  //  {avrt1A}@TCCR1A,
-  //  {avrt1B}@TCCR1A,
-  //  {avrt2A}@TCCR2A,
-  //  {avrt2B}@TCCR2A
-  //  );
-  //
-  //TimerOutputCompareRegister_PGM: array[TAVRTimer] of PByte = (
-  //  {avrtNo}nil,
-  //  {avrt0A}@OCR0A,
-  //  {avrt0B}@OCR0A,
-  //  {avrt1A}@OCR1A,
-  //  {avrt1B}@OCR1B,
-  //  {avrt2A}@OCR2A,
-  //  {avrt2B}@OCR2B
-  //  );
-  //
-  //TimerRegisterOutputMode_PGM: array[TAVRTimer] of Byte = (
-  //  {avrtNo}0,
-  //  {avrt0A}COM0A,
-  //  {avrt0B}COM0B,
-  //  {avrt1A}COM1A,
-  //  {avrt1B}COM1B,
-  //  {avrt2A}COM2A,
-  //  {avrt2B}COM2B
-  //  );
-procedure AnalogWrite(const APin: Byte; const AValue: Byte);
+
+procedure AnalogWrite(const APin: Byte; const AValue: Integer);
 var
   VTimer: TAVRTimer;
 begin
-  PinMode(APin, False);
+  PinMode(APin, avrmOutput);
   if AValue = System.Low(AValue) then
     DigitalWrite(APin, False)
   else if AValue = System.High(AValue) then
@@ -368,8 +490,8 @@ begin
         DigitalWrite(APin, True)
     else
     begin
-      sbi(TimerCounterControlRegister_PGM[VTimer], TimerRegisterOutputMode_PGM[VTimer]);
-      TimerOutputCompareRegister_PGM[VTimer]^ := AValue;
+      sbi(TimerCounterControlRegister[VTimer], TimerRegisterOutputMode[VTimer]);
+      TimerOutputCompareRegister[VTimer]^ := AValue;
     end;
   end;
 end;
@@ -386,10 +508,11 @@ end;
 
 procedure UARTInit;
 begin
-  UBRR0 := Divider;                          // Baud
-  UCSR0A := 0;                               // Normal speed
-  UCSR0B := (1 shl TXEN0) or (1 shl RXEN0);  // Receive and send
-  UCSR0C := (%011 shl UCSZ0);                // 8-bit word, 1 stop bit
+  UBRR0 := Divider;
+
+  UCSR0A := (0 shl U2X0);
+  UCSR0B := (1 shl TXEN0) or (1 shl RXEN0);
+  UCSR0C := %011 shl UCSZ0;              // 8-bit word, 1 stop bit
 end;
 
 function UARTReadChar: Char;
@@ -421,7 +544,7 @@ begin
   UARTWrite(#13);
 end;
 
-procedure SleepMillisecs(Time: LongInt);
+procedure SleepMicroSecs(Time: LongInt);
 var
   VTime: LongInt;
 begin
@@ -530,7 +653,7 @@ begin
   end;
 end;
 
-function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Byte): Byte;
+function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 var
   VBit, VStateMask: Byte;
   VPort: TAVRPort;

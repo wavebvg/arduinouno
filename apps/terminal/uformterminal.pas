@@ -311,38 +311,45 @@ var
   end;
 
 var
+  VData: string;
   VChar: byte;
 begin
-  FLines.WriteString(Serial.ReadData);
-  if FLines.Position >= FLines.Size then
+  VData := Serial.ReadData;
+  if VData = '' then
     Exit;
-  if UpdateLocked then
-    Exit;
-  FErrorCount := 0;
-  FLines.Position := 0;
-  VLine := '';
-  while FLines.Position < FLines.Size do
-  begin
-    VChar := FLines.ReadByte;
-    case VChar of
-      10:
-      begin
-        DropLine;
-        FTermCursor.X := 0;
-        MemoTTY.CaretPos := FTermCursor;
+  MemoTTY.Lines.BeginUpdate;
+  try
+    FLines.WriteString(VData);
+    if UpdateLocked then
+      Exit;
+    FErrorCount := 0;
+    FLines.Position := 0;
+    VLine := '';
+    while FLines.Position < FLines.Size do
+    begin
+      VChar := FLines.ReadByte;
+      case VChar of
+        10:
+        begin
+          DropLine;
+          FTermCursor.X := 0;
+          MemoTTY.CaretPos := FTermCursor;
+        end;
+        13:
+        begin
+          DropLine;
+          Inc(FTermCursor.Y);
+          DropLine;
+        end;
+        else
+          VLine := VLine + Chr(VChar);
       end;
-      13:
-      begin
-        DropLine;
-        Inc(FTermCursor.Y);
-        DropLine;
-      end;
-      else
-        VLine := VLine + Chr(VChar);
     end;
+    DropLine;
+    FLines.Size := 0;
+  finally
+    MemoTTY.Lines.EndUpdate;
   end;
-  DropLine;
-  FLines.Size := 0;
 end;
 
 procedure TFormTerminal.SerialStatus(Sender: TObject; Reason: THookSerialReason;
