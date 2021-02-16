@@ -43,6 +43,14 @@ object FormTerminal: TFormTerminal
       Action = ActionFlash
       TabOrder = 2
     end
+    object ButtonClear: TButton
+      Left = 8
+      Height = 25
+      Top = 352
+      Width = 75
+      Action = ActionClear
+      TabOrder = 3
+    end
   end
   object PanelBody: TPanel
     Left = 0
@@ -126,6 +134,10 @@ object FormTerminal: TFormTerminal
       Caption = 'Flash'
       OnExecute = ActionFlashExecute
       OnUpdate = ActionFlashUpdate
+    end
+    object ActionClear: TAction
+      Caption = 'Clear'
+      OnExecute = ActionClearExecute
     end
   end
 end

@@ -1,6 +1,7 @@
 unit Servo;
 
-{$mode objfpc}
+{$mode objfpc}{$H-}
+{$goto on}
 
 interface
 
@@ -11,6 +12,8 @@ const
 type
 
   { TServo }
+
+  PServo = ^TServo;
 
   TServo = object
   private
@@ -31,8 +34,7 @@ type
 implementation
 
 uses
-  ArduinoTools,
-  UInterrupts;
+  ArduinoTools;
 
 { TServo }
 

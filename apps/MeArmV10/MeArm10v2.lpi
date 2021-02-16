@@ -10,7 +10,7 @@
         <Runnable Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="MeArm10"/>
+      <Title Value="MeArm10v2"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -20,7 +20,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10"/>
+            <Filename Value="bin/MeArm10v2"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -65,7 +65,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10"/>
+            <Filename Value="bin/MeArm10v2"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -79,7 +79,8 @@
           </Parsing>
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
-            <TargetProcessor Value="avr5"/>
+            <RelocatableUnit Value="True"/>
+            <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
             <Optimizations>
@@ -110,13 +111,23 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="MeArm10.lpr"/>
+        <Filename Value="MeArm10v2.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/servo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Servo"/>
+      </Unit>
+      <Unit>
+        <Filename Value="servotimerisr.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ServoTimerISR"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uirremote.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UIRRemote"/>
       </Unit>
       <Unit>
         <Filename Value="servotimer.pas"/>
@@ -128,7 +139,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="bin/MeArm10"/>
+      <Filename Value="bin/MeArm10v2"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

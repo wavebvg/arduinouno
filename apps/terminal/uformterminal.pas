@@ -32,10 +32,12 @@ type
   { TFormTerminal }
 
   TFormTerminal = class(TForm)
+    ActionClear: TAction;
     ActionConnect: TAction;
     ActionPreferences: TAction;
     ActionFlash: TAction;
     ActionList: TActionList;
+    ButtonClear: TButton;
     ButtonPreferences: TButton;
     ButtonFlash: TButton;
     EditLastKeys: TEdit;
@@ -45,6 +47,7 @@ type
     Serial: TLazSerial;
     ProcessTimer: TTimer;
     ToggleBoxConnect: TToggleBox;
+    procedure ActionClearExecute(Sender: TObject);
     procedure ActionConnectExecute(Sender: TObject);
     procedure ActionConnectUpdate(Sender: TObject);
     procedure ActionFlashExecute(Sender: TObject);
@@ -159,6 +162,12 @@ begin
         ToggleBoxConnect.Checked := False;
       end;
     end;
+end;
+
+procedure TFormTerminal.ActionClearExecute(Sender: TObject);
+begin
+  MemoTTY.Clear;
+  FTermCursor := MemoTTY.CaretPos;
 end;
 
 procedure TFormTerminal.ActionConnectUpdate(Sender: TObject);
@@ -386,7 +395,7 @@ begin
   if Trim(MemoTTY.Lines[FTermCursor.Y]) <> '' then
     Inc(FTermCursor.Y);
   MemoTTY.Lines[FTermCursor.Y] := AText;
-  Inc(FTermCursor.Y);
+  FTermCursor.Y := MemoTTY.Lines.Count;
   MemoTTY.CaretPos := FTermCursor;
 end;
 

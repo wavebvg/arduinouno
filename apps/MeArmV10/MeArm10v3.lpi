@@ -10,7 +10,7 @@
         <Runnable Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="MeArm10"/>
+      <Title Value="MeArm10v3"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -20,7 +20,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10"/>
+            <Filename Value="bin/MeArm10v3"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -65,7 +65,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10"/>
+            <Filename Value="bin/MeArm10v3"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -79,12 +79,13 @@
           </Parsing>
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
-            <TargetProcessor Value="avr5"/>
+            <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
             <Optimizations>
-              <OptimizationLevel Value="3"/>
+              <OptimizationLevel Value="4"/>
             </Optimizations>
+            <SmallerCode Value="True"/>
           </CodeGeneration>
           <Linking>
             <Debugging>
@@ -110,7 +111,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="MeArm10.lpr"/>
+        <Filename Value="MeArm10v3.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
@@ -128,7 +129,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="bin/MeArm10"/>
+      <Filename Value="bin/MeArm10v3"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

@@ -11,6 +11,20 @@ const
   ClockCyclesPerMicrosecond = F_CPU div 1000000;
 
 const
+  WGM10  =  0;
+  WGM11  =  1;
+  COM1B0 =  4;
+  COM1B1 =  5;
+  COM1A0 =  6;
+  COM1A1 =  7;
+
+  CS10   = 0;
+  CS11   = 1;
+  CS12   = 2;
+  WGM12  = 3;
+  WGM13  = 4;
+
+const
   LOW = 0;
   HIGH = 1;
 
@@ -222,8 +236,8 @@ const
   //
 
              
-procedure sbi(const AAddr: PByte; const ABit: Byte); inline;
-procedure cbi(const AAddr: PByte; const ABit: Byte); inline;
+procedure sbi(const AAddr: PByte; const ABit: Byte);
+procedure cbi(const AAddr: PByte; const ABit: Byte);
 procedure UARTInit;
 procedure UARTWrite(s: String); overload;
 procedure UARTWriteLn(s: String);
@@ -245,10 +259,15 @@ function IntToStr(AValue: longint): string;
 
 implementation
 
-uses
-  UInterrupts;
+//uses
+//  UInterrupts;
 
 function IntToStr(AValue: longint): string;
+begin
+  Str(AValue, Result);
+end;
+
+function IntToStr1(AValue: longint): string;
 var
   VValue: longint;
   VBuffer: array[0..9] of char;
@@ -279,7 +298,7 @@ begin
 end;
 
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
-begin          
+begin
   if AMode = avrmOutput then
     sbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin])
   else
@@ -303,20 +322,18 @@ begin
   end;
 end;     
 
-procedure sbi(const AAddr: PByte; const ABit: Byte); inline;
+procedure sbi(const AAddr: PByte; const ABit: Byte);
 begin
   AAddr^ := AAddr^ or (Byte(1) shl ABit);
 end;
 
-procedure cbi(const AAddr: PByte; const ABit: Byte); inline;
+procedure cbi(const AAddr: PByte; const ABit: Byte);
 begin
   AAddr^ := AAddr^ and not (1 shl ABit);
 end;
 
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
 begin
-  //UARTWriteLn('DigitalWrite PORT ' + IntToStr(byte(PortToOutputPGM[DigitalPinToPortPGM[APin]])) +
-  //  ' PIN ' + IntToStr(DigitalPinToBitMaskPGM[APin]));
   if AValue then
     sbi(PortToOutputPGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin])
   else
@@ -330,16 +347,15 @@ end;
 
 procedure ArduinoInit1;
 begin
-  InterruptsEnable;
+  //InterruptsEnable;
   sbi(@TCCR0A, WGM0);
   sbi(@TCCR2B, CS2);
   sbi(@TCCR2A, WGM2);
 end;
 
 procedure ArduinoInit2;
-begin               
-
-  InterruptsDisable;  //stop interrupts
+begin
+  //InterruptsDisable;  //stop interrupts
 
 //set timer0 interrupt at 2kHz
   TCCR0A := 0;// set entire TCCR0A register to 0
@@ -380,87 +396,59 @@ begin
   // enable timer compare interrupt
   TIMSK2 := TIMSK2 or (1 shl OCIE2A);
 
-
-  InterruptsEnable;  //allow interrupts
+  //InterruptsEnable;  //allow interrupts
 end;
 
-procedure ArduinoInit;
-begin
-  asm
-    sei
-    in	r24, 0x24	// 36
-    ori	r24, 0x02	// 2
-    out	0x24, r24	// 36
-    in	r24, 0x24	// 36
-    ori	r24, 0x01	// 1
-    out	0x24, r24	// 36
-    in	r24, 0x25	// 37
-    ori	r24, 0x02	// 2
-    out	0x25, r24	// 37
-    in	r24, 0x25	// 37
-    ori	r24, 0x01	// 1
-    out	0x25, r24	// 37
-    lds	r24, 0x006E	// 0x80006e <__DATA_REGION_ORIGIN__+0xe>
-    ori	r24, 0x01	// 1
-    sts	0x006E, r24	// 0x80006e <__DATA_REGION_ORIGIN__+0xe>
-    sts	0x0081, r1	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-    lds	r24, 0x0081	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-    ori	r24, 0x02	// 2
-    sts	0x0081, r24	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-    lds	r24, 0x0081	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-    ori	r24, 0x01	// 1
-    sts	0x0081, r24	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-    lds	r24, 0x0080	// 0x800080 <__DATA_REGION_ORIGIN__+0x20>
-    ori	r24, 0x01	// 1
-    sts	0x0080, r24	// 0x800080 <__DATA_REGION_ORIGIN__+0x20>
-    lds	r24, 0x00B1	// 0x8000b1 <__DATA_REGION_ORIGIN__+0x51>
-    ori	r24, 0x04	// 4
-    sts	0x00B1, r24	// 0x8000b1 <__DATA_REGION_ORIGIN__+0x51>
-    lds	r24, 0x00B0	// 0x8000b0 <__DATA_REGION_ORIGIN__+0x50>
-    ori	r24, 0x01	// 1
-    sts	0x00B0, r24	// 0x8000b0 <__DATA_REGION_ORIGIN__+0x50>
-    lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-    ori	r24, 0x04	// 4
-    sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-    lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-    ori	r24, 0x02	// 2
-    sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-    lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-    ori	r24, 0x01	// 1
-    sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-    lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-    ori	r24, 0x80	// 128
-    sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-    sts	0x00C1, r1	// 0x8000c1 <__DATA_REGION_ORIGIN__+0x61>
-    ldi	r30, 0xAF	// 175
-    ldi	r31, 0x00	// 0
-    lpm	r18, Z
-    ldi	r30, 0x9B	// 155
-    ldi	r31, 0x00	// 0
-    lpm	r24, Z
-    and	r24, r24
-    breq	38     	// 0x312 <main+0xbc>
-    ldi	r25, 0x00	// 0
-    add	r24, r24
-    adc	r25, r25
-    movw	r30, r24
-    subi	r30, 0x7A	// 122
-    sbci	r31, 0xFF	// 255
-    lpm	r26, Z+
-    lpm	r27, Z
-    movw	r30, r24
-    subi	r30, 0x84	// 132
-    sbci	r31, 0xFF	// 255
-    lpm	r24, Z+
-    lpm	r25, Z
-    in	r24, 0x3f	// 63
-    cli
-    ld	r30, X
-    or	r30, r18
-    st	X, r30
-    out	0x3f, r24	// 63
-    ldi	r24, 0x0B	// 11
-  end;
+procedure ArduinoInit;assembler;
+asm
+  sei
+  in	r24, 0x24	  // 36
+  ori	r24, 0x02	  // 2
+  out	0x24, r24	  // 36
+  in	r24, 0x24	  // 36
+  ori	r24, 0x01	  // 1
+  out	0x24, r24	  // 36
+  in	r24, 0x25  	// 37
+  ori	r24, 0x02  	// 2
+  out	0x25, r24	  // 37
+  in	r24, 0x25	  // 37
+  ori	r24, 0x01	  // 1
+  out	0x25, r24	  // 37
+  lds	r24, 0x006E	// 0x80006e <__DATA_REGION_ORIGIN__+0xe>
+  ori	r24, 0x01  	// 1
+  sts	0x006E, r24	// 0x80006e <__DATA_REGION_ORIGIN__+0xe>
+  sts	0x0081, r1	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+  lds	r24, 0x0081	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+  ori	r24, 0x02	  // 2
+  sts	0x0081, r24	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+  lds	r24, 0x0081	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+  ori	r24, 0x01	  // 1
+  sts	0x0081, r24	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
+  lds	r24, 0x0080	// 0x800080 <__DATA_REGION_ORIGIN__+0x20>
+  ori	r24, 0x01  	// 1
+  sts	0x0080, r24	// 0x800080 <__DATA_REGION_ORIGIN__+0x20>
+  lds	r24, 0x00B1	// 0x8000b1 <__DATA_REGION_ORIGIN__+0x51>
+  ori	r24, 0x04	  // 4
+  sts	0x00B1, r24	// 0x8000b1 <__DATA_REGION_ORIGIN__+0x51>
+  lds	r24, 0x00B0	// 0x8000b0 <__DATA_REGION_ORIGIN__+0x50>
+  ori	r24, 0x01	  // 1
+  sts	0x00B0, r24	// 0x8000b0 <__DATA_REGION_ORIGIN__+0x50>
+  lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  ori	r24, 0x04	  // 4
+  sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  ori	r24, 0x02	  // 2
+  sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  ori	r24, 0x01	  // 1
+  sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  ori	r24, 0x80	  // 128
+  sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  sts	0x00C1, r1	// 0x8000c1 <__DATA_REGION_ORIGIN__+0x61>
+  ldi	r28, 0x00	  // 0
+  ldi	r29, 0x00	  // 0
+  sbiw	r28, 0x00 // 0
 end;
 
 procedure ADCInit;
@@ -503,7 +491,7 @@ begin
   while (ADCSRA and (1 shl ADSC)) <> 0 do    // Wait until measured
   begin
   end;
-  Result := ADCL and $FF or (ADCH and $FF shl 8);  // Read out the measured value
+  Result := ADC;  // Read out the measured value
 end;
 
 procedure UARTInit;
