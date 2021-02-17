@@ -9,101 +9,98 @@ const
   MIN_PULSE_WIDTH: longint = 450;
   MAX_PULSE_WIDTH: longint = 2400;
 
-type
+type       
+  TServoAngle = 0..180;
+
+  { TCustomServo }
+  PCustomServo = ^TCustomServo;
+
+  TCustomServo = object
+  private
+    FAngle: TServoAngle;
+    FPin: byte;
+  protected
+    function GetInitComplete: boolean; virtual;
+    function GetAngle: TServoAngle; virtual;
+    procedure SetAngle(const AValue: TServoAngle); virtual;
+  public
+    constructor Init(const APin: byte);
+    destructor Deinit; virtual;
+
+    property InitComplete: boolean read GetInitComplete;
+    property Angle: TServoAngle read GetAngle write SetAngle;
+    property Pin: byte read FPin;
+  end;
 
   { TServo }
 
   PServo = ^TServo;
 
-  TServo = object
-  private
-    FAngle: byte;
-    FPin: byte;
-    function GetAngle: byte;
-    function GetInitComplete: boolean;
-    procedure SetAngle(const AValue: byte);
+  TServo = object(TCustomServo)
+  protected
+    procedure SetAngle(const AValue: TServoAngle); virtual;
   public
-    procedure Init(const APin: byte);
-    procedure Deinit;
-
-    property InitComplete: boolean read GetInitComplete;
-    property Angle: byte read GetAngle write SetAngle;
-    property Pin: byte read FPin;
+    constructor Init(const APin: byte);
   end;
 
 implementation
 
 uses
-  ArduinoTools;
+  ArduinoTools;   
 
-{ TServo }
+{ TCustomServo }
 
-function TServo.GetAngle: byte;
-begin
-  Result := FAngle;
-end;
-
-function TServo.GetInitComplete: boolean;
-begin
-  Result := FPin > 0;
-end;
-
-procedure TServo.SetAngle(const AValue: byte);
-var
-  VTime: longint;
-  i: integer;
-  VTimer: TAVRTimer;
-  VTimerInterval: Byte;
-begin
-  VTimer := DigitalPinTimerPGM[Pin];
-  if VTimer = avrtNo then
-  begin
-    FAngle := AValue;
-    VTime := (MAX_PULSE_WIDTH - MIN_PULSE_WIDTH) * FAngle div 180 + MIN_PULSE_WIDTH;
-    for i := 1 to 5 do
-    begin
-      DigitalWrite(Pin, True);
-      SleepMicroSecs(VTime);
-      DigitalWrite(Pin, False);
-      SleepMicroSecs(20000 - VTime);
-    end;
-  end
-  else
-  begin
-    // Configure PD5 and PD6 as outputs
-    // avrt0A
-    PinMode(Pin, avrmOutput);
-    // Configure in PWM mode
-    TimerCounterControlRegister[VTimer]^ := 0;   
-      TimerClockControlRegister[VTimer]^ := 0;
-    TimerCounterControlRegister[VTimer]^ := (%10 shl TimerRegisterOutputMode[VTimer]) or (1 shl WGM0);
-    // Enable timer
-    if AValue <= 156 then
-    begin
-      TimerClockControlRegister[VTimer]^ := TimerClockControlRegister[VTimer]^ or %11;
-      UARTWriteLn(IntToStr(AValue));
-      VTimerInterval := (Integer(194) * Integer(AValue)) div 156 + 60;
-      UARTWriteLn(IntToStr(VTimerInterval));
-    end else
-    begin       
-      TimerClockControlRegister[VTimer]^ := TimerClockControlRegister[VTimer]^ or %100;
-      UARTWriteLn(IntToStr(AValue));
-      VTimerInterval := (18* Integer(AValue - 156)) div 24 + 60;
-      UARTWriteLn(IntToStr(VTimerInterval));
-    end;     
-      TimerOutputCompareRegister[VTimer]^ := VTimerInterval;
-  end;
-end;
-
-procedure TServo.Init(const APin: byte);
+constructor TCustomServo.Init(const APin: byte);
 begin
   FPin := APin;
   PinMode(Pin, avrmOutput);
 end;
 
-procedure TServo.Deinit;
+destructor TCustomServo.Deinit;
 begin
   FPin := 0;
+end;
+
+function TCustomServo.GetAngle: TServoAngle;
+begin
+  Result := FAngle;
+end;
+
+function TCustomServo.GetInitComplete: boolean;
+begin
+  Result := FPin > 0;
+end;
+
+procedure TCustomServo.SetAngle(const AValue: TServoAngle);
+begin
+  if AValue > 180 then
+    FAngle := 180
+  else
+    FAngle := AValue;
+end;
+
+{ TServo }    
+
+constructor TServo.Init(const APin: byte);
+begin
+  inherited;
+  PinMode(Pin, avrmOutput);
+end;
+
+procedure TServo.SetAngle(const AValue: TServoAngle);
+var
+  VTime: longint;
+  i: Byte;
+begin
+  inherited;
+  VTime := (MAX_PULSE_WIDTH - MIN_PULSE_WIDTH) * Angle div 180 + MIN_PULSE_WIDTH;
+  for i := 1 to 5 do
+  begin
+    DigitalWrite(Pin, True);
+    SleepMicroSecs(VTime);
+    DigitalWrite(Pin, False);
+    SleepMicroSecs(20000 - VTime);
+  end;
 end;
 
 end.

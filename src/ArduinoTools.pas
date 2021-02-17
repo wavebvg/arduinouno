@@ -506,14 +506,18 @@ end;
 function UARTReadChar: Char;
 begin
   while UCSR0A and (1 shl RXC0) = 0 do
-  ;                                        // Wait for a character to arrive
+  asm
+  nop;                                        // Wait for a character to arrive
+  end;
   Result := Char(UDR0);                    // Read character
 end;
 
 procedure UARTWrite(c: Char);
 begin
   while UCSR0A and (1 shl UDRE0) = 0 do
-  ;                                        // Wait for the last character to be sent
+  asm
+    nop;                                        // Wait for the last character to be sent
+  end;
   UDR0 := Byte(c);                         // Send character
 end;   
 

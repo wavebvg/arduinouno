@@ -20,8 +20,8 @@
         <UnitName Value="UFormTerminal"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="382"/>
-        <CursorPos X="39" Y="398"/>
+        <TopLine Value="146"/>
+        <CursorPos X="25" Y="161"/>
         <UsageCount Value="38"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -233,10 +233,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="240" Column="34" TopLine="220"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
         <Caret Line="258" Column="34" TopLine="238"/>
       </Position>
       <Position>
@@ -313,10 +309,6 @@
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="176" Column="42" TopLine="260"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
         <Caret Line="77" Column="16" TopLine="65"/>
       </Position>
       <Position>
@@ -350,6 +342,14 @@
       <Position>
         <Filename Value="uformterminal.pas"/>
         <Caret Line="308" Column="33" TopLine="289"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="398" Column="39" TopLine="433"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="170" Column="16" TopLine="167"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -167,6 +167,7 @@ end;
 procedure TFormTerminal.ActionClearExecute(Sender: TObject);
 begin
   MemoTTY.Clear;
+  EditLastKeys.Text := '';
   FTermCursor := MemoTTY.CaretPos;
 end;
 
