@@ -3,7 +3,10 @@ unit Servo;
 {$mode objfpc}{$H-}
 {$goto on}
 
-interface
+interface        
+
+uses
+  ArduinoTools;
 
 const
   MIN_PULSE_WIDTH: longint = 450;
@@ -15,10 +18,9 @@ type
   { TCustomServo }
   PCustomServo = ^TCustomServo;
 
-  TCustomServo = object
+  TCustomServo = object(TCustomPinOutput)
   private
     FAngle: TServoAngle;
-    FPin: byte;
   protected
     function GetInitComplete: boolean; virtual;
     function GetAngle: TServoAngle; virtual;
@@ -29,7 +31,6 @@ type
 
     property InitComplete: boolean read GetInitComplete;
     property Angle: TServoAngle read GetAngle write SetAngle;
-    property Pin: byte read FPin;
   end;
 
   { TServo }
@@ -45,20 +46,15 @@ type
 
 implementation
 
-uses
-  ArduinoTools;   
-
 { TCustomServo }
 
 constructor TCustomServo.Init(const APin: byte);
 begin
-  FPin := APin;
-  PinMode(Pin, avrmOutput);
+  inherited;
 end;
 
 destructor TCustomServo.Deinit;
 begin
-  FPin := 0;
 end;
 
 function TCustomServo.GetAngle: TServoAngle;
@@ -68,7 +64,7 @@ end;
 
 function TCustomServo.GetInitComplete: boolean;
 begin
-  Result := FPin > 0;
+  Result := Pin > 0;
 end;
 
 procedure TCustomServo.SetAngle(const AValue: TServoAngle);

@@ -3,10 +3,10 @@ unit TimedServoISR;
 {$mode objfpc}{$H-}
 {$goto on}
 
-interface    
+interface
 
-const
-  MAX_SERVO_COUNT = 2;
+uses
+  TimedServo;
 
 type
   PServoInfo = ^TServoInfo;

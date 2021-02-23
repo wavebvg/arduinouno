@@ -6,7 +6,10 @@ unit TimedServo;
 interface
 
 uses
-  Servo;
+  Servo;   
+
+const
+  MAX_SERVO_COUNT = 4;
 
 type
 

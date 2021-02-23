@@ -125,14 +125,19 @@
         <UnitName Value="TimedServoISR"/>
       </Unit>
       <Unit>
-        <Filename Value="uirremote.pas"/>
+        <Filename Value="irremoteisr.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UIRRemote"/>
+        <UnitName Value="IRRemoteISR"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/timedservo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TimedServo"/>
+      </Unit>
+      <Unit>
+        <Filename Value="irremote.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IRRemote"/>
       </Unit>
     </Units>
   </ProjectOptions>

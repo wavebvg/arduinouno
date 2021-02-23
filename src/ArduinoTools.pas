@@ -257,6 +257,43 @@ procedure SleepMicroSecs(Time: LongInt);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(AValue: longint): string;
 
+
+type
+
+  { TCustomPinOutput }
+
+  PCustomPined = ^TCustomPined;
+
+  { TCustomPined }
+
+  TCustomPined = object
+  private
+    FPin: byte;
+  public
+    constructor Init(const APin: byte);
+    destructor Deinit; virtual;
+    //
+    property Pin: byte read FPin;
+  end;
+
+  { TCustomPinOutput }
+
+  PCustomPinOutput = ^TCustomPinOutput;
+
+  TCustomPinOutput = object(TCustomPined)
+  public
+    constructor Init(const APin: byte);
+  end;
+
+  { TCustomPinInput }
+
+  PCustomPinInput = ^TCustomPinInput;
+
+  TCustomPinInput = object(TCustomPined)
+  public
+    constructor Init(const APin: byte);
+  end;
+
 implementation
 
 //uses
@@ -672,6 +709,34 @@ begin
     Result := (VWidth * 16 + 16) div ClockCyclesPerMicrosecond
   else
     Result := 0;
+end;
+
+{ TCustomPinInput }
+
+constructor TCustomPinInput.Init(const APin: byte);
+begin
+  inherited;
+  PinMode(Pin, avrmInput);
+end;
+
+{ TCustomPined }
+
+constructor TCustomPined.Init(const APin: byte);
+begin
+  FPin:=APin;
+end;
+
+destructor TCustomPined.Deinit;
+begin
+  FPin := 0;
+end;
+
+{ TCustomPinOutput }
+
+constructor TCustomPinOutput.Init(const APin: byte);
+begin
+  inherited;
+  PinMode(Pin, avrmOutput);
 end;
 
 end.

@@ -5,55 +5,88 @@ program MeArm10v2;
 
 uses
   UInterrupts,
-  UIRRemote,
+  IRRemoteISR,
   TimedServoISR,
   ArduinoTools,
   Servo,
-  TimedServo;
+  TimedServo, IRRemote;
 
 const
-  PIN_PORT1 = 11;
-  PIN_PORT2 = 12;
+  PIN_PORT1 = 9;
+  PIN_PORT2 = 10;
+  PIN_PORT3 = 11;
+  PIN_PORT4 = 12;
+  SERVO_ANGE_MIN: array[1..4] of Byte = (0, 0, 0, 0);
+  SERVO_ANGE_MAX: array[1..4] of Byte = (180, 180, 180, 100);
 
 var
-  VServo1, VServo2: TServo;
+  VServo1, VServo2, VServo3, VServo4: TTimedServo;
+  VServoNo: byte;
   ActiveServo: PCustomServo;
   c: char;
+  VMin, VMax: Byte;
 
 begin
   UARTInit;
   VServo1.Init(PIN_PORT1);
-  VServo1.Angle := 0;
+  VServo1.Angle := 90;//SERVO_ANGE_MIN[1];
   VServo2.Init(PIN_PORT2);
-  VServo2.Angle := 0;
+  VServo2.Angle := 50;//SERVO_ANGE_MIN[2];
+  VServo3.Init(PIN_PORT3);
+  VServo3.Angle := 120;//SERVO_ANGE_MIN[3];
+  VServo4.Init(PIN_PORT4);
+  VServo4.Angle := 0;//SERVO_ANGE_MIN[4];
   ActiveServo := @VServo1;
+  VServoNo := 1;
   InterruptsEnable;
   repeat
     c := UARTReadChar;
+    VMin := SERVO_ANGE_MIN[VServoNo];
+    VMax := SERVO_ANGE_MAX[VServoNo];
     case c of
-      '1': ActiveServo^.Angle := ActiveServo^.Angle + 10;
-      '2': ActiveServo^.Angle := ActiveServo^.Angle - 10;
-      //'3': ActiveServo^.Angle := FULL_CIRCLE * 20 div 180;
-      //'4': ActiveServo^.Angle := FULL_CIRCLE * 30 div 180;
-      //'5': ActiveServo^.Angle := FULL_CIRCLE * 40 div 180;
-      //'6': ActiveServo^.Angle := FULL_CIRCLE * 50 div 180;
-      //'7': ActiveServo^.Angle := FULL_CIRCLE * 60 div 180;
-      //'8': ActiveServo^.Angle := FULL_CIRCLE * 70 div 180;
-      //'9': ActiveServo^.Angle := FULL_CIRCLE * 80 div 180;
-      //'0': ActiveServo^.Angle := FULL_CIRCLE * 90 div 180;
-      //'q': ActiveServo^.Angle := FULL_CIRCLE * 100 div 180;
-      //'w': ActiveServo^.Angle := FULL_CIRCLE * 110 div 180;
-      //'e': ActiveServo^.Angle := FULL_CIRCLE * 120 div 180;
-      //'r': ActiveServo^.Angle := FULL_CIRCLE * 130 div 180;
-      //'t': ActiveServo^.Angle := FULL_CIRCLE * 140 div 180;
-      //'y': ActiveServo^.Angle := FULL_CIRCLE * 150 div 180;
-      //'u': ActiveServo^.Angle := FULL_CIRCLE * 160 div 180;
-      //'i': ActiveServo^.Angle := FULL_CIRCLE * 170 div 180;
-      //'o': ActiveServo^.Angle := 600;
-      'a': ActiveServo := @VServo1;
-      's': ActiveServo := @VServo2;
+      '1':
+      begin
+        if VMax >= ActiveServo^.Angle + 10 then
+          ActiveServo^.Angle := ActiveServo^.Angle + 10;
+      end;
+      '2':
+      begin                                   
+        if VMin <= ActiveServo^.Angle - 10 then
+          ActiveServo^.Angle := ActiveServo^.Angle - 10;
+      end;
+      'p':
+      begin
+        UARTWrite('Active ');              
+        UARTWrite(IntToStr(VServoNo));
+        UARTWrite(' ');
+        UARTWrite(IntToStr(VServo1.Angle));
+        UARTWrite(' ');
+        UARTWrite(IntToStr(VServo2.Angle));
+        UARTWrite(' ');
+        UARTWrite(IntToStr(VServo3.Angle));
+        UARTWrite(' ');
+        UARTWriteLn(IntToStr(VServo4.Angle));
+      end;
+      'a':
+      begin
+        ActiveServo := @VServo1;
+        VServoNo := 1;
+      end;
+      's':
+      begin
+        ActiveServo := @VServo2;
+        VServoNo := 2;
+      end;
+      'd':
+      begin
+        ActiveServo := @VServo3;
+        VServoNo := 3;
+      end;
+      'f':
+      begin
+        ActiveServo := @VServo4;
+        VServoNo := 4;
+      end;
     end;
-    UARTWriteLn(IntToStr(ActiveServo^.Angle));
-    //UARTWriteLn(IntToStr(ServoInfos[0].Position));
   until False;
 end.
