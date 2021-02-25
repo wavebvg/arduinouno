@@ -13,6 +13,7 @@ const
   USECPERTICK = 50;  // microseconds per clock interrupt tick
   _GAP = 5000; // Minimum map between transmissions
   GAP_TICKS = _GAP div USECPERTICK;
+  TIMER_COUNT_TOP = F_CPU div 1000000 * USECPERTICK;
 
 type
   TReceiverState = (rsUndefined0, rsUndefined1, rsIdle, rsMark, rsSpace, rsStop);
@@ -100,6 +101,25 @@ begin
       Params.timer := 0;
     end;
   end;
+end;    
+
+procedure CheckTimer;
+begin
+  // TCCR2A - регистр управления A.
+  TCCR2A := 0;
+
+  // TCCR2B - регистр управления B.
+  TCCR2B := 0;
+
+  TCCR2A := TCCR2A or (1 shl WGM0) or (0 shl WGM20);
+
+  TCCR2B := TCCR2B or (0 shl CS22) or (1 shl CS21) or (0 shl CS20);
+
+  OCR2A := TIMER_COUNT_TOP div 8;
+
+  TCNT2 := 0;
+
+  TIMSK2 := TIMSK2 or (1 shl OCIE2A);
 end;
 
 

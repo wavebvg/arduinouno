@@ -9,7 +9,8 @@ uses
   TimedServoISR,
   ArduinoTools,
   Servo,
-  TimedServo, IRRemote;
+  TimedServo,
+  IRRemote;
 
 const
   PIN_PORT1 = 9;

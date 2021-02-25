@@ -24,6 +24,20 @@ const
   WGM12  = 3;
   WGM13  = 4;
 
+  WGM20  = 0;
+  WGM21  = 1;
+  COM2B0 = 4;
+  COM2B1 = 5;
+  COM2A0 = 6;
+  COM2A1 = 7;
+
+  CS20   = 0;
+  CS21   = 1;
+  CS22   = 2;
+  WGM22  = 3;
+  FOC2B  = 6;
+  FOC2A  = 7;
+
 const
   LOW = 0;
   HIGH = 1;
