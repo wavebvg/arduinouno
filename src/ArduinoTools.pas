@@ -310,9 +310,6 @@ type
 
 implementation
 
-//uses
-//  UInterrupts;
-
 function IntToStr(AValue: longint): string;
 begin
   Str(AValue, Result);

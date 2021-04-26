@@ -24,7 +24,7 @@ type
     procedure SetAngle(const AValue: TServoAngle); virtual;
     property Position: word read GetPosition;
   public
-    constructor Init(const APin: byte);
+    constructor Init(const APin: byte; const AAngle: TServoAngle);
     destructor Deinit; virtual;
   end;
 
@@ -37,7 +37,7 @@ uses
 
 { TTimedServo }
 
-constructor TTimedServo.Init(const APin: byte);
+constructor TTimedServo.Init(const APin: byte; const AAngle: TServoAngle);
 var
   i: integer;
   VServo: PServoInfo;
