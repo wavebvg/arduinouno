@@ -10,7 +10,7 @@
         <Runnable Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="MeArm10v3"/>
+      <Title Value="IRTest"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -20,7 +20,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10v3"/>
+            <Filename Value="bin/IRTest"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -65,7 +65,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10v3"/>
+            <Filename Value="bin/IRTest"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -79,13 +79,13 @@
           </Parsing>
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
+            <RelocatableUnit Value="True"/>
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
             <Optimizations>
-              <OptimizationLevel Value="4"/>
+              <OptimizationLevel Value="3"/>
             </Optimizations>
-            <SmallerCode Value="True"/>
           </CodeGeneration>
           <Linking>
             <Debugging>
@@ -111,25 +111,31 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="MeArm10v3.lpr"/>
+        <Filename Value="IRTest.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/servo.pas"/>
+        <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Servo"/>
       </Unit>
       <Unit>
-        <Filename Value="servotimer.pas"/>
+        <Filename Value="UInterrupts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ServoTimer"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IRRemote.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IRRemoteISR.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="bin/MeArm10v3"/>
+      <Filename Value="bin/IRTest"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
