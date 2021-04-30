@@ -355,19 +355,12 @@ end;
 
 function DigitalRead(const APin: Byte): Boolean;
 var
-  VPin: Byte;
+  VBit: Byte;
+  VPort: TAVRPort;
 begin
-  VPin := APin mod 8;
-  case APin of
-    0, 1, 2, 3, 4, 5, 6, 7:
-      Result := PIND xor (Byte(1) shl VPin) <> 0;
-    8, 9, 10, 11, 12, 13:
-      Result := PINB xor (Byte(1) shl VPin) <> 0;
-    14, 15, 16, 17, 18, 19:
-      Result := PINC xor (Byte(1) shl VPin) <> 0;
-    else
-      Result := False;
-  end;
+  VBit := DigitalPinToBitMaskPGM[APin];
+  VPort := DigitalPinToPortPGM[APin];
+  Result := PortToInputPGM[VPort]^ and VBit <> 0;
 end;     
 
 procedure sbi(const AAddr: PByte; const ABit: Byte);
