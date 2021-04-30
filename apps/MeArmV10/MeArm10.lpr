@@ -6,50 +6,57 @@ program MeArm10;
 uses
   UInterrupts,
   ArduinoTools,
-  Servo;
+  TimedServo;
 
 const
-  SERVO1_PIN = 5;
-  SERVO2_PIN = 6;
+  SERVO_COUNT = 4;
+  MIN_PIN_PORT: SmallInt = 9;
+  SERVO_ANGE_DEF: array[1..SERVO_COUNT] of Byte = (0, 0, 0, 0);
+  SERVO_ANGE_MIN: array[1..SERVO_COUNT] of Byte = (0, 0, 0, 0);
+  SERVO_ANGE_MAX: array[1..SERVO_COUNT] of Byte = (180, 180, 180, 100);
 
 var
-  i: byte;
-  Servo1: TServo;
-  Servo2: TServo;
-  ActiveServo: PServo;
-  c: char;
+  VServos: array[1..SERVO_COUNT] of TTimedServo;
+  VServoNo: SmallInt;
+  c: Char;
+  i: Byte;
+  VMin, VMax: Byte;
 
 begin
-  Sleep10ms(200);
-  UARTInit;
-  Servo1.Init(SERVO1_PIN);
-  Servo2.Init(SERVO2_PIN);
-  ActiveServo := @Servo1;
-  while True do
-  begin
+  UARTInit;     
+  InterruptsEnable;
+  for i := 1 to SERVO_COUNT do
+    VServos[i].Init(MIN_PIN_PORT + i - 1, SERVO_ANGE_DEF[i]);
+  VServoNo := 1;
+  repeat
     c := UARTReadChar;
+    VMin := SERVO_ANGE_MIN[VServoNo];
+    VMax := SERVO_ANGE_MAX[VServoNo];
     case c of
-      '1': ActiveServo^.Angle := 0;
-      '2': ActiveServo^.Angle := 10;
-      '3': ActiveServo^.Angle := 20;
-      '4': ActiveServo^.Angle := 30;
-      '5': ActiveServo^.Angle := 40;
-      '6': ActiveServo^.Angle := 50;
-      '7': ActiveServo^.Angle := 60;
-      '8': ActiveServo^.Angle := 70;
-      '9': ActiveServo^.Angle := 80;
-      '0': ActiveServo^.Angle := 90;
-      'q': ActiveServo^.Angle := 100;
-      'w': ActiveServo^.Angle := 110;
-      'e': ActiveServo^.Angle := 120;
-      'r': ActiveServo^.Angle := 130;
-      't': ActiveServo^.Angle := 140;
-      'y': ActiveServo^.Angle := 150;
-      'u': ActiveServo^.Angle := 160;
-      'i': ActiveServo^.Angle := 170;
-      'o': ActiveServo^.Angle := 180;
-      'a': ActiveServo := @Servo1;
-      's': ActiveServo := @Servo2;
+      '1':
+        if VMax >= VServos[VServoNo].Angle + 10 then
+          VServos[VServoNo].Angle := VServos[VServoNo].Angle + 10;
+      '2':
+        if VMin <= VServos[VServoNo].Angle - 10 then
+          VServos[VServoNo].Angle := VServos[VServoNo].Angle - 10;
+      'p':
+      begin
+        UARTWrite('Active ');
+        UARTWrite(IntToStr(VServoNo));
+        for i := 1 to SERVO_COUNT do
+        begin
+          UARTWrite(' ');
+          UARTWrite(IntToStr(VServos[i].Angle));
+        end;
+      end;
+      'a':
+        VServoNo := 1;
+      's':
+        VServoNo := 2;
+      'd':
+        VServoNo := 3;
+      'f':
+        VServoNo := 4;
     end;
-  end;
+  until False;
 end.
