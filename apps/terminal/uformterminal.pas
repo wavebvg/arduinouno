@@ -14,11 +14,9 @@ uses
   Dialogs,
   StdCtrls,
   ExtCtrls,
-  LazSynaSer,
-  LMessages, ActnList,
-  syncobjs,
-  IniFiles,
-  UTF8Process;
+  LMessages,
+  ActnList,
+  IniFiles;
 
 const
   MAX_ERROR_COUNT = 10;
@@ -35,71 +33,42 @@ type
     ActionClear: TAction;
     ActionConnect: TAction;
     ActionPreferences: TAction;
-    ActionFlash: TAction;
     ActionList: TActionList;
     ButtonClear: TButton;
     ButtonPreferences: TButton;
-    ButtonFlash: TButton;
     EditLastKeys: TEdit;
     MemoTTY: TMemo;
     PanelBody: TPanel;
     PanelButton: TPanel;
     Serial: TLazSerial;
-    ProcessTimer: TTimer;
     ToggleBoxConnect: TToggleBox;
     procedure ActionClearExecute(Sender: TObject);
     procedure ActionConnectExecute(Sender: TObject);
-    procedure ActionConnectUpdate(Sender: TObject);
-    procedure ActionFlashExecute(Sender: TObject);
-    procedure ActionFlashUpdate(Sender: TObject);
     procedure ActionPreferencesExecute(Sender: TObject);
-    procedure ActionPreferencesUpdate(Sender: TObject);
-    procedure ButtonPreferencesClick(Sender: TObject);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
-    procedure MemoTTYKeyPress(Sender: TObject; var Key: char);
-    procedure MemoTTYKeyUp(Sender: TObject; var Key: word; Shift: TShiftState);
-    procedure MemoTTYMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: integer);
-    procedure MemoTTYMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: integer);
-    procedure ProcessTimerTimer(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SerialRxData(Sender: TObject);
-    procedure SerialStatus(Sender: TObject; Reason: THookSerialReason;
-      const Value: string);
     procedure ToggleBoxConnectChange(Sender: TObject);
   private
-    FAvrdudePath: string;
-    FBinPath: string;
-    FConfigPath: string;
-    FDevice: string;
-    FErrorCount: integer;
-    FMouseDownLock: boolean;
+    FAvrdudePath: String;
+    FBinPath: String;
+    FConfigPath: String;
+    FDevice: String;
     FTermCursor: TPoint;
-    FLines: TStringStream;
-    FKeys: TStrings;
-    FSyncEvent: TEvent;
     FIniFile: TIniFile;
-    FProcess: TProcessUTF8;
-    FProcessRunning: boolean;
-    FOutputLines: TStrings;
-    FBeforeRunConnected: boolean;
-    function GetUpdateLocked: boolean;
-    procedure AddLine(const AText: string);
-    procedure DisplayConnected(const AValue: boolean);
-    procedure SetDevice(AValue: string);
-    procedure WMSerial(var AMsg: TLMessage); message WM_SERIAL;
+    FLines: TStrings;
+    procedure AddLine(const AText: String);
+    procedure DisplayConnected(const AValue: Boolean);
+    procedure SetDevice(AValue: String);
     procedure LoadConfig;
     procedure SaveConfig;
-    procedure UpdateControls;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
-    property UpdateLocked: boolean read GetUpdateLocked;
 
-    property Device: string read FDevice write SetDevice;
-    property ConfigPath: string read FConfigPath write FConfigPath;
-    property BinPath: string read FBinPath write FBinPath;
-    property AvrdudePath: string read FAvrdudePath write FAvrdudePath;
+    property Device: String read FDevice write SetDevice;
+    property ConfigPath: String read FConfigPath write FConfigPath;
+    property BinPath: String read FBinPath write FBinPath;
+    property AvrdudePath: String read FAvrdudePath write FAvrdudePath;
   end;
 
 var
@@ -121,12 +90,7 @@ uses
 constructor TFormTerminal.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  FOutputLines := TStringList.Create;
-  FSyncEvent := TSimpleEvent.Create;
-  FLines := TStringStream.Create('');
-  FKeys := TStringList.Create;
-  FProcess := TProcessUTF8.Create(Self);
-  FProcess.Options := FProcess.Options + [poUsePipes, poStderrToOutput];
+  FLines := TStringList.Create;
   FIniFile := TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini'));
   LoadConfig;
 end;
@@ -134,16 +98,8 @@ end;
 destructor TFormTerminal.Destroy;
 begin
   FIniFile.Free;
-  FKeys.Free;
   FLines.Free;
-  FSyncEvent.Free;
-  FOutputLines.Free;
   inherited Destroy;
-end;
-
-procedure TFormTerminal.ButtonPreferencesClick(Sender: TObject);
-begin
-
 end;
 
 procedure TFormTerminal.ActionConnectExecute(Sender: TObject);
@@ -166,38 +122,10 @@ end;
 
 procedure TFormTerminal.ActionClearExecute(Sender: TObject);
 begin
+  WriteLn('ActionClearExecute ', GetCurrentThreadId, ' (main: ', MainThreadID, ')');
   MemoTTY.Clear;
   EditLastKeys.Text := '';
   FTermCursor := MemoTTY.CaretPos;
-end;
-
-procedure TFormTerminal.ActionConnectUpdate(Sender: TObject);
-begin
-  TCustomAction(Sender).Enabled := not FProcessRunning;
-end;
-
-procedure TFormTerminal.ActionFlashExecute(Sender: TObject);
-begin
-  FBeforeRunConnected := Serial.Active;
-  Serial.Close;
-  FProcess.Executable := AvrdudePath;
-  FProcess.Parameters.Add(Format('-C%s', [ConfigPath]));
-  FProcess.Parameters.Add('-q');
-  FProcess.Parameters.Add('-q');
-  FProcess.Parameters.Add('-patmega328p');
-  FProcess.Parameters.Add('-carduino');
-  FProcess.Parameters.Add('-b115200');
-  FProcess.Parameters.Add('-D');
-  FProcess.Parameters.Add(Format('-P%s', [Device]));
-  FProcess.Parameters.Add(Format('-Uflash:w:%s:i', [BinPath]));
-  AddLine('Begin flashing');
-  FProcess.Execute;
-  ProcessTimer.Enabled := True;
-end;
-
-procedure TFormTerminal.ActionFlashUpdate(Sender: TObject);
-begin
-  TCustomAction(Sender).Enabled := not FProcessRunning;
 end;
 
 procedure TFormTerminal.ActionPreferencesExecute(Sender: TObject);
@@ -216,165 +144,38 @@ begin
   end;
 end;
 
-procedure TFormTerminal.ActionPreferencesUpdate(Sender: TObject);
-begin
-  //TCustomAction(Sender).Enabled := ;
-end;
-
-procedure TFormTerminal.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+procedure TFormTerminal.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   Serial.Close;
 end;
 
-procedure TFormTerminal.MemoTTYKeyPress(Sender: TObject; var Key: char);
-begin
-  if not Serial.Active then
-    Exit;
-  Serial.WriteData(Key);
-  FKeys.Insert(0, Format('#%0.3d', [Ord(Key)]));
-  if FKeys.Count > 10 then
-    FKeys.Delete(FKeys.Count - 1);
-  EditLastKeys.Text := StringReplace(FKeys.Text, LineEnding, ' ', [rfReplaceAll]);
-end;
-
-procedure TFormTerminal.MemoTTYKeyUp(Sender: TObject; var Key: word;
-  Shift: TShiftState);
-begin
-  MemoTTY.CaretPos := FTermCursor;
-end;
-
-procedure TFormTerminal.MemoTTYMouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: integer);
-begin
-  FMouseDownLock := True;
-end;
-
-procedure TFormTerminal.MemoTTYMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: integer);
-var
-  VSelText: string;
-begin
-  FMouseDownLock := False;
-  VSelText := MemoTTY.SelText;
-  if VSelText <> '' then
-    Clipboard.AsText := VSelText;
-  MemoTTY.CaretPos := FTermCursor;
-  if Serial.Active then
-    SerialRxData(nil);
-end;
-
-procedure TFormTerminal.ProcessTimerTimer(Sender: TObject);
-begin
-  ProcessTimer.Enabled := False;
-  try
-    FProcessRunning := FProcess.Running;
-    FOutputLines.LoadFromStream(FProcess.Output);
-    MemoTTY.Lines.AddStrings(FOutputLines);
-    FOutputLines.Clear;
-    UpdateControls;
-    if not FProcessRunning then
-      AddLine('End   flashing');
-    if not FProcessRunning and FBeforeRunConnected then
-      Serial.Open;
-  finally
-    ProcessTimer.Enabled := FProcessRunning;
-  end;
-end;
-
 procedure TFormTerminal.SerialRxData(Sender: TObject);
 var
-  VLine: string;
-
-  procedure DropLine;
-  var
-    VCurrentLine: string;
-    VLinePos: integer;
-    VSpaces: string;
-  begin
-    VCurrentLine := MemoTTY.Lines[FTermCursor.Y];
-    if Length(VLine) = 1 then
-      VLinePos := 1
-    else
-      VLinePos := 1;
-    if Length(VCurrentLine) < FTermCursor.X then
-    begin
-      SetLength(VSpaces, FTermCursor.X - Length(VCurrentLine));
-      FillChar(VSpaces[1], Length(VSpaces), ' ');
-      VCurrentLine := VCurrentLine + VSpaces;
-    end
-    else
-      while (Length(VCurrentLine) >= FTermCursor.X + 1) and
-        (Length(VLine) >= VLinePos) do
-      begin
-        VCurrentLine[FTermCursor.X + 1] := VLine[VLinePos];
-        Inc(VLinePos);
-        Inc(FTermCursor.X);
-      end;
-    if Length(VLine) >= VLinePos then
-    begin
-      VCurrentLine := VCurrentLine + Copy(VLine, VLinePos, Length(VLine) - VLinePos + 1);
-      Inc(FTermCursor.X, Length(VLine) - VLinePos + 1);
-    end;
-    VLine := '';
-    MemoTTY.Lines[FTermCursor.Y] := VCurrentLine;
-    MemoTTY.CaretPos := FTermCursor;
-  end;
-
-var
-  VData: string;
-  VChar: byte;
+  i: Integer;
+  VCurrentLine: String;
 begin
-  VData := Serial.ReadData;
-  if VData = '' then
+  WriteLn('SerialRxData ', GetCurrentThreadId, ' (main: ', MainThreadID, ')');
+  FLines.Text := Serial.ReadData;
+  if FLines.Count = 0 then
     Exit;
   MemoTTY.Lines.BeginUpdate;
   try
-    FLines.WriteString(VData);
-    if UpdateLocked then
-      Exit;
-    FErrorCount := 0;
-    FLines.Position := 0;
-    VLine := '';
-    while FLines.Position < FLines.Size do
+    MemoTTY.CaretPos := FTermCursor;
+    while MemoTTY.Lines.Count > FTermCursor.Y + 1 do
+      MemoTTY.Lines.Delete(MemoTTY.Lines.Count - 1);
+    VCurrentLine := Copy(MemoTTY.Lines[FTermCursor.Y], 1, FTermCursor.X) + FLines[0];
+    MemoTTY.Lines[FTermCursor.Y] := VCurrentLine;
+    for i := 1 to FLines.Count - 1 do
     begin
-      VChar := FLines.ReadByte;
-      case VChar of
-        10:
-        begin
-          DropLine;
-          FTermCursor.X := 0;
-          MemoTTY.CaretPos := FTermCursor;
-        end;
-        13:
-        begin
-          DropLine;
-          Inc(FTermCursor.Y);
-          DropLine;
-        end;
-        else
-          VLine := VLine + Chr(VChar);
-      end;
+      VCurrentLine := FLines[i];
+      MemoTTY.Lines[FTermCursor.Y + i] := VCurrentLine;
     end;
-    DropLine;
-    FLines.Size := 0;
+    FTermCursor.Y := MemoTTY.Lines.Count;
+    FTermCursor.X := Length(VCurrentLine);
   finally
     MemoTTY.Lines.EndUpdate;
   end;
-end;
-
-procedure TFormTerminal.SerialStatus(Sender: TObject; Reason: THookSerialReason;
-  const Value: string);
-begin
-  if Application.Terminated then
-    Exit;
-  if MainThreadID = GetCurrentThreadId then
-    SendMessage(Handle, WM_SERIAL, WParam(PChar(Value)), Ord(Reason))
-  else
-  begin
-    PostMessage(Handle, WM_SERIAL, WParam(PChar(Value)), Ord(Reason));
-    FSyncEvent.WaitFor(INFINITE);
-    FSyncEvent.ResetEvent;
-  end;
+  FLines.Clear;
 end;
 
 procedure TFormTerminal.ToggleBoxConnectChange(Sender: TObject);
@@ -382,13 +183,9 @@ begin
   ActionConnect.Execute;
 end;
 
-function TFormTerminal.GetUpdateLocked: boolean;
+procedure TFormTerminal.AddLine(const AText: String);
 begin
-  Result := FMouseDownLock;
-end;
-
-procedure TFormTerminal.AddLine(const AText: string);
-begin
+  WriteLn('AddLine ', GetCurrentThreadId, ' (main: ', MainThreadID, ')');
   if Application.Terminated then
     Exit;
   if AText = '' then
@@ -400,16 +197,16 @@ begin
   MemoTTY.CaretPos := FTermCursor;
 end;
 
-procedure TFormTerminal.DisplayConnected(const AValue: boolean);
+procedure TFormTerminal.DisplayConnected(const AValue: Boolean);
 begin
   if Application.Terminated then
     Exit;
   ToggleBoxConnect.Checked := AValue;
 end;
 
-procedure TFormTerminal.SetDevice(AValue: string);
+procedure TFormTerminal.SetDevice(AValue: String);
 var
-  VSerialActive: boolean;
+  VSerialActive: Boolean;
 begin
   if FDevice = AValue then Exit;
   FDevice := AValue;
@@ -417,65 +214,6 @@ begin
   Serial.Close;
   Serial.Device := Device;
   Serial.Active := VSerialActive;
-end;
-
-procedure TFormTerminal.WMSerial(var AMsg: TLMessage);
-var
-  VText, Value: string;
-  Reason: THookSerialReason;
-begin
-  if Application.Terminated then
-    Exit;
-  Value := PChar(AMsg.WParam);
-  Reason := THookSerialReason(AMsg.LParam);
-  VText := '';
-  case Reason of
-    HR_SerialClose:
-    begin
-      DisplayConnected(False);
-      VText := Format('Disconnect %s', [Value]);
-    end;
-    HR_Connect:
-    begin
-      DisplayConnected(True);
-      VText := Format('Connect %s', [Value]);
-    end;
-    HR_CanRead:
-    begin
-      Inc(FErrorCount);
-      Sleep(100);
-    end;
-    HR_CanWrite:
-    begin
-      Inc(FErrorCount);
-      Sleep(100);
-    end;
-    HR_ReadCount:
-    begin
-      FErrorCount := 0;
-    end;
-    HR_WriteCount:
-    begin
-      FErrorCount := 0;
-    end
-    else
-    begin
-      FErrorCount := 0;
-      Exit;
-    end;
-  end;
-  if VText <> '' then
-  begin
-    AddLine(VText);
-  end
-  else
-  if FErrorCount >= MAX_ERROR_COUNT then
-  begin
-    AddLine(Format('Disconnect %s', [Serial.Device]));
-    DisplayConnected(False);
-    Serial.Close;
-  end;
-  FSyncEvent.SetEvent;
 end;
 
 procedure TFormTerminal.LoadConfig;
@@ -492,11 +230,6 @@ begin
   FIniFile.WriteString('MAIN', 'config_path', ConfigPath);
   FIniFile.WriteString('MAIN', 'bin_path', BinPath);
   FIniFile.WriteString('MAIN', 'avrdude_path', AvrdudePath);
-end;
-
-procedure TFormTerminal.UpdateControls;
-begin
-  ToggleBoxConnect.Enabled := not FProcessRunning;
 end;
 
 end.

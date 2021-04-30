@@ -7,7 +7,6 @@ object FormTerminal: TFormTerminal
   ClientHeight = 392
   ClientWidth = 543
   OnCloseQuery = FormCloseQuery
-  LCLVersion = '2.1.0.0'
   object PanelButton: TPanel
     Left = 453
     Height = 392
@@ -32,16 +31,7 @@ object FormTerminal: TFormTerminal
       Top = 40
       Width = 75
       Action = ActionPreferences
-      OnClick = ButtonPreferencesClick
       TabOrder = 1
-    end
-    object ButtonFlash: TButton
-      Left = 8
-      Height = 25
-      Top = 72
-      Width = 75
-      Action = ActionFlash
-      TabOrder = 2
     end
     object ButtonClear: TButton
       Left = 8
@@ -49,7 +39,7 @@ object FormTerminal: TFormTerminal
       Top = 352
       Width = 75
       Action = ActionClear
-      TabOrder = 3
+      TabOrder = 2
     end
   end
   object PanelBody: TPanel
@@ -72,10 +62,6 @@ object FormTerminal: TFormTerminal
       Font.Color = clInfoText
       Font.Height = -16
       Font.Name = 'Ubuntu Mono'
-      OnKeyPress = MemoTTYKeyPress
-      OnKeyUp = MemoTTYKeyUp
-      OnMouseDown = MemoTTYMouseDown
-      OnMouseUp = MemoTTYMouseUp
       ParentFont = False
       ReadOnly = True
       ScrollBars = ssBoth
@@ -85,8 +71,8 @@ object FormTerminal: TFormTerminal
     object EditLastKeys: TEdit
       AnchorSideRight.Side = asrBottom
       Left = 8
-      Height = 25
-      Top = 362
+      Height = 27
+      Top = 360
       Width = 437
       Anchors = [akLeft, akRight, akBottom]
       Color = clInfoBk
@@ -106,16 +92,8 @@ object FormTerminal: TFormTerminal
     Device = '/dev/ttyACM0'
     RcvLineCRLF = False
     OnRxData = SerialRxData
-    OnStatus = SerialStatus
-    Left = 16
-    Top = 8
-  end
-  object ProcessTimer: TTimer
-    Enabled = False
-    Interval = 100
-    OnTimer = ProcessTimerTimer
-    Left = 93
-    Top = 14
+    Left = 120
+    Top = 16
   end
   object ActionList: TActionList
     Left = 200
@@ -123,17 +101,10 @@ object FormTerminal: TFormTerminal
     object ActionConnect: TAction
       Caption = 'Connect'
       OnExecute = ActionConnectExecute
-      OnUpdate = ActionConnectUpdate
     end
     object ActionPreferences: TAction
       Caption = 'Preferences'
       OnExecute = ActionPreferencesExecute
-      OnUpdate = ActionPreferencesUpdate
-    end
-    object ActionFlash: TAction
-      Caption = 'Flash'
-      OnExecute = ActionFlashExecute
-      OnUpdate = ActionFlashUpdate
     end
     object ActionClear: TAction
       Caption = 'Clear'
