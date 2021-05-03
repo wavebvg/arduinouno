@@ -52,6 +52,9 @@ begin
       end;
     end;
     if VCounter div 100000 = 0 then
+    begin
       UARTWriteLn(IntToStr(Ord(VValue)));
+      SleepMicroSecs(1000000 * 4);
+    end;
   until False;
 end.

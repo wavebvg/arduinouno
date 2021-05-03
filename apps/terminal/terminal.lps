@@ -8,7 +8,7 @@
         <Filename Value="terminal.lpr"/>
         <IsPartOfProject Value="True"/>
         <CursorPos X="23" Y="15"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="52"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -20,9 +20,9 @@
         <UnitName Value="UFormTerminal"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="3"/>
-        <CursorPos X="14" Y="18"/>
-        <UsageCount Value="39"/>
+        <TopLine Value="407"/>
+        <CursorPos X="35" Y="412"/>
+        <UsageCount Value="52"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -35,14 +35,14 @@
         <UnitName Value="UFormDialogPreferences"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="61" Y="6"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="45"/>
       </Unit>
       <Unit>
         <Filename Value="ucomport.pas"/>
         <UnitName Value="UComPort"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="10" Y="5"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="18"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/stdctrls.pp"/>
@@ -50,14 +50,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="842"/>
         <CursorPos X="30" Y="852"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/src/rtl/unix/sysunixh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="21"/>
         <CursorPos X="2" Y="29"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/packages/TLazSerial/lazserial.pas"/>
@@ -65,7 +65,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="462"/>
         <CursorPos X="24" Y="476"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="11"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/packages/TLazSerial/lazsynaser.pas"/>
@@ -73,7 +73,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="275"/>
         <CursorPos X="14" Y="286"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/components/lazutils/textstrings.pas"/>
@@ -81,21 +81,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="221"/>
         <CursorPos X="35" Y="231"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="udialogpreferences.pas"/>
         <UnitName Value="UDialogPreferences"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="43" Y="12"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2432"/>
         <CursorPos Y="2443"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/components/lazutils/fileutil.pas"/>
@@ -103,7 +103,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="121"/>
         <CursorPos X="12" Y="140"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/lmessages.pp"/>
@@ -111,14 +111,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="692"/>
         <CursorPos X="3" Y="694"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/include/winapih.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="203"/>
         <CursorPos Y="215"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/lcltype.pp"/>
@@ -126,48 +126,48 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="106"/>
         <CursorPos X="3" Y="117"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/include/control.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2229"/>
         <CursorPos X="25" Y="2237"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2proc.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="3895"/>
         <CursorPos Y="3907"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/src/rtl/objpas/classes/classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1944"/>
         <CursorPos X="32" Y="1955"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/src/rtl/objpas/classes/classes.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="398"/>
         <CursorPos Y="403"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/src/rtl/unix/sysutils.pp"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="40" Y="12"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/lclclasses.pp"/>
@@ -175,28 +175,28 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="142"/>
         <CursorPos Y="153"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/lcl/include/customform.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="130"/>
         <CursorPos X="45" Y="141"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/src/packages/fcl-process/src/processbody.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="145"/>
         <CursorPos X="21" Y="157"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/src/packages/fcl-process/src/unix/process.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="50"/>
         <CursorPos X="27" Y="51"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/lazarus/share/lazarus/components/lazutils/utf8process.pp"/>
@@ -204,152 +204,176 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="38"/>
         <CursorPos X="3" Y="48"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../.local/share/fpc/src/packages/fcl-process/src/process.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
         <CursorPos X="29" Y="56"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
         <UnitName Value="LazSerial"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="315"/>
-        <CursorPos X="3" Y="318"/>
-        <UsageCount Value="10"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="457"/>
+        <CursorPos Y="474"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
         <UnitName Value="LazSynaSer"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1481"/>
-        <CursorPos Y="1468"/>
+        <TopLine Value="264"/>
+        <CursorPos X="5" Y="281"/>
+        <UsageCount Value="12"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/components/lazutils/utf8process.pp"/>
+        <UnitName Value="UTF8Process"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="32"/>
+        <CursorPos X="3" Y="48"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/3.2.0/src/packages/fcl-process/src/process.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="27"/>
+        <CursorPos X="18" Y="56"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/3.2.0/src/packages/fcl-process/src/processbody.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="115"/>
+        <CursorPos X="22" Y="136"/>
         <UsageCount Value="10"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="115" Column="73" TopLine="102"/>
+        <Caret Line="121" Column="13" TopLine="113"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="159" Column="8" TopLine="149"/>
+        <Caret Line="178" Column="13" TopLine="176"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="164" Column="43" TopLine="151"/>
+        <Caret Line="268" Column="18" TopLine="252"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="163" Column="43" TopLine="150"/>
+        <Caret Line="275" Column="18" TopLine="259"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="162" Column="43" TopLine="149"/>
+        <Caret Line="156" Column="3" TopLine="154"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="157" Column="9" TopLine="149"/>
+        <Caret Line="167" Column="3" TopLine="160"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="183" Column="9" TopLine="180"/>
+        <Caret Line="157" Column="3" TopLine="146"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="265" Column="9" TopLine="254"/>
+        <Caret Line="65" Column="14" TopLine="32"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="384" Column="8" TopLine="357"/>
+        <Caret Line="52" Column="21" TopLine="136"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="56" Column="36" TopLine="36"/>
+        <Caret Line="168" Column="65" TopLine="142"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="67" Column="36" TopLine="63"/>
+        <Caret Line="154" Column="31" TopLine="150"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="168" Column="8" TopLine="167"/>
+        <Caret Line="155" Column="31" TopLine="151"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="55" Column="41" TopLine="37"/>
+        <Caret Line="166" Column="3" TopLine="150"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="19" Column="3" TopLine="7"/>
+        <Caret Line="90" Column="15" TopLine="75"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="184" Column="9" TopLine="173"/>
+        <Caret Line="166" Column="6" TopLine="166"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="61" Column="26" TopLine="49"/>
+        <Caret Line="49" Column="5" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/components/lazutils/utf8process.pp"/>
+        <Caret Line="48" Column="3" TopLine="32"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="110" Column="18" TopLine="90"/>
+        <Caret Line="180" Column="19" TopLine="157"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="170" Column="17" TopLine="155"/>
+        <Caret Line="196" Column="28" TopLine="176"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="63" Column="34" TopLine="39"/>
+        <Caret Line="189" Column="55" TopLine="176"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="103" Column="13" TopLine="88"/>
+        <Caret Line="191" Column="55" TopLine="178"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="111" Column="13" TopLine="88"/>
+        <Caret Line="80" Column="14" TopLine="65"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="225" Column="7" TopLine="204"/>
+        <Caret Line="182" Column="55" TopLine="168"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="58" Column="27" TopLine="50"/>
+        <Caret Line="321" Column="13" TopLine="349"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="105" Column="20" TopLine="85"/>
+        <Caret Line="165" Column="58" TopLine="161"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="181" Column="9" TopLine="171"/>
+        <Caret Line="164" Column="61" TopLine="147"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="61" Column="41" TopLine="49"/>
+        <Caret Line="29" Column="29" TopLine="456"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="106" Column="8" TopLine="97"/>
+        <Caret Line="334" Column="20" TopLine="321"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="183" Column="16" TopLine="160"/>
+        <Caret Line="186" Column="35" TopLine="179"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="176" Column="43" TopLine="162"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="50" Column="51" TopLine="37"/>
+        <Caret Line="176" Column="45" TopLine="163"/>
       </Position>
     </JumpHistory>
     <RunParams>

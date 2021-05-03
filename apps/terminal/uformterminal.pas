@@ -15,39 +15,57 @@ uses
   StdCtrls,
   ExtCtrls,
   LMessages,
-  ActnList,
-  IniFiles;
+  ActnList, UTF8Process,
+  IniFiles,
+  LazSynaSer;
 
 const
-  MAX_ERROR_COUNT = 10;
+  MAX_READ_TIMEOUT = 2;
+  MAX_WRITE_TIMEOUT = 2;
+  TERMINAL_MESSAGE = WM_USER + 435;
+  TM_READTIMEOUT = TERMINAL_MESSAGE + 1;
+  TM_WRITETIMEOUT = TERMINAL_MESSAGE + 2;
 
-  WM_ADDLINE = WM_USER + 434;
-  WM_DISPLAYCONNECTED = WM_ADDLINE + 1;
-  WM_SERIAL = WM_ADDLINE + 2;
+  MAX_KEY_PRESSED_DISLAY = 8;
 
 type
+  TPressedKeys = array[1..MAX_KEY_PRESSED_DISLAY] of Char;
 
   { TFormTerminal }
 
   TFormTerminal = class(TForm)
+    ActionFlash: TAction;
     ActionClear: TAction;
     ActionConnect: TAction;
     ActionPreferences: TAction;
     ActionList: TActionList;
     ButtonClear: TButton;
     ButtonPreferences: TButton;
+    ButtonPreferences1: TButton;
     EditLastKeys: TEdit;
     MemoTTY: TMemo;
     PanelBody: TPanel;
     PanelButton: TPanel;
+    ProcessAVRDude: TProcessUTF8;
     Serial: TLazSerial;
+    TimerTTYCheck: TTimer;
     ToggleBoxConnect: TToggleBox;
     procedure ActionClearExecute(Sender: TObject);
     procedure ActionConnectExecute(Sender: TObject);
+    procedure ActionConnectUpdate(Sender: TObject);
+    procedure ActionFlashExecute(Sender: TObject);
+    procedure ActionFlashUpdate(Sender: TObject);
     procedure ActionPreferencesExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure MemoTTYKeyPress(Sender: TObject; var Key: Char);
     procedure SerialRxData(Sender: TObject);
+    procedure SerialStatus(Sender: TObject; Reason: THookSerialReason;
+      const Value: String);
+    procedure TimerTTYCheckTimer(Sender: TObject);
     procedure ToggleBoxConnectChange(Sender: TObject);
+  private
+    function GetSerialCanRead: Boolean;
+    procedure DisplayPressedKeys;
   private
     FAvrdudePath: String;
     FBinPath: String;
@@ -55,12 +73,25 @@ type
     FDevice: String;
     FTermCursor: TPoint;
     FIniFile: TIniFile;
-    FLines: TStrings;
-    procedure AddLine(const AText: String);
+    FReadStart, FWriteStart: TDateTime;
+    FTotalPressedKeys: Integer;
+    FCurrentPressedKeysIndex: Integer;
+    FPressedKeys: TPressedKeys;
+    FTTYExist: Boolean;
+    procedure CheckTTYExist;
+    procedure DisplayTerminal(const AText: String; const ANewLine: Boolean = False);
+    procedure DisplayText(const AText: String);
     procedure DisplayConnected(const AValue: Boolean);
     procedure SetDevice(AValue: String);
     procedure LoadConfig;
     procedure SaveConfig;
+  private
+    procedure TMReadTimeout(var AMsg: TLMessage); message TM_READTIMEOUT;
+    procedure TMWriteTimeout(var AMsg: TLMessage); message TM_WRITETIMEOUT;
+  protected
+    property SerialCanRead: Boolean read GetSerialCanRead;
+    procedure TTYOpen;
+    procedure TTYClose;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -81,6 +112,7 @@ uses
   Clipbrd,
   LCLType,
   LCLIntf,
+  DateUtils,
   process;
 
 {$R *.lfm}
@@ -90,15 +122,15 @@ uses
 constructor TFormTerminal.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  FLines := TStringList.Create;
+  FTermCursor := MemoTTY.CaretPos;
   FIniFile := TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini'));
+  CheckTTYExist;
   LoadConfig;
 end;
 
 destructor TFormTerminal.Destroy;
 begin
   FIniFile.Free;
-  FLines.Free;
   inherited Destroy;
 end;
 
@@ -106,26 +138,75 @@ procedure TFormTerminal.ActionConnectExecute(Sender: TObject);
 begin
   if ToggleBoxConnect.Checked xor Serial.Active then
     try
-      if ToggleBoxConnect.Checked then
-        Serial.Open
+      if Serial.Active then
+      begin
+        DisplayTerminal(Serial.ReadData);
+        TTYClose;
+      end
       else
-        Serial.Close;
+      begin
+        FReadStart := 0;
+        FWriteStart := 0;
+        TTYOpen;
+      end;
     except
       on E: Exception do
       begin
         Serial.Close;
-        AddLine(E.Message);
+        DisplayText(E.Message);
         ToggleBoxConnect.Checked := False;
       end;
     end;
+end;
+
+procedure TFormTerminal.ActionConnectUpdate(Sender: TObject);
+begin
+  TCustomAction(Sender).Enabled := not ProcessAVRDude.Active and FTTYExist;
+  ToggleBoxConnect.Enabled := TCustomAction(Sender).Enabled;
+end;
+
+procedure TFormTerminal.ActionFlashExecute(Sender: TObject);
+var
+  VLastConnected: Boolean;
+begin
+  VLastConnected := Serial.Active;
+  TTYClose;
+  DisplayText('Begin flashing');
+  ProcessAVRDude.Parameters.Clear;
+  ProcessAVRDude.Executable := AvrdudePath;
+  ProcessAVRDude.Parameters.Add(Format('-C%s', [ConfigPath]));
+  ProcessAVRDude.Parameters.Add('-q');
+  ProcessAVRDude.Parameters.Add('-q');
+  ProcessAVRDude.Parameters.Add('-patmega328p');
+  ProcessAVRDude.Parameters.Add('-carduino');
+  ProcessAVRDude.Parameters.Add('-b115200');
+  ProcessAVRDude.Parameters.Add('-D');
+  ProcessAVRDude.Parameters.Add(Format('-P%s', [Device]));
+  ProcessAVRDude.Parameters.Add(Format('-Uflash:w:%s:i', [BinPath]));
+  ProcessAVRDude.Execute;
+  ActionConnect.Update;
+  while not ProcessAVRDude.WaitOnExit(100) do
+    Application.ProcessMessages;
+  ActionConnect.Update;
+  ProcessAVRDude.Active := False;
+  DisplayText('End  flashing');
+  if VLastConnected then
+    TTYOpen;
+end;
+
+procedure TFormTerminal.ActionFlashUpdate(Sender: TObject);
+begin
+  TCustomAction(Sender).Enabled := not ProcessAVRDude.Active and FTTYExist;
 end;
 
 procedure TFormTerminal.ActionClearExecute(Sender: TObject);
 begin
   WriteLn('ActionClearExecute ', GetCurrentThreadId, ' (main: ', MainThreadID, ')');
   MemoTTY.Clear;
-  EditLastKeys.Text := '';
   FTermCursor := MemoTTY.CaretPos;
+  FTotalPressedKeys := 0;
+  FCurrentPressedKeysIndex := 0;
+  DisplayPressedKeys;
 end;
 
 procedure TFormTerminal.ActionPreferencesExecute(Sender: TObject);
@@ -146,36 +227,81 @@ end;
 
 procedure TFormTerminal.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  Serial.Close;
+  if ProcessAVRDude.Active then
+    CanClose := False
+  else
+  begin
+    TTYClose;
+    CanClose := True;
+  end;
+end;
+
+procedure TFormTerminal.MemoTTYKeyPress(Sender: TObject; var Key: Char);
+begin
+  if FTotalPressedKeys < MAX_KEY_PRESSED_DISLAY then
+    Inc(FTotalPressedKeys);
+  if FCurrentPressedKeysIndex >= MAX_KEY_PRESSED_DISLAY then
+    FCurrentPressedKeysIndex := 1
+  else
+    Inc(FCurrentPressedKeysIndex);
+  FPressedKeys[FCurrentPressedKeysIndex] := Key;
+  Serial.WriteData(Key);
+  DisplayPressedKeys;
 end;
 
 procedure TFormTerminal.SerialRxData(Sender: TObject);
 var
-  i: Integer;
-  VCurrentLine: String;
+  VBuffer: String;
 begin
-  WriteLn('SerialRxData ', GetCurrentThreadId, ' (main: ', MainThreadID, ')');
-  FLines.Text := Serial.ReadData;
-  if FLines.Count = 0 then
-    Exit;
-  MemoTTY.Lines.BeginUpdate;
   try
-    MemoTTY.CaretPos := FTermCursor;
-    while MemoTTY.Lines.Count > FTermCursor.Y + 1 do
-      MemoTTY.Lines.Delete(MemoTTY.Lines.Count - 1);
-    VCurrentLine := Copy(MemoTTY.Lines[FTermCursor.Y], 1, FTermCursor.X) + FLines[0];
-    MemoTTY.Lines[FTermCursor.Y] := VCurrentLine;
-    for i := 1 to FLines.Count - 1 do
+    if SerialCanRead then
     begin
-      VCurrentLine := FLines[i];
-      MemoTTY.Lines[FTermCursor.Y + i] := VCurrentLine;
+      VBuffer := Serial.ReadData;
+      DisplayTerminal(VBuffer);
     end;
-    FTermCursor.Y := MemoTTY.Lines.Count;
-    FTermCursor.X := Length(VCurrentLine);
-  finally
-    MemoTTY.Lines.EndUpdate;
+  except
+    on E: Exception do
+      WriteLn(E.Message);
   end;
-  FLines.Clear;
+end;
+
+procedure TFormTerminal.SerialStatus(Sender: TObject; Reason: THookSerialReason;
+  const Value: String);
+begin
+  if (FReadStart > 0) and (SecondsBetween(Now, FReadStart) > MAX_READ_TIMEOUT) then
+  begin
+    PostMessage(Handle, TM_READTIMEOUT, 0, 0);
+    FReadStart := 0;
+    Exit;
+  end;
+  if (FWriteStart > 0) and (SecondsBetween(Now, FWriteStart) > MAX_WRITE_TIMEOUT) then
+  begin
+    PostMessage(Handle, TM_WRITETIMEOUT, 0, 0);
+    FWriteStart := 0;
+    Exit;
+  end;
+  case Reason of
+    HR_SerialClose: ;
+    HR_Connect: ;
+    HR_CanRead:
+      if FReadStart = 0 then
+        FReadStart := Now;
+    HR_CanWrite:
+      if FWriteStart = 0 then
+        FWriteStart := Now;
+    HR_ReadCount:
+      FReadStart := 0;
+    HR_WriteCount:
+      FWriteStart := 0;
+    HR_Wait: ;
+  end;
+  WriteLn(Ord(Reason), ' ', Value);
+end;
+
+procedure TFormTerminal.TimerTTYCheckTimer(Sender: TObject);
+begin
+  CheckTTYExist;
+  ActionConnect.Update;
 end;
 
 procedure TFormTerminal.ToggleBoxConnectChange(Sender: TObject);
@@ -183,18 +309,103 @@ begin
   ActionConnect.Execute;
 end;
 
-procedure TFormTerminal.AddLine(const AText: String);
+function TFormTerminal.GetSerialCanRead: Boolean;
 begin
-  WriteLn('AddLine ', GetCurrentThreadId, ' (main: ', MainThreadID, ')');
-  if Application.Terminated then
-    Exit;
-  if AText = '' then
-    Exit;
-  if Trim(MemoTTY.Lines[FTermCursor.Y]) <> '' then
+  Result := Serial.Active and ToggleBoxConnect.Checked and not Application.Terminated;
+end;
+
+procedure TFormTerminal.DisplayPressedKeys;
+var
+  i, VIndex: Integer;
+  VText: String;
+  c: Char;
+begin
+  VText := '';
+  for i := FTotalPressedKeys downto 1 do
+  begin
+    if FTotalPressedKeys < MAX_KEY_PRESSED_DISLAY then
+      VIndex := i
+    else
+      VIndex := i + FCurrentPressedKeysIndex;
+    if VIndex > MAX_KEY_PRESSED_DISLAY then
+      VIndex := VIndex - MAX_KEY_PRESSED_DISLAY;
+    c := FPressedKeys[VIndex];
+    VText := VText + ' ' + c + ' (#' + IntToStr(Ord(c)) + ')';
+  end;
+  EditLastKeys.Text := Copy(VText, 2, Length(VText) - 1);
+end;
+
+procedure TFormTerminal.CheckTTYExist;
+begin
+  FTTYExist := FileExists(Device);
+end;
+
+procedure TFormTerminal.DisplayText(const AText: String);
+begin
+  DisplayTerminal(AText, True);
+end;
+
+procedure TFormTerminal.DisplayTerminal(const AText: String; const ANewLine: Boolean);
+
+  procedure NewLine;
+  begin
     Inc(FTermCursor.Y);
-  MemoTTY.Lines[FTermCursor.Y] := AText;
-  FTermCursor.Y := MemoTTY.Lines.Count;
-  MemoTTY.CaretPos := FTermCursor;
+  end;
+
+  procedure CarriageReturn;
+  begin
+    FTermCursor.X := 0;
+  end;
+
+  procedure AddChar(const c: Char);
+  var
+    VLine: String;
+  begin
+    while MemoTTY.Lines.Count < FTermCursor.Y do
+      MemoTTY.Lines.Add('');
+    VLine := MemoTTY.Lines[FTermCursor.Y];
+    while Length(VLine) < FTermCursor.X do
+      VLine := VLine + ' ';
+    if Length(VLine) = FTermCursor.X then
+      VLine := VLine + c
+    else
+      VLine[FTermCursor.X + 1] := c;
+    MemoTTY.Lines[FTermCursor.Y] := VLine;
+    Inc(FTermCursor.X);
+  end;
+
+var
+  i: Integer;
+  c: Char;
+begin
+  MemoTTY.Lines.BeginUpdate;
+  try
+    if ANewLine and (FTermCursor.X > 0) then
+    begin
+      NewLine;
+      CarriageReturn;
+    end;
+    for i := 1 to Length(AText) do
+    begin
+      c := AText[i];
+      case c of
+        #10:
+          NewLine;
+        #13:
+          CarriageReturn;
+        else
+          AddChar(c);
+      end;
+    end;
+    if ANewLine then
+    begin
+      NewLine;
+      CarriageReturn;
+    end;
+    MemoTTY.CaretPos := Point(FTermCursor.X, FTermCursor.Y + 1);
+  finally
+    MemoTTY.Lines.EndUpdate;
+  end;
 end;
 
 procedure TFormTerminal.DisplayConnected(const AValue: Boolean);
@@ -230,6 +441,44 @@ begin
   FIniFile.WriteString('MAIN', 'config_path', ConfigPath);
   FIniFile.WriteString('MAIN', 'bin_path', BinPath);
   FIniFile.WriteString('MAIN', 'avrdude_path', AvrdudePath);
+end;
+
+procedure TFormTerminal.TMReadTimeout(var AMsg: TLMessage);
+begin
+  if ToggleBoxConnect.Checked then
+  begin
+    DisplayText('Read timeout');
+    TTYClose;
+  end;
+end;
+
+procedure TFormTerminal.TMWriteTimeout(var AMsg: TLMessage);
+begin
+  if ToggleBoxConnect.Checked then
+  begin
+    DisplayText('Write timeout');
+    TTYClose;
+  end;
+end;
+
+procedure TFormTerminal.TTYOpen;
+begin
+  if not Serial.Active then
+  begin
+    DisplayText('Connect');
+    Serial.Open;
+    ToggleBoxConnect.Checked := True;
+  end;
+end;
+
+procedure TFormTerminal.TTYClose;
+begin
+  if Serial.Active then
+  begin
+    ToggleBoxConnect.Checked := False;
+    Serial.Close;
+    DisplayText('Disconnected');
+  end;
 end;
 
 end.

@@ -95,6 +95,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="LazUtils"/>
+      </Item>
+      <Item>
         <PackageName Value="LazSerialPort"/>
       </Item>
       <Item>

@@ -8,8 +8,8 @@
         <Filename Value="IRTest.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="27"/>
-        <CursorPos X="12" Y="51"/>
+        <TopLine Value="26"/>
+        <CursorPos X="35" Y="57"/>
         <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit>
@@ -17,8 +17,8 @@
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="39"/>
-        <CursorPos X="3" Y="54"/>
+        <TopLine Value="252"/>
+        <CursorPos X="25" Y="270"/>
         <UsageCount Value="42"/>
         <Loaded Value="True"/>
       </Unit>
@@ -168,10 +168,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="88" Column="17" TopLine="78"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="46" Column="35" TopLine="31"/>
       </Position>
       <Position>
@@ -285,6 +281,10 @@
       <Position>
         <Filename Value="IRTest.lpr"/>
         <Caret Line="55" Column="42" TopLine="31"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="57" Column="7" TopLine="26"/>
       </Position>
     </JumpHistory>
     <RunParams>
