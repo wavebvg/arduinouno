@@ -267,7 +267,7 @@ function AnalogRead(const APin: Byte): Word;
 procedure AnalogWrite(const APin: Byte; const AValue: Integer);
 procedure Sleep10ms(Time: Byte);
 procedure Wait(Time: Byte);
-procedure SleepMicroSecs(Time: LongInt);
+procedure SleepMicroSecs(const ATime: LongInt);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(AValue: longint): string;
 
@@ -577,30 +577,77 @@ begin
   UARTWrite(#13);
 end;
 
-procedure SleepMicroSecs(Time: LongInt);
+procedure SleepMicroSecs(const ATime: LongInt);
+label
+  loop, skipfirst, normal, skip4;
 var
-  VTime: LongInt;
+  VR18, VR19, VR20, VR21: Byte;
 begin
-  VTime := Time div 3;
-  while VTime > 0 do
-  begin
-    Dec(VTime);
-    asm
-      nop
-      nop
-      nop
-      nop
-      nop
-      nop
-      nop
-      nop
-      nop
-      nop
-      nop
-      nop
-      nop
-    end;
-  end;
+  (* ~ 40/16 мкс требуется для запуска sleep *)
+  (* ~ 8/16 мкс возможный минимум запуска sleep *)
+  asm            
+    // CALL                   // 4
+    PUSH R18                  // 2
+    PUSH R19                  // 2
+    PUSH R20                  // 2
+    PUSH R21                  // 2
+    PUSH R22                  // 2
+    PUSH R23                  // 2
+    LDD R18, ATime            // 2
+    LDD R19, ATime + 1        // 3
+    LDD R20, ATime + 2        // 3
+    LDD R21, ATime + 3        // 3
+    LDI R22, 8                // 1
+    LDI R23, 15               // 1
+    loop:
+            CPI R22, 0        // 1
+            BRNE skipfirst    // 1|2
+              NOP             // 1
+              NOP             // 1
+              NOP             // 1
+              NOP             // 1
+              NOP             // 1
+              RJMP normal     // 2
+            skipfirst:
+            DEC R22           // 1
+            normal:
+            NOP               // 1
+            NOP               // 1
+            NOP               // 1
+            NOP               // 1
+            DEC R18           // 1
+            BRNE loop         // 1|2
+            NOP               // 1
+          DEC R19             // 1
+          BRNE loop           // 1|2
+          NOP                 // 1
+        DEC R20               // 1
+        BRNE loop             // 1|2
+        CPI R21, 0            // 1
+        BREQ skip4            // 1|2
+      DEC R21                 // 1
+      BRNE loop               // 1|2
+      skip4:
+      NOP                     // 1
+    STD VR18, R18
+    STD VR19, R19
+    STD VR20, R20
+    STD VR21, R21
+    POP R18                   // 2
+    POP R19                   // 2
+    POP R20                   // 2
+    POP R21                   // 2
+    POP R22                   // 2
+    POP R23                   // 2
+    // RET                    // 4
+  end['r18','r19','r20','r21','r22']; // Used registers to be published to compiler
+  //UARTWrite(IntToStr(VR18));
+  //UARTWrite(' ');
+  //UARTWrite(IntToStr(VR19));
+  //UARTWrite(' ');
+  //UARTWrite(IntToStr(VR20));
+  //UARTWrite(' ');
+  //UARTWriteLn(IntToStr(VR21));
 end;
 
 procedure Wait(Time: Byte);
@@ -643,7 +690,7 @@ begin
     outer:
       ldi r21, Faktor
       inner1:         // 640*Faktor= 640*15*1 = 9600 cycles/1MHz
-        ldi r22,128
+        ldi r22,135
         inner2:       // 5*128 = 640 cycles
           nop         // 1 cycle
           nop         // 1 cycle

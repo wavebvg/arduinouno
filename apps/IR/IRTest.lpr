@@ -5,56 +5,38 @@ program IRTest;
 
 uses
   ArduinoTools,
-  UInterrupts,
-  IRRemote,
-  IRRemoteISR;
+  UInterrupts;
 
 const
   IR_PIN_PORT: SmallInt = 11;
+  INTERVAL = 200;
 
 type
   TIRState = (irsIdle, irsWait);
 
 var
-  VValue: Boolean;
-  VState: TIRState;
-  VTimer: Integer;
-  VCounter: Integer;
+  MSecs: Longint;
+
+  procedure PrintTime;
+  begin
+    UARTWriteLn(IntToStr(MSecs));
+  end;
 
 begin
   UARTInit;
-  VCounter := 0;
-  VTimer := 0;
-  VState := irsIdle;
+  UARTWriteLn('start');
+  MSecs := 0;
+  //repeat
+  //  Sleep10ms(INTERVAL);
+  //  Inc(MSecs, INTERVAL * 10);
+  //  if MSecs mod 2000 = 0 then
+  //    PrintTime;
+  //until False;   
+  SleepMicroSecs(3000000);
+  UARTWriteLn('SleepMicroSecs 3000000');
+  Sleep10ms(200);
+  UARTWriteLn('Sleep10ms 2000000');
   repeat
-    Inc(VCounter);
-    VValue := DigitalRead(IR_PIN_PORT);
-    if VValue then
-    begin
-      Inc(VTimer);
-      case VState of
-        irsIdle:
-          VState := irsIdle;
-        irsWait: ;
-      end;
-    end
-    else
-    begin
-      case VState of
-        irsIdle: ;
-        irsWait:
-        begin
-          VState := irsIdle;
-          UARTWrite('Key pressed timer: ');
-          UARTWriteLn(IntToStr(VTimer));
-          VTimer := 0;
-        end;
-      end;
-    end;
-    if VCounter div 100000 = 0 then
-    begin
-      UARTWriteLn(IntToStr(Ord(VValue)));
-      SleepMicroSecs(1000000 * 4);
-    end;
+    Sleep10ms(200);
   until False;
 end.

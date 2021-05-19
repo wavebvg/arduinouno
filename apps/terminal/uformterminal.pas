@@ -78,6 +78,7 @@ type
     FCurrentPressedKeysIndex: Integer;
     FPressedKeys: TPressedKeys;
     FTTYExist: Boolean;
+    FStartTime: TDateTime;
     procedure CheckTTYExist;
     procedure DisplayTerminal(const AText: String; const ANewLine: Boolean = False);
     procedure DisplayText(const AText: String);
@@ -353,8 +354,15 @@ procedure TFormTerminal.DisplayTerminal(const AText: String; const ANewLine: Boo
   end;
 
   procedure CarriageReturn;
+  var
+    VMS: Integer;
   begin
     FTermCursor.X := 0;
+    if (FStartTime > 0) and SerialCanRead then
+    begin
+      VMS := MilliSecondsBetween(Now, FStartTime);
+      DisplayTerminal(IntToStr(VMS) + ': ');
+    end;
   end;
 
   procedure AddChar(const c: Char);
@@ -467,6 +475,7 @@ begin
   begin
     DisplayText('Connect');
     Serial.Open;
+    FStartTime := Now;
     ToggleBoxConnect.Checked := True;
   end;
 end;
