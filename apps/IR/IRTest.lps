@@ -2,14 +2,13 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Debug"/>
     <Units>
       <Unit>
         <Filename Value="IRTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="12"/>
-        <CursorPos X="28" Y="40"/>
-        <UsageCount Value="106"/>
+        <CursorPos X="21" Y="20"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -17,9 +16,9 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="580"/>
-        <CursorPos X="9" Y="587"/>
-        <UsageCount Value="59"/>
+        <TopLine Value="577"/>
+        <CursorPos X="54" Y="582"/>
+        <UsageCount Value="74"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -29,7 +28,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="53"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemote.pas"/>
@@ -37,7 +36,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="16" Y="16"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="53"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemoteISR.pas"/>
@@ -45,7 +44,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="52"/>
         <CursorPos X="21" Y="55"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="53"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/servo.pas"/>
@@ -171,124 +170,124 @@
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="580" Column="39" TopLine="570"/>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="23" Column="25"/>
       </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="270" Column="32" TopLine="270"/>
+        <Caret Line="646" Column="10" TopLine="579"/>
       </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="580" Column="39" TopLine="580"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="270" Column="39" TopLine="251"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="580" Column="33" TopLine="580"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="270" Column="33" TopLine="270"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="589" Column="21" TopLine="583"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="11" Column="28"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="580" Column="26" TopLine="570"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="270" Column="26" TopLine="251"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="584" Column="20" TopLine="565"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="589" Column="17" TopLine="570"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="590" Column="23" TopLine="570"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="585" Column="14" TopLine="570"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="586" Column="20" TopLine="570"/>
+        <Caret Line="603" Column="5" TopLine="582"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="36" Column="20" TopLine="12"/>
+        <Caret Line="30" Column="23"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="20" Column="18" TopLine="12"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="270" Column="11" TopLine="257"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="613" Column="12" TopLine="585"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="580" Column="32" TopLine="575"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="270" Column="31" TopLine="270"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="582" Column="18" TopLine="576"/>
+        <Caret Line="34" Column="19"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="26" Column="23" TopLine="14"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="270" Column="11" TopLine="257"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="601" TopLine="587"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="600" Column="10" TopLine="588"/>
+        <Caret Line="46" Column="44" TopLine="14"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="36" Column="5" TopLine="13"/>
+        <Caret Line="41" Column="29" TopLine="17"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="35" Column="18" TopLine="15"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="38" Column="25" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="36" Column="22" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="28" Column="29" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="27" Column="49" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="39" Column="27" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="86" Column="6" TopLine="22"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="40" Column="24" TopLine="17"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="19" Column="5" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="45" Column="26" TopLine="17"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="41" Column="27" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="42" Column="18" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="19" Column="9" TopLine="13"/>
       </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="600" Column="15" TopLine="582"/>
+        <Caret Line="582" Column="17" TopLine="561"/>
       </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="630" Column="18" TopLine="618"/>
+        <Caret Line="627" Column="12" TopLine="601"/>
       </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="627" Column="13" TopLine="616"/>
+        <Caret Line="580" Column="58" TopLine="576"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="586" Column="19" TopLine="570"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="594" Column="10" TopLine="572"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="338" Column="21" TopLine="316"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="583" Column="10" TopLine="575"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="607" Column="45" TopLine="580"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="315" Column="4" TopLine="304"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="11" Column="3"/>
       </Position>
     </JumpHistory>
     <RunParams>

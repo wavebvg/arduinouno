@@ -577,77 +577,50 @@ begin
   UARTWrite(#13);
 end;
 
-procedure SleepMicroSecs(const ATime: LongInt);
+procedure SleepMicroSecs(const ATime: Longint); assembler;  
 label
-  loop, skipfirst, normal, skip4;
-var
-  VR18, VR19, VR20, VR21: Byte;
-begin
-  (* ~ 40/16 мкс требуется для запуска sleep *)
-  (* ~ 8/16 мкс возможный минимум запуска sleep *)
-  asm            
-    // CALL                   // 4
-    PUSH R18                  // 2
-    PUSH R19                  // 2
-    PUSH R20                  // 2
-    PUSH R21                  // 2
-    PUSH R22                  // 2
-    PUSH R23                  // 2
-    LDD R18, ATime            // 2
-    LDD R19, ATime + 1        // 3
-    LDD R20, ATime + 2        // 3
-    LDD R21, ATime + 3        // 3
-    LDI R22, 8                // 1
-    LDI R23, 15               // 1
-    loop:
-            CPI R22, 0        // 1
-            BRNE skipfirst    // 1|2
-              NOP             // 1
-              NOP             // 1
-              NOP             // 1
-              NOP             // 1
-              NOP             // 1
-              RJMP normal     // 2
-            skipfirst:
-            DEC R22           // 1
-            normal:
-            NOP               // 1
-            NOP               // 1
-            NOP               // 1
-            NOP               // 1
-            DEC R18           // 1
-            BRNE loop         // 1|2
-            NOP               // 1
-          DEC R19             // 1
-          BRNE loop           // 1|2
-          NOP                 // 1
-        DEC R20               // 1
-        BRNE loop             // 1|2
-        CPI R21, 0            // 1
-        BREQ skip4            // 1|2
-      DEC R21                 // 1
-      BRNE loop               // 1|2
-      skip4:
-      NOP                     // 1
-    STD VR18, R18
-    STD VR19, R19
-    STD VR20, R20
-    STD VR21, R21
-    POP R18                   // 2
-    POP R19                   // 2
-    POP R20                   // 2
-    POP R21                   // 2
-    POP R22                   // 2
-    POP R23                   // 2
-    // RET                    // 4
-  end['r18','r19','r20','r21','r22']; // Used registers to be published to compiler
-  //UARTWrite(IntToStr(VR18));
-  //UARTWrite(' ');
-  //UARTWrite(IntToStr(VR19));
-  //UARTWrite(' ');
-  //UARTWrite(IntToStr(VR20));
-  //UARTWrite(' ');
-  //UARTWriteLn(IntToStr(VR21));
+  loop, compl;
+  (* ~ 32/16 мкс возможный минимум запуска sleep *)
+asm
+         // CALL                       // 4
+         // Wait start
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         // PUSH stack
+         PUSH    R16                   // 2
+         PUSH    R17                   // 2
+         // Load values
+         LDI     R16, 0                // 1
+         LDI     R17, 2                // 1
+         // Loop
+         loop:
+         CP      R16, R22              // 1
+         CPC     R16, R23              // 1
+         CPC     R16, R24              // 1
+         CPC     R16, R25              // 1
+         BREQ    compl                 // 1|2
+         // Decrement
+         SUB     r22, R17              // 1
+         SBCI    r23, 0                // 1
+         SBCI    r24, 0                // 1
+         SBCI    r25, 0                // 1
+         LDI     R17, 1                // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         RJMP    loop                  // 2
+         compl:
+         // POP stack
+         POP     R16                   // 2
+         POP     R17                   // 2
+         // RET                        // 4
 end;
 
 procedure Wait(Time: Byte);

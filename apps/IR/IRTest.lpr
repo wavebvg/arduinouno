@@ -14,28 +14,13 @@ const
 type
   TIRState = (irsIdle, irsWait);
 
-var
-  MSecs: Longint;
-
-  procedure PrintTime;
-  begin
-    UARTWriteLn(IntToStr(MSecs));
-  end;
-
 begin
-  UARTInit;
-  UARTWriteLn('start');
-  MSecs := 0;
-  //repeat
-  //  Sleep10ms(INTERVAL);
-  //  Inc(MSecs, INTERVAL * 10);
-  //  if MSecs mod 2000 = 0 then
-  //    PrintTime;
-  //until False;   
+  //UARTInit;
+  //UARTWriteLn('start');
   SleepMicroSecs(3000000);
-  UARTWriteLn('SleepMicroSecs 3000000');
-  Sleep10ms(200);
-  UARTWriteLn('Sleep10ms 2000000');
+  //UARTWriteLn('SleepMicroSecs 3000000');
+  //Sleep10ms(200);
+  //UARTWriteLn('Sleep10ms 2000000');
   repeat
     Sleep10ms(200);
   until False;
