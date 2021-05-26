@@ -29,6 +29,7 @@ type
     ButtonBinPath: TButton;
     ButtonAvrdude: TButton;
     ButtonPanel: TButtonPanel;
+    CheckBoxShowTime: TCheckBox;
     ComboBoxTTY: TComboBox;
     EditConfigPath: TEdit;
     EditBinPath: TEdit;
@@ -43,17 +44,19 @@ type
     procedure ButtonBinPathClick(Sender: TObject);
     procedure ButtonConfigPathClick(Sender: TObject);
   private
-    FAvrdudePath: string;
-    FBinPath: string;
-    FConfigPath: string;
-    FDevice: string;
+    FAvrdudePath: String;
+    FBinPath: String;
+    FConfigPath: String;
+    FDevice: String;
+    FShowTime: Boolean;
   public
-    function ShowModal: integer; override;
+    function ShowModal: Integer; override;
 
-    property Device: string read FDevice write FDevice;
-    property ConfigPath: string read FConfigPath write FConfigPath;
-    property AvrdudePath: string read FAvrdudePath write FAvrdudePath;
-    property BinPath: string read FBinPath write FBinPath;
+    property Device: String read FDevice write FDevice;
+    property ConfigPath: String read FConfigPath write FConfigPath;
+    property AvrdudePath: String read FAvrdudePath write FAvrdudePath;
+    property BinPath: String read FBinPath write FBinPath;
+    property ShowTime: Boolean read FShowTime write FShowTime;
   end;
 
 var
@@ -86,10 +89,10 @@ begin
     EditAvrdude.Text := OpenDialog.FileName;
 end;
 
-function TFormDialogPreferences.ShowModal: integer;
+function TFormDialogPreferences.ShowModal: Integer;
 var
   VTTYFiles: TStrings;
-  i: integer;
+  i: Integer;
 begin
   VTTYFiles := TStringList.Create;
   try
@@ -111,6 +114,7 @@ begin
   EditConfigPath.Text := ConfigPath;
   EditBinPath.Text := BinPath;
   EditAvrdude.Text := AvrdudePath;
+  CheckBoxShowTime.Checked := ShowTime;
   Result := inherited ShowModal;
   if Result = mrOk then
   begin
@@ -118,6 +122,7 @@ begin
     ConfigPath := EditConfigPath.Text;
     BinPath := EditBinPath.Text;
     AvrdudePath := EditAvrdude.Text;
+    ShowTime := CheckBoxShowTime.Checked;
   end;
 end;
 

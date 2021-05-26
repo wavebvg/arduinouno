@@ -78,7 +78,9 @@ type
     FCurrentPressedKeysIndex: Integer;
     FPressedKeys: TPressedKeys;
     FTTYExist: Boolean;
+    FShowTime: Boolean;
     FStartTime: TDateTime;
+    FInShowTime: Boolean;
     procedure CheckTTYExist;
     procedure DisplayTerminal(const AText: String; const ANewLine: Boolean = False);
     procedure DisplayText(const AText: String);
@@ -101,6 +103,7 @@ type
     property ConfigPath: String read FConfigPath write FConfigPath;
     property BinPath: String read FBinPath write FBinPath;
     property AvrdudePath: String read FAvrdudePath write FAvrdudePath;
+    property ShowTime: Boolean read FShowTime write FShowTime;
   end;
 
 var
@@ -216,12 +219,14 @@ begin
   FormDialogPreferences.ConfigPath := ConfigPath;
   FormDialogPreferences.BinPath := BinPath;
   FormDialogPreferences.AvrdudePath := AvrdudePath;
+  FormDialogPreferences.ShowTime := ShowTime;
   if FormDialogPreferences.ShowModal = mrOk then
   begin
     Device := FormDialogPreferences.Device;
     ConfigPath := FormDialogPreferences.ConfigPath;
     BinPath := FormDialogPreferences.BinPath;
     AvrdudePath := FormDialogPreferences.AvrdudePath;
+    ShowTime := FormDialogPreferences.ShowTime;
     SaveConfig;
   end;
 end;
@@ -354,21 +359,26 @@ procedure TFormTerminal.DisplayTerminal(const AText: String; const ANewLine: Boo
   end;
 
   procedure CarriageReturn;
-  var
-    VMS: Integer;
   begin
     FTermCursor.X := 0;
-    if (FStartTime > 0) and SerialCanRead then
-    begin
-      VMS := MilliSecondsBetween(Now, FStartTime);
-      DisplayTerminal(IntToStr(VMS) + ': ');
-    end;
   end;
 
   procedure AddChar(const c: Char);
   var
     VLine: String;
+    VMS: Integer;
   begin
+    if not FInShowTime and ShowTime and (FTermCursor.X = 0) and
+      (FStartTime > 0) and SerialCanRead then
+    begin
+      VMS := MilliSecondsBetween(Now, FStartTime);
+      FInShowTime := True;
+      try
+        DisplayTerminal(IntToStr(VMS) + ': ');
+      finally
+        FInShowTime := False;
+      end;
+    end;
     while MemoTTY.Lines.Count < FTermCursor.Y do
       MemoTTY.Lines.Add('');
     VLine := MemoTTY.Lines[FTermCursor.Y];
@@ -441,6 +451,7 @@ begin
   ConfigPath := FIniFile.ReadString('MAIN', 'config_path', '');
   BinPath := FIniFile.ReadString('MAIN', 'bin_path', '');
   AvrdudePath := FIniFile.ReadString('MAIN', 'avrdude_path', '');
+  ShowTime := FIniFile.ReadBool('MAIN', 'show_time', False);
 end;
 
 procedure TFormTerminal.SaveConfig;
@@ -449,6 +460,7 @@ begin
   FIniFile.WriteString('MAIN', 'config_path', ConfigPath);
   FIniFile.WriteString('MAIN', 'bin_path', BinPath);
   FIniFile.WriteString('MAIN', 'avrdude_path', AvrdudePath);
+  FIniFile.WriteBool('MAIN', 'show_time', ShowTime);
 end;
 
 procedure TFormTerminal.TMReadTimeout(var AMsg: TLMessage);
@@ -475,7 +487,8 @@ begin
   begin
     DisplayText('Connect');
     Serial.Open;
-    FStartTime := Now;
+    if ShowTime then
+      FStartTime := Now;
     ToggleBoxConnect.Checked := True;
   end;
 end;
@@ -486,6 +499,7 @@ begin
   begin
     ToggleBoxConnect.Checked := False;
     Serial.Close;
+    FStartTime := 0;
     DisplayText('Disconnected');
   end;
 end;

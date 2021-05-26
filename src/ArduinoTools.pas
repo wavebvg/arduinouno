@@ -267,7 +267,7 @@ function AnalogRead(const APin: Byte): Word;
 procedure AnalogWrite(const APin: Byte; const AValue: Integer);
 procedure Sleep10ms(Time: Byte);
 procedure Wait(Time: Byte);
-procedure SleepMicroSecs(const ATime: LongInt);
+procedure SleepMicroSecs(const ATime: LongWord);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(AValue: longint): string;
 
@@ -313,36 +313,6 @@ implementation
 function IntToStr(AValue: longint): string;
 begin
   Str(AValue, Result);
-end;
-
-function IntToStr1(AValue: longint): string;
-var
-  VValue: longint;
-  VBuffer: array[0..9] of char;
-  i, l: byte;
-  VLessZero: byte;
-begin
-  VLessZero := byte(AValue < 0);
-  if VLessZero = 1 then
-    VValue := -AValue
-  else
-    VValue := AValue;
-  l := 0;
-  repeat
-    VBuffer[l] := char(48 + VValue mod 10);
-    VValue := VValue div 10;
-    Inc(l);
-  until VValue = 0;
-  if VLessZero = 1 then
-  begin
-    SetLength(Result, l + 1);
-    Result[1] := '-';
-  end
-  else
-    SetLength(Result, l);
-  for i := 1 to l do
-    Result[i + VLessZero] := VBuffer[l - i];
-  Result[l + VLessZero + 1] := #0;
 end;
 
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
@@ -577,40 +547,39 @@ begin
   UARTWrite(#13);
 end;
 
-procedure SleepMicroSecs(const ATime: Longint); assembler;  
+procedure SleepMicroSecs(const ATime: LongWord); assembler;  
 label
   loop, compl;
   (* ~ 32/16 мкс возможный минимум запуска sleep *)
 asm
-         // CALL                       // 4
-         // Wait start
-         NOP                           // 1
-         NOP                           // 1
-         NOP                           // 1
-         NOP                           // 1
-         NOP                           // 1
-         NOP                           // 1
-         NOP                           // 1
-         NOP                           // 1
+         // CALL                       // 4 + 4 
          // PUSH stack
          PUSH    R16                   // 2
-         PUSH    R17                   // 2
+         // Wait start                       
+         CP      R16, R22              // 1
+         CPC     R16, R23              // 1
+         CPC     R16, R24              // 1
+         CPC     R16, R25              // 1
+         BREQ    compl                 // 1|2
+         SUBI    r22, 2                // 1
+         SBCI    r23, 0                // 1
+         SBCI    r24, 0                // 1
+         SBCI    r25, 0                // 1
          // Load values
          LDI     R16, 0                // 1
-         LDI     R17, 2                // 1
          // Loop
          loop:
          CP      R16, R22              // 1
          CPC     R16, R23              // 1
          CPC     R16, R24              // 1
          CPC     R16, R25              // 1
-         BREQ    compl                 // 1|2
          // Decrement
-         SUB     r22, R17              // 1
+         SUBI    r22, 1                // 1
          SBCI    r23, 0                // 1
          SBCI    r24, 0                // 1
          SBCI    r25, 0                // 1
-         LDI     R17, 1                // 1
+         BREQ    compl                // 1|2
+         NOP                           // 1
          NOP                           // 1
          NOP                           // 1
          NOP                           // 1
@@ -619,7 +588,6 @@ asm
          compl:
          // POP stack
          POP     R16                   // 2
-         POP     R17                   // 2
          // RET                        // 4
 end;
 
@@ -652,7 +620,7 @@ end;  // procedure
 // Waitingtime = Time * 10 Milliseconds
 procedure Sleep10ms(Time: Byte);
 const
-  Faktor = 15 * ClockCyclesPerMicrosecond;
+  Faktor = 10 * ClockCyclesPerMicrosecond;
 label                 // Labels, here for the loop, has to be declared explicitly
   outer, inner1, inner2;
 var
@@ -662,13 +630,12 @@ begin
     ldd r20,Time      // Variables can be accessed, here a local variable
     outer:
       ldi r21, Faktor
-      inner1:         // 640*Faktor= 640*15*1 = 9600 cycles/1MHz
-        ldi r22,135
-        inner2:       // 5*128 = 640 cycles
-          nop         // 1 cycle
+      inner1:         // 1000*Faktor= 714*10 = 10000 cycles/1MHz
+        ldi r22,250
+        inner2:       // 4*250 = 1000 cycles
           nop         // 1 cycle
           dec r22     // 1 cycle
-        brne inner2   // 2 cycles in case of branch //one loop in sum 5 cycles
+        brne inner2   // 2 cycles
         dec r21
       brne inner1
       dec r20
@@ -747,7 +714,7 @@ end;
 
 constructor TCustomPined.Init(const APin: byte);
 begin
-  FPin:=APin;
+  FPin := APin;
 end;
 
 destructor TCustomPined.Deinit;

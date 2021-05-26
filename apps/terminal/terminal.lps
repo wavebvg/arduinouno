@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Debug"/>
     <Units>
       <Unit>
         <Filename Value="terminal.lpr"/>
@@ -20,8 +20,8 @@
         <UnitName Value="UFormTerminal"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="338"/>
-        <CursorPos X="42" Y="361"/>
+        <TopLine Value="362"/>
+        <CursorPos X="23" Y="370"/>
         <UsageCount Value="53"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -33,9 +33,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UFormDialogPreferences"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="61" Y="6"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="99"/>
+        <CursorPos X="41" Y="125"/>
         <UsageCount Value="46"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="ucomport.pas"/>
@@ -216,7 +219,7 @@
       <Unit>
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
         <UnitName Value="LazSerial"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="457"/>
         <CursorPos Y="474"/>
         <UsageCount Value="14"/>
@@ -233,7 +236,7 @@
       <Unit>
         <Filename Value="../../../../../fpc/lazarus/share/lazarus/components/lazutils/utf8process.pp"/>
         <UnitName Value="UTF8Process"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="32"/>
         <CursorPos X="3" Y="48"/>
         <UsageCount Value="11"/>
@@ -257,123 +260,123 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="167" Column="3" TopLine="160"/>
+        <Caret Line="71" Column="13" TopLine="65"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="157" Column="3" TopLine="146"/>
+        <Caret Line="103" Column="43" TopLine="79"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="65" Column="14" TopLine="32"/>
+        <Caret Line="104" Column="70" TopLine="80"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="168" Column="65" TopLine="142"/>
+        <Caret Line="179" Column="43" TopLine="166"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="154" Column="31" TopLine="150"/>
+        <Caret Line="228" Column="47" TopLine="206"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="58" Column="72" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="52" Column="19" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="102" Column="35" TopLine="96"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="107" Column="71" TopLine="97"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="106" Column="71" TopLine="96"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="117" Column="38" TopLine="97"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="155" Column="31" TopLine="151"/>
+        <Caret Line="227" Column="57" TopLine="206"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="166" Column="3" TopLine="150"/>
+        <Caret Line="366" Column="21" TopLine="353"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="90" Column="15" TopLine="75"/>
+        <Caret Line="368" Column="51" TopLine="353"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="166" Column="6" TopLine="166"/>
+        <Caret Line="484" Column="21" TopLine="459"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="49" Column="5" TopLine="32"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/lazarus/share/lazarus/components/lazutils/utf8process.pp"/>
-        <Caret Line="48" Column="3" TopLine="32"/>
+        <Caret Line="496" Column="15" TopLine="471"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="180" Column="19" TopLine="157"/>
+        <Caret Line="82" Column="15" TopLine="175"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="196" Column="28" TopLine="176"/>
+        <Caret Line="372" Column="34" TopLine="363"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="189" Column="55" TopLine="176"/>
+        <Caret Line="374" Column="9" TopLine="359"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="191" Column="55" TopLine="178"/>
+        <Caret Line="84" Column="15" TopLine="69"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="80" Column="14" TopLine="65"/>
+        <Caret Line="394" Column="3" TopLine="382"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="182" Column="55" TopLine="168"/>
+        <Caret Line="370" TopLine="360"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="165" Column="58" TopLine="161"/>
+        <Caret Line="376" TopLine="360"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="164" Column="61" TopLine="147"/>
+        <Caret Line="457" Column="51" TopLine="449"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="334" Column="20" TopLine="321"/>
+        <Caret Line="370" Column="28" TopLine="341"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="186" Column="35" TopLine="179"/>
+        <Caret Line="81" Column="14" TopLine="71"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="176" Column="45" TopLine="163"/>
+        <Caret Line="83" Column="16" TopLine="71"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="81" Column="15" TopLine="73"/>
+        <Caret Line="106" Column="62" TopLine="82"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="85" Column="29" TopLine="73"/>
+        <Caret Line="222" Column="45" TopLine="212"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="138" Column="38" TopLine="136"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="140" Column="22" TopLine="136"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="158" Column="25" TopLine="145"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="195" Column="12" TopLine="184"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="94" Column="15" TopLine="83"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="358" Column="35" TopLine="336"/>
+        <Caret Line="229" Column="47" TopLine="212"/>
       </Position>
     </JumpHistory>
     <RunParams>
