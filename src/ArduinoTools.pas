@@ -518,7 +518,7 @@ function UARTReadChar: Char;
 begin
   while UCSR0A and (1 shl RXC0) = 0 do
   asm
-  nop;                                        // Wait for a character to arrive
+    nop;                                        // Wait for a character to arrive
   end;
   Result := Char(UDR0);                    // Read character
 end;
