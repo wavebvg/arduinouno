@@ -2,24 +2,24 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Debug"/>
+    <BuildModes Active="Release"/>
     <Units>
       <Unit>
         <Filename Value="IRTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="173"/>
-        <CursorPos X="54" Y="210"/>
-        <UsageCount Value="131"/>
+        <TopLine Value="165"/>
+        <CursorPos X="56" Y="130"/>
+        <UsageCount Value="135"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="324"/>
-        <CursorPos X="14" Y="336"/>
-        <UsageCount Value="84"/>
+        <TopLine Value="504"/>
+        <CursorPos X="21" Y="523"/>
+        <UsageCount Value="88"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -29,7 +29,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="63"/>
+        <UsageCount Value="67"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemote.pas"/>
@@ -37,7 +37,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="16" Y="16"/>
-        <UsageCount Value="63"/>
+        <UsageCount Value="67"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemoteISR.pas"/>
@@ -45,7 +45,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="52"/>
         <CursorPos X="21" Y="55"/>
-        <UsageCount Value="63"/>
+        <UsageCount Value="67"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/servo.pas"/>
@@ -112,10 +112,10 @@
       <Unit>
         <Filename Value="../../../../../fpc/3.2.0/src/rtl/embedded/avr/atmega328p.pp"/>
         <UnitName Value="ATmega328P"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="58"/>
-        <CursorPos X="43" Y="64"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="6" Y="9"/>
         <UsageCount Value="22"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/3.2.0/src/compiler/pdecsub.pas"/>
@@ -171,43 +171,19 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="203" Column="19" TopLine="171"/>
+        <Caret Line="54" Column="71" TopLine="31"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="67" Column="39" TopLine="59"/>
+        <Caret Line="168" Column="11" TopLine="151"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="221" Column="32" TopLine="191"/>
+        <Caret Line="14" Column="23"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="45" Column="14" TopLine="23"/>
-      </Position>
-      <Position>
-        <Filename Value="IRTest.lpr"/>
-        <Caret Line="221" Column="30" TopLine="201"/>
-      </Position>
-      <Position>
-        <Filename Value="IRTest.lpr"/>
-        <Caret Line="222" Column="24" TopLine="194"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="336" Column="12" TopLine="312"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="253" Column="11" TopLine="231"/>
-      </Position>
-      <Position>
-        <Filename Value="IRTest.lpr"/>
-        <Caret Line="224" Column="16" TopLine="209"/>
-      </Position>
-      <Position>
-        <Filename Value="IRTest.lpr"/>
-        <Caret Line="14" Column="36"/>
+        <Caret Line="171" Column="25" TopLine="145"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
@@ -215,79 +191,103 @@
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="110" Column="24" TopLine="88"/>
+        <Caret Line="14" Column="14"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="14" Column="18"/>
+        <Caret Line="103" Column="94" TopLine="78"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="108" Column="24" TopLine="86"/>
+        <Caret Line="158" Column="35" TopLine="129"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="15" Column="21"/>
+        <Caret Line="20" Column="49"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="195" Column="45" TopLine="167"/>
+        <Caret Line="174" Column="43" TopLine="155"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="17" Column="17"/>
+        <Caret Line="177" Column="39" TopLine="155"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="206" Column="43" TopLine="183"/>
+        <Caret Line="180" Column="11" TopLine="162"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="15" Column="21"/>
+        <Caret Line="190" Column="24" TopLine="168"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="16" Column="23"/>
+        <Caret Line="192" Column="44" TopLine="168"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="17" Column="23"/>
+        <Caret Line="134" Column="16" TopLine="126"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="18" Column="31"/>
+        <Caret Line="186" Column="15" TopLine="171"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="204" Column="49" TopLine="182"/>
+        <Caret Line="52" Column="19" TopLine="30"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="19" Column="32"/>
+        <Caret Line="188" Column="31" TopLine="171"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="20" Column="33"/>
+        <Caret Line="51" Column="13" TopLine="29"/>
       </Position>
       <Position>
         <Filename Value="IRTest.lpr"/>
-        <Caret Line="204" Column="59" TopLine="170"/>
+        <Caret Line="130" Column="56" TopLine="165"/>
       </Position>
       <Position>
-        <Filename Value="IRTest.lpr"/>
-        <Caret Line="207" Column="35" TopLine="170"/>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="256" Column="11" TopLine="234"/>
       </Position>
       <Position>
-        <Filename Value="IRTest.lpr"/>
-        <Caret Line="19" Column="50"/>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="539" Column="3" TopLine="535"/>
       </Position>
       <Position>
-        <Filename Value="IRTest.lpr"/>
-        <Caret Line="207" Column="53" TopLine="170"/>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="526" Column="11" TopLine="504"/>
       </Position>
       <Position>
-        <Filename Value="IRTest.lpr"/>
-        <Caret Line="20" Column="33"/>
+        <Filename Value="../../../../../fpc/3.2.0/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="123" Column="6" TopLine="101"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/3.2.0/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="132" Column="6" TopLine="101"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/3.2.0/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="365" Column="53" TopLine="328"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/3.2.0/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="399" Column="18" TopLine="362"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/3.2.0/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="427" Column="20" TopLine="391"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/3.2.0/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="453" Column="19" TopLine="417"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="516" Column="11" TopLine="504"/>
       </Position>
     </JumpHistory>
     <RunParams>

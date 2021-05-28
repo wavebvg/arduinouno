@@ -10,17 +10,17 @@ uses
 
 const
   IR_PIN_PORT: SmallInt = 11;
-  IR_INTERVAL = 56;
-  IR_WAIT_TIMEOUT = 15000 + IR_INTERVAL;
-  IR_DATA_VALUE_TIME = 562;
-  IR_SPACE_VALUE0_TIME = IR_DATA_VALUE_TIME;
-  IR_SPACE_VALUE1_TIME = 3 * IR_DATA_VALUE_TIME;
-  IR_DATA_PREAMBLE_TIME = 9000;
-  IR_SPACE_PREAMBLE_TIME = 4500;
-  IR_REPEAT_PREAMBLE_TIME = 2500;
+  IR_INTERVAL = 281;
+  IR_INTERVAL_DIFF = 25;
+  IR_VALUE_TIME = 562;
+  IR_VALUE0_TIME = 562;
+  IR_VALUE1_TIME = 1687;
+  IR_PREAMBLE_TIME = 9000;
+  IR_DATA_TIME = 4500;
+  IR_REPEAT_TIME = 2500;
+  IR_INVALID_TIMEOUT = 65000;
 
 type
-  TIRState = (irsWait, irsData, irsSpace);
   TIREventType = (iretUndefined, iretPreamble, iretRepeat, iretData);
   TIRReadData = (irrdAddress, irrdAddressInvert, irrdCommand, irrdCommandInvert);
   TIRReadDatas = array[TIRReadData] of Byte;
@@ -29,6 +29,12 @@ type
     EventType: TIREventType;
     Value: Boolean;
   end;
+
+  TIREventTime = packed record
+    Data, Space: Word;
+  end;
+
+  TIREventTimes = array[0..9] of TIREventTime;
 
   TIRValue = packed record
     Address, Command: Byte;
@@ -41,6 +47,12 @@ type
     InData: Boolean;
   end;
 
+var
+  EventTimes: TIREventTimes;
+  CurrentEventTime: Byte;
+
+type
+
   { TIRReceiver }
 
   TIRReceiver = object(TCustomPinOutput)
@@ -52,6 +64,8 @@ type
     function AddContextValue(var AContext: TIRContext; const AValue: Boolean): Boolean;
   protected
     function InInterval(const AValue: Word; const AIntervalMiddle: Word): Boolean;
+      overload;
+    function InInterval(const AValue: Word; const AIntervalMin, AIntervalMax: Word): Boolean; overload;
     procedure ParseEvent(var AContext: TIRContext; const AData, ASpace: Word);
     procedure DoEvent(var AContext: TIRContext; const AEvent: TIREvent);
   public
@@ -71,8 +85,7 @@ type
     FillByte(FCurrentValue, SizeOf(TIRValue), 0);
   end;
 
-  function TIRReceiver.AddContextValue(var AContext: TIRContext;
-  const AValue: Boolean): Boolean;
+  function TIRReceiver.AddContextValue(var AContext: TIRContext; const AValue: Boolean): Boolean;
   begin
     Result := False;
     if AValue then
@@ -97,120 +110,118 @@ type
     end;
   end;
 
-  function TIRReceiver.InInterval(const AValue: Word;
-  const AIntervalMiddle: Word): Boolean;
+  function TIRReceiver.InInterval(const AValue: Word; const AIntervalMiddle: Word): Boolean;
   begin
-    Result := (AValue > AIntervalMiddle - IR_INTERVAL) and
-      (AValue < AIntervalMiddle + IR_INTERVAL);
+    Result := InInterval(AValue, AIntervalMiddle - IR_INTERVAL, AIntervalMiddle + IR_INTERVAL);
+  end;
+
+  function TIRReceiver.InInterval(const AValue: Word; const AIntervalMin, AIntervalMax: Word): Boolean;
+  begin
+    Result := (AValue >= AIntervalMin) and (AValue <= AIntervalMax);
   end;
 
   function TIRReceiver.Read: TIRValue;
   var
-    VState: TIRState;
-    VData, VSpace, VTimer: Word;
     VValue: Boolean;
+    VInSpace: Boolean;
+    VTimer: Word;
+    VData: Word;
     VContext: TIRContext;
-
-    procedure CheckWait;
-    begin
-      if VTimer > IR_WAIT_TIMEOUT then
-      begin
-        UARTWriteLn('Wait mode');
-        FillByte(VContext, SizeOf(TIRReceiver), 0);
-        FIsInvalid := False;
-        FComplete := False;
-        VState := irsWait;
-        VTimer := 0;
-      end;
-    end;
-
   begin
-    VData := 0;
-    VSpace := 0;
     VTimer := 0;
     FComplete := False;
-    VState := irsWait;
-    FillByte(VContext, SizeOf(TIRReceiver), 0);
+    VInSpace := False;
+    VData := 0;
+    FIsInvalid := False;
+    VContext := Default(TIRContext);
     repeat
-      VValue := not DigitalRead(Pin);
-      if not FIsInvalid then
-        CheckWait
-      else
-      if VValue then
+      if FIsInvalid then
       begin
-        case VState of
-          irsWait:
-          begin
-            VState := irsData;
-            VTimer := 0;
-          end;
-          irsData:
-            CheckWait;
-          irsSpace:
-          begin
-            VState := irsData;
-            VSpace := VTimer;
-            VTimer := 0;
-            UARTWrite('Set space time to ');
-            UARTWriteLn(IntToStr(VSpace));
-            ParseEvent(VContext, VData, VSpace);
-          end;
+        if VTimer > IR_INVALID_TIMEOUT then
+        begin
+          VTimer := 0;
+          FIsInvalid := False;
+          VContext := Default(TIRContext);
         end;
       end
       else
       begin
-        case VState of
-          irsWait:
-            VTimer := 0;
-          irsData:
+        VValue := DigitalRead(Pin);
+        if VValue then
+        begin
+          if VInSpace then
           begin
-            VState := irsSpace;
+            VInSpace := False;
             VData := VTimer;
             VTimer := 0;
-            UARTWrite('Set data time to ');
-            UARTWriteLn(IntToStr(VData));
           end;
-          irsSpace:
-            CheckWait;
+        end
+        else
+        begin
+          if not VInSpace then
+          begin
+            if VData > 0 then
+            begin
+              ParseEvent(VContext, VData, VTimer);
+              VData := 0;
+            end;
+            VInSpace := True;
+            VTimer := 0;
+          end;
         end;
       end;
       SleepMicroSecs(IR_INTERVAL);
       Inc(VTimer, IR_INTERVAL);
-    until FComplete and not FIsInvalid;
+      Inc(VTimer, IR_INTERVAL_DIFF);
+    until FComplete;
     Result := FCurrentValue;
-    FLastValue := FCurrentValue;
+    FLastValue := Result;
   end;
 
   procedure TIRReceiver.ParseEvent(var AContext: TIRContext; const AData, ASpace: Word);
   var
     VEvent: TIREvent;
+    i: Byte;
   begin
-    VEvent.EventType := iretUndefined;
-    VEvent.Value := False;
-    if VEvent.EventType = iretUndefined then
+    if CurrentEventTime > Length(EventTimes) then
     begin
-      if InInterval(AData, IR_DATA_VALUE_TIME) then
-        if InInterval(ASpace, IR_SPACE_VALUE0_TIME) then
-        begin
-          VEvent.EventType := iretData;
-          VEvent.Value := False;
-        end
-        else if InInterval(ASpace, IR_SPACE_VALUE1_TIME) then
-        begin
-          VEvent.EventType := iretData;
-          VEvent.Value := True;
-        end;
+      for i := 0 to CurrentEventTime - 1 do
+      begin
+        UARTWrite('Data: ');
+        UARTWrite(IntToStr(EventTimes[i].Data));
+        UARTWrite(' space: ');
+        UARTWriteLn(IntToStr(EventTimes[i].Space));
+      end;
+      EventTimes := Default(TIREventTimes);
+      CurrentEventTime := 0;
     end;
-    if VEvent.EventType = iretUndefined then
+    EventTimes[CurrentEventTime].Data := AData;
+    EventTimes[CurrentEventTime].Space := ASpace;
+    Inc(CurrentEventTime);
+    VEvent := Default(TIREvent);
+    if InInterval(AData, IR_PREAMBLE_TIME) then
     begin
-      if InInterval(AData, IR_DATA_PREAMBLE_TIME) then
-        if InInterval(ASpace, IR_SPACE_PREAMBLE_TIME) then
-          VEvent.EventType := iretPreamble
-        else
-        if InInterval(ASpace, IR_REPEAT_PREAMBLE_TIME) then
-          VEvent.EventType := iretRepeat;
+      if InInterval(ASpace, IR_DATA_TIME) then
+        VEvent.EventType := iretPreamble;
+      if InInterval(ASpace, IR_REPEAT_TIME) then
+        VEvent.EventType := iretRepeat
+      else
+        FIsInvalid := True;
+    end
+    else
+    if InInterval(AData, IR_VALUE_TIME) then
+    begin
+      VEvent.EventType := iretData;
+      if InInterval(ASpace, IR_VALUE1_TIME) then
+        VEvent.Value := True
+      else
+      if InInterval(ASpace, IR_VALUE0_TIME) then
+        VEvent.Value := True
+      else
+        FIsInvalid := True;
     end;
-    DoEvent(AContext, VEvent);
+    if not FIsInvalid then
+      DoEvent(AContext, VEvent);
   end;
 
   procedure TIRReceiver.DoEvent(var AContext: TIRContext; const AEvent: TIREvent);
@@ -242,10 +253,11 @@ type
           end;
           if AContext.ReadData > System.High(TIRReadData) then
           begin
-            if (AContext.Data[irrdAddress] xor not AContext.Data[irrdAddressInvert] =
-              $FF) and (AContext.Data[irrdCommand] xor not
-              AContext.Data[irrdCommandInvert] = $FF) then
+            if (AContext.Data[irrdAddress] xor not AContext.Data[irrdAddressInvert] = $FF) and
+              (AContext.Data[irrdCommand] xor not AContext.Data[irrdCommandInvert] = $FF) then
             begin
+              FCurrentValue.Address := AContext.Data[irrdAddress];
+              FCurrentValue.Command := AContext.Data[irrdCommand];
               FComplete := True;
             end
             else
@@ -265,6 +277,8 @@ var
 
 begin
   UARTInit;
+  EventTimes := Default(TIREventTimes);
+  CurrentEventTime := 0;
   Context.Init(IR_PIN_PORT);
   UARTWriteLn('start');
 
