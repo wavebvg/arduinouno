@@ -59,8 +59,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure MemoTTYKeyPress(Sender: TObject; var Key: Char);
     procedure SerialRxData(Sender: TObject);
-    procedure SerialStatus(Sender: TObject; Reason: THookSerialReason;
-      const Value: String);
+    procedure SerialStatus(Sender: TObject; Reason: THookSerialReason; const Value: String);
     procedure TimerTTYCheckTimer(Sender: TObject);
     procedure ToggleBoxConnectChange(Sender: TObject);
   private
@@ -81,6 +80,7 @@ type
     FShowTime: Boolean;
     FStartTime: TDateTime;
     FInShowTime: Boolean;
+    FInFlashing: Boolean;
     procedure CheckTTYExist;
     procedure DisplayTerminal(const AText: String; const ANewLine: Boolean = False);
     procedure DisplayText(const AText: String);
@@ -165,7 +165,7 @@ end;
 
 procedure TFormTerminal.ActionConnectUpdate(Sender: TObject);
 begin
-  TCustomAction(Sender).Enabled := not ProcessAVRDude.Active and FTTYExist;
+  TCustomAction(Sender).Enabled := not FInFlashing and FTTYExist;
   ToggleBoxConnect.Enabled := TCustomAction(Sender).Enabled;
 end;
 
@@ -176,23 +176,34 @@ begin
   VLastConnected := Serial.Active;
   TTYClose;
   DisplayText('Begin flashing');
-  ProcessAVRDude.Parameters.Clear;
-  ProcessAVRDude.Executable := AvrdudePath;
-  ProcessAVRDude.Parameters.Add(Format('-C%s', [ConfigPath]));
-  ProcessAVRDude.Parameters.Add('-q');
-  ProcessAVRDude.Parameters.Add('-q');
-  ProcessAVRDude.Parameters.Add('-patmega328p');
-  ProcessAVRDude.Parameters.Add('-carduino');
-  ProcessAVRDude.Parameters.Add('-b115200');
-  ProcessAVRDude.Parameters.Add('-D');
-  ProcessAVRDude.Parameters.Add(Format('-P%s', [Device]));
-  ProcessAVRDude.Parameters.Add(Format('-Uflash:w:%s:i', [BinPath]));
-  ProcessAVRDude.Execute;
-  ActionConnect.Update;
-  while not ProcessAVRDude.WaitOnExit(100) do
+  FInFlashing := True;
+  try         
+    ActionConnect.Update;
+    ActionFlash.Update;
+    ProcessAVRDude.Parameters.Clear;
+    ProcessAVRDude.Executable := AvrdudePath;
+    ProcessAVRDude.Parameters.Add(Format('-C%s', [ConfigPath]));
+    ProcessAVRDude.Parameters.Add('-q');
+    ProcessAVRDude.Parameters.Add('-q');
+    ProcessAVRDude.Parameters.Add('-patmega328p');
+    ProcessAVRDude.Parameters.Add('-carduino');
+    ProcessAVRDude.Parameters.Add('-b115200');
+    ProcessAVRDude.Parameters.Add('-D');
+    ProcessAVRDude.Parameters.Add(Format('-P%s', [Device]));
+    ProcessAVRDude.Parameters.Add(Format('-Uflash:w:%s:i', [BinPath]));
+    TTYOpen;
     Application.ProcessMessages;
-  ActionConnect.Update;
-  ProcessAVRDude.Active := False;
+    Sleep(300);
+    Application.ProcessMessages;
+    TTYClose;
+    ProcessAVRDude.Execute;
+    while not ProcessAVRDude.WaitOnExit(100) do
+      Application.ProcessMessages;
+    ActionConnect.Update;
+    ProcessAVRDude.Active := False;
+  finally
+    FInFlashing := False;
+  end;
   DisplayText('End  flashing');
   if VLastConnected then
     TTYOpen;
@@ -200,12 +211,11 @@ end;
 
 procedure TFormTerminal.ActionFlashUpdate(Sender: TObject);
 begin
-  TCustomAction(Sender).Enabled := not ProcessAVRDude.Active and FTTYExist;
+  TCustomAction(Sender).Enabled := not FInFlashing and FTTYExist;
 end;
 
 procedure TFormTerminal.ActionClearExecute(Sender: TObject);
 begin
-  WriteLn('ActionClearExecute ', GetCurrentThreadId, ' (main: ', MainThreadID, ')');
   MemoTTY.Clear;
   FTermCursor := MemoTTY.CaretPos;
   FTotalPressedKeys := 0;
@@ -271,8 +281,7 @@ begin
   end;
 end;
 
-procedure TFormTerminal.SerialStatus(Sender: TObject; Reason: THookSerialReason;
-  const Value: String);
+procedure TFormTerminal.SerialStatus(Sender: TObject; Reason: THookSerialReason; const Value: String);
 begin
   if (FReadStart > 0) and (SecondsBetween(Now, FReadStart) > MAX_READ_TIMEOUT) then
   begin
@@ -301,7 +310,6 @@ begin
       FWriteStart := 0;
     HR_Wait: ;
   end;
-  WriteLn(Ord(Reason), ' ', Value);
 end;
 
 procedure TFormTerminal.TimerTTYCheckTimer(Sender: TObject);
@@ -368,8 +376,7 @@ procedure TFormTerminal.DisplayTerminal(const AText: String; const ANewLine: Boo
     VLine: String;
     VMS: Integer;
   begin
-    if not FInShowTime and ShowTime and (FTermCursor.X = 0) and
-      (FStartTime > 0) and SerialCanRead then
+    if not FInShowTime and ShowTime and (FTermCursor.X = 0) and (FStartTime > 0) and SerialCanRead then
     begin
       VMS := MilliSecondsBetween(Now, FStartTime);
       FInShowTime := True;
@@ -396,6 +403,8 @@ var
   i: Integer;
   c: Char;
 begin
+  if FInFlashing then
+    Exit;
   MemoTTY.Lines.BeginUpdate;
   try
     if ANewLine and (FTermCursor.X > 0) then
@@ -497,8 +506,8 @@ procedure TFormTerminal.TTYClose;
 begin
   if Serial.Active then
   begin
-    ToggleBoxConnect.Checked := False;
     Serial.Close;
+    ToggleBoxConnect.Checked := False;
     FStartTime := 0;
     DisplayText('Disconnected');
   end;

@@ -10,7 +10,10 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, LazSerialPort, UFormTerminal, UFormDialogPreferences;
+  Forms,
+  LazSerialPort,
+  UFormTerminal,
+  UFormDialogPreferences;
 
 {$R *.res}
 

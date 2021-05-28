@@ -126,7 +126,11 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="UKeyMap.pas"/>
+        <Filename Value="KeyMap.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="IR.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>

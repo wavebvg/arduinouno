@@ -1,4 +1,4 @@
-unit UKeyMap;
+unit KeyMap;
 
 {$mode ObjFPC}
 
