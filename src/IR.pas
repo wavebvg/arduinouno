@@ -8,7 +8,6 @@ uses
   ArduinoTools;
 
 const
-  IR_PIN_PORT: SmallInt = 11;
   IR_INTERVAL = 100;
   IR_INTERVAL_DIFF = 8;
   IR_VALUE_TIME = 562;
@@ -101,10 +100,8 @@ begin
 end;
 
 function TIRReceiver.InInterval(const AValue: Word; const AIntervalMiddle: Word): Boolean;
-const
-  IR_DIFF = IR_INTERVAL * 2;
 begin
-  Result := InInterval(AValue, AIntervalMiddle - IR_DIFF, AIntervalMiddle + IR_DIFF);
+  Result := InInterval(AValue, AIntervalMiddle - 200, AIntervalMiddle + 200);
 end;
 
 function TIRReceiver.InInterval(const AValue: Word; const AIntervalMin, AIntervalMax: Word): Boolean;

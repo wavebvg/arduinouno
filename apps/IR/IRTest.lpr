@@ -10,6 +10,9 @@ uses
   KeyMap,
   IR;
 
+const
+  IR_PIN_PORT = 11;
+
 var
   Context: TIRReceiver;
   Value: TIRValue;

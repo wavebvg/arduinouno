@@ -126,11 +126,11 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="KeyMap.pas"/>
+        <Filename Value="../../src/IR.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="IR.pas"/>
+        <Filename Value="../../src/KeyMap.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>

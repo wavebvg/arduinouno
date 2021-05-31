@@ -10,7 +10,7 @@
         <Runnable Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="MeArm10"/>
+      <Title Value="UARTTest"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -20,7 +20,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10"/>
+            <Filename Value="bin/UARTTest"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -41,15 +41,13 @@
               <StackChecks Value="True"/>
             </Checks>
             <VerifyObjMethodCallValidity Value="True"/>
-            <TargetProcessor Value="avr5"/>
+            <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
           </CodeGeneration>
           <Linking>
             <Debugging>
-              <DebugInfoType Value="dsDwarf2Set"/>
-              <UseHeaptrc Value="True"/>
-              <TrashVariables Value="True"/>
+              <UseLineInfoUnit Value="False"/>
               <UseExternalDbgSyms Value="True"/>
             </Debugging>
           </Linking>
@@ -65,7 +63,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10"/>
+            <Filename Value="bin/UARTTest"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -83,9 +81,6 @@
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
-            <Optimizations>
-              <OptimizationLevel Value="3"/>
-            </Optimizations>
           </CodeGeneration>
           <Linking>
             <Debugging>
@@ -111,7 +106,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="MeArm10.lpr"/>
+        <Filename Value="UARTTest.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
@@ -119,28 +114,27 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/TimedServo.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/TimedServoISR.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/Servo.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="UInterrupts.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/uart.pas"/>
+        <Filename Value="../../src/IRRemote.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UART"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/UARTASync.pas"/>
+        <Filename Value="../../src/IRRemoteISR.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IR.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/KeyMap.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/UARTI.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
@@ -148,7 +142,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="bin/MeArm10"/>
+      <Filename Value="bin/UARTTest"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

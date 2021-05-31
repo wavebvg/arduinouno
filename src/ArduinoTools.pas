@@ -6,8 +6,8 @@ interface
 
 const
   F_CPU = 16000000;      // Arduino clock frequency, default 16MHz.
-  Baud = 9600;           // baud rate
-  Divider = F_CPU div (16 * Baud) - 1;
+  BaudRate = 9600;           // baud rate
+  Divider = F_CPU div (16 * BaudRate) - 1;
   ClockCyclesPerMicrosecond = F_CPU div 1000000;
 
 const
@@ -258,7 +258,6 @@ procedure UARTWriteLn(s: String);
 procedure UARTWrite(c: Char);overload;
 function UARTReadChar: Char;
 //
-procedure ArduinoInit;
 procedure ADCInit;
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
 function DigitalRead(const APin: Byte): Boolean;
@@ -308,7 +307,18 @@ type
     constructor Init(const APin: byte);
   end;
 
+function ByteMap(const ABytes: array of Byte): Byte;
+
 implementation
+
+function ByteMap(const ABytes: array of Byte): Byte;
+var
+  i: Byte;
+begin
+  Result := 0;
+  for i := 0 to Length(ABytes) - 1 do
+    Result := Result or Byte((1 shl ABytes[i]));
+end;
 
 function IntToStr(AValue: longint): string;
 begin
@@ -354,112 +364,6 @@ end;
 function pgm_read_byte(const AFlash: Word): Byte;
 begin
   Result := AFlash and $00FF;
-end;   
-
-procedure ArduinoInit1;
-begin
-  //InterruptsEnable;
-  sbi(@TCCR0A, WGM0);
-  sbi(@TCCR2B, CS2);
-  sbi(@TCCR2A, WGM2);
-end;
-
-procedure ArduinoInit2;
-begin
-  //InterruptsDisable;  //stop interrupts
-
-//set timer0 interrupt at 2kHz
-  TCCR0A := 0;// set entire TCCR0A register to 0
-  TCCR0B := 0;// same for TCCR0B
-  TCNT0  := 0;//initialize counter value to 0
-  // set compare match register for 2khz increments
-  OCR0A := 124;// = (16*10^6) / (2000*64) - 1 (must be <256)
-  // turn on CTC mode
-  TCCR0A := TCCR0A or (1 shl 1);
-  // Set CS01 and CS00 bits for 64 prescaler
-  TCCR0B :=  TCCR0B or (1 shl 1) or (1 shl 0);
-  // enable timer compare interrupt
-  TIMSK0 := TIMSK0 or (1 shl OCIE0A);
-
-//set timer1 interrupt at 1Hz
-  TCCR1A := 0;// set entire TCCR1A register to 0
-  TCCR1B := 0;// same for TCCR1B
-  TCNT1  := 0;//initialize counter value to 0
-  // set compare match register for 1hz increments
-  OCR1A := 15624;// = (16*10^6) / (1*1024) - 1 (must be <65536)
-  // turn on CTC mode
-  TCCR1B := TCCR1B or (1 shl 3);
-  // Set CS10 and CS12 bits for 1024 prescaler
-  TCCR1B := TCCR1B or (1 shl 2) or (1 shl 0);
-  // enable timer compare interrupt
-  TIMSK1 := TIMSK1 or (1 shl OCIE1A);
-
-//set timer2 interrupt at 8kHz
-  TCCR2A := 0;// set entire TCCR2A register to 0
-  TCCR2B := 0;// same for TCCR2B
-  TCNT2  := 0;//initialize counter value to 0
-  // set compare match register for 8khz increments
-  OCR2A := 249;// = (16*10^6) / (8000*8) - 1 (must be <256)
-  // turn on CTC mode
-  TCCR2A := TCCR2A or (1 shl 1);
-  // Set CS21 bit for 8 prescaler
-  TCCR2B := TCCR2B or (1 shl 1);
-  // enable timer compare interrupt
-  TIMSK2 := TIMSK2 or (1 shl OCIE2A);
-
-  //InterruptsEnable;  //allow interrupts
-end;
-
-procedure ArduinoInit;assembler;
-asm
-  sei
-  in	r24, 0x24	  // 36
-  ori	r24, 0x02	  // 2
-  out	0x24, r24	  // 36
-  in	r24, 0x24	  // 36
-  ori	r24, 0x01	  // 1
-  out	0x24, r24	  // 36
-  in	r24, 0x25  	// 37
-  ori	r24, 0x02  	// 2
-  out	0x25, r24	  // 37
-  in	r24, 0x25	  // 37
-  ori	r24, 0x01	  // 1
-  out	0x25, r24	  // 37
-  lds	r24, 0x006E	// 0x80006e <__DATA_REGION_ORIGIN__+0xe>
-  ori	r24, 0x01  	// 1
-  sts	0x006E, r24	// 0x80006e <__DATA_REGION_ORIGIN__+0xe>
-  sts	0x0081, r1	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-  lds	r24, 0x0081	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-  ori	r24, 0x02	  // 2
-  sts	0x0081, r24	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-  lds	r24, 0x0081	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-  ori	r24, 0x01	  // 1
-  sts	0x0081, r24	// 0x800081 <__DATA_REGION_ORIGIN__+0x21>
-  lds	r24, 0x0080	// 0x800080 <__DATA_REGION_ORIGIN__+0x20>
-  ori	r24, 0x01  	// 1
-  sts	0x0080, r24	// 0x800080 <__DATA_REGION_ORIGIN__+0x20>
-  lds	r24, 0x00B1	// 0x8000b1 <__DATA_REGION_ORIGIN__+0x51>
-  ori	r24, 0x04	  // 4
-  sts	0x00B1, r24	// 0x8000b1 <__DATA_REGION_ORIGIN__+0x51>
-  lds	r24, 0x00B0	// 0x8000b0 <__DATA_REGION_ORIGIN__+0x50>
-  ori	r24, 0x01	  // 1
-  sts	0x00B0, r24	// 0x8000b0 <__DATA_REGION_ORIGIN__+0x50>
-  lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-  ori	r24, 0x04	  // 4
-  sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-  lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-  ori	r24, 0x02	  // 2
-  sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-  lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-  ori	r24, 0x01	  // 1
-  sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-  lds	r24, 0x007A	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-  ori	r24, 0x80	  // 128
-  sts	0x007A, r24	// 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
-  sts	0x00C1, r1	// 0x8000c1 <__DATA_REGION_ORIGIN__+0x61>
-  ldi	r28, 0x00	  // 0
-  ldi	r29, 0x00	  // 0
-  sbiw	r28, 0x00 // 0
 end;
 
 procedure ADCInit;
