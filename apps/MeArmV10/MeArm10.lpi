@@ -134,15 +134,6 @@
         <Filename Value="UInterrupts.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
-      <Unit>
-        <Filename Value="../../src/uart.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="UART"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/UARTASync.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -9,7 +9,7 @@ uses
   TimedServo,
   IR,
   KeyMap,
-  UART;
+  UARTI;
 
 const
   IR_PIN_PORT: SmallInt = 11;
@@ -26,19 +26,18 @@ var
   Value: TIRValue;
   i: Byte;
   VMin, VMax: Byte;
-  VUART: TUART;
 
 begin     
-  VUART.Init;
+  UARTIConsole.Init(9600);
   VIR.Init(IR_PIN_PORT);
   InterruptsEnable;
   for i := 1 to SERVO_COUNT do
     VServos[i].Init(MIN_PIN_PORT + i - 1, SERVO_ANGE_DEF[i]);
-  VUART.WriteLnString('started2');
+  UARTIConsole.WriteLnString('started2');
   VServoNo := 1;
   repeat
     Value := VIR.Read;
-    VUART.WriteLnString(GetKeyName(Value.Command));
+    UARTIConsole.WriteLnString(GetKeyName(Value.Command));
     VMin := SERVO_ANGE_MIN[VServoNo];
     VMax := SERVO_ANGE_MAX[VServoNo];
     case Value.Command of
@@ -50,12 +49,12 @@ begin
           VServos[VServoNo].Angle := VServos[VServoNo].Angle - 5;
       KeyOK:
       begin
-        VUART.WriteString('Active ');
-        VUART.WriteString(IntToStr(VServoNo));
+        UARTIConsole.WriteString('Active ');
+        UARTIConsole.WriteString(IntToStr(VServoNo));
         for i := 1 to SERVO_COUNT do
         begin
-          VUART.WriteString(' ');
-          VUART.WriteLnString(IntToStr(VServos[i].Angle));
+          UARTIConsole.WriteString(' ');
+          UARTIConsole.WriteLnString(IntToStr(VServos[i].Angle));
         end;
       end;
       KeyA:

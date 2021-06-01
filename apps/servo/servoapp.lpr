@@ -6,7 +6,8 @@ program servoapp;
 uses
   UInterrupts,
   ArduinoTools,
-  Servo;
+  Servo,
+  UARTI;
 
 const
   SERVO_PIN = 14;
@@ -15,8 +16,8 @@ var
   Servo1: TServo;
   c: char;
 begin
-  Sleep10ms(100);
-  UARTInit;
+  SleepMicroSecs(100000);
+  UARTIConsole.Init(9600);
   Servo1.Init(SERVO_PIN);
   while True do
   begin

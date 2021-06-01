@@ -8,21 +8,22 @@ uses
   UInterrupts,
   Servo,
   KeyMap,
-  IR;
+  IR,
+  UARTI;
 
 const
   IR_PIN_PORT = 11;
 
 var
-  Context: TIRReceiver;
+  IRData: TIRReceiver;
   Value: TIRValue;
 
 begin
-  UARTInit;
-  Context.Init(IR_PIN_PORT);
-  UARTWriteLn('start');
+  UARTIConsole.Init(9600);
+  IRData.Init(IR_PIN_PORT);
+  UARTIConsole.WriteLnString('start');
   repeat
-    Value := Context.Read;
-    UARTWriteLn('Key: ' + GetKeyName(Value.Command));
+    Value := IRData.Read;
+    UARTIConsole.WriteLnString('Key: ' + GetKeyName(Value.Command));
   until False;
 end.

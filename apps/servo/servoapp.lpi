@@ -113,11 +113,6 @@
         <Filename Value="servoapp.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
-      <Unit>
-        <Filename Value="../../src/servo.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="Servo"/>
-      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -7,13 +7,22 @@
       <Unit>
         <Filename Value="servoapp.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="7" Y="20"/>
+        <IsVisibleTab Value="True"/>
+        <CursorPos X="25" Y="20"/>
         <UsageCount Value="39"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
+        <Filename Value="../../src/servo.pas"/>
+        <UnitName Value="Servo"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="46"/>
+        <CursorPos X="24" Y="63"/>
+        <UsageCount Value="20"/>
+      </Unit>
+      <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="419"/>
         <CursorPos X="11" Y="445"/>
         <UsageCount Value="19"/>
@@ -30,25 +39,14 @@
       <Unit>
         <Filename Value="uinterrupts.pas"/>
         <UnitName Value="UInterrupts"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <TopLine Value="13"/>
         <CursorPos X="29" Y="22"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit>
-      <Unit>
-        <Filename Value="../../src/servo.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="Servo"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="46"/>
-        <CursorPos X="24" Y="63"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
-      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="23">
+    <JumpHistory HistoryIndex="17">
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="215" Column="11" TopLine="204"/>
@@ -106,44 +104,20 @@
         <Caret Line="423" Column="8" TopLine="422"/>
       </Position>
       <Position>
-        <Filename Value="../../src/servo.pas"/>
-        <Caret Line="22" Column="57"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/servo.pas"/>
-        <Caret Line="30" Column="3" TopLine="16"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/servo.pas"/>
-        <Caret Line="49" Column="33"/>
-      </Position>
-      <Position>
         <Filename Value="servoapp.lpr"/>
         <Caret Line="25" Column="41" TopLine="4"/>
       </Position>
       <Position>
         <Filename Value="servoapp.lpr"/>
-        <Caret Line="19" Column="11" TopLine="4"/>
+        <Caret Line="19" Column="7"/>
       </Position>
       <Position>
-        <Filename Value="../../src/servo.pas"/>
-        <Caret Line="27" Column="14" TopLine="17"/>
+        <Filename Value="servoapp.lpr"/>
+        <Caret Line="9" Column="8"/>
       </Position>
       <Position>
-        <Filename Value="../../src/servo.pas"/>
-        <Caret Line="21" Column="15" TopLine="18"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/servo.pas"/>
-        <Caret Line="53" Column="20" TopLine="49"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/servo.pas"/>
-        <Caret Line="54" Column="31" TopLine="49"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/servo.pas"/>
-        <Caret Line="57" Column="41" TopLine="48"/>
+        <Filename Value="servoapp.lpr"/>
+        <Caret Line="18" Column="24"/>
       </Position>
     </JumpHistory>
     <RunParams>

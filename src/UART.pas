@@ -8,7 +8,6 @@ uses
   ArduinoTools;
 
 type
-  TUARTMode = (uartmSync, uartmAsync);
 
   { TUART }
 
@@ -22,7 +21,10 @@ type
     procedure WriteLnString(const AValue: String);
     function ReadByte: byte; virtual;
     function ReadChar: Char;
-  end;
+  end; 
+
+var
+  UARTConsole: TUART;
 
 implementation
 

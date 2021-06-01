@@ -5,17 +5,18 @@ program servo;
 
 uses
   UInterrupts,
-  ArduinoTools, Servo;
+  ArduinoTools,
+  UARTI;
 
 const
   SERVO_PIN = 14;
-  MIN_PULSE_WIDTH: longint = 450;
-  MAX_PULSE_WIDTH: longint = 2400;
+  MIN_PULSE_WIDTH: Longint = 450;
+  MAX_PULSE_WIDTH: Longint = 2400;
 
   procedure Rotate(const AAngle: byte);
   var
     i: byte;
-    VTime: longint;
+    VTime: Longint;
   begin
     UARTWriteLn('Rotate to angle ' + IntToStr(AAngle));
     VTime := (MAX_PULSE_WIDTH - MIN_PULSE_WIDTH) * AAngle div 180 + MIN_PULSE_WIDTH;
@@ -23,17 +24,17 @@ const
     begin
       InterruptsEnable;
       DigitalWrite(SERVO_PIN, True);
-      SleepMillisecs(VTime);
+      SleepMicroSecs(VTime * 1000);
       DigitalWrite(SERVO_PIN, False);
       InterruptsDisable;
-      SleepMillisecs(200);
+      SleepMicroSecs(200 * 1000);
     end;
   end;
 
 var
-  c: char;
+  c: Char;
 begin
-  UARTInit;
+  UARTIConsole.Init(9600);
   Rotate(0);
   while True do
   begin

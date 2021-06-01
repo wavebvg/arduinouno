@@ -6,43 +6,42 @@ interface
 
 const
   F_CPU = 16000000;      // Arduino clock frequency, default 16MHz.
-  BaudRate = 9600;           // baud rate
-  Divider = F_CPU div (16 * BaudRate) - 1;
+  BaudRate = 9600;       // baud rate
   ClockCyclesPerMicrosecond = F_CPU div 1000000;
 
 const
-  WGM10  =  0;
-  WGM11  =  1;
-  COM1B0 =  4;
-  COM1B1 =  5;
-  COM1A0 =  6;
-  COM1A1 =  7;
+  WGM10 = 0;
+  WGM11 = 1;
+  COM1B0 = 4;
+  COM1B1 = 5;
+  COM1A0 = 6;
+  COM1A1 = 7;
 
-  CS10   = 0;
-  CS11   = 1;
-  CS12   = 2;
-  WGM12  = 3;
-  WGM13  = 4;
+  CS10 = 0;
+  CS11 = 1;
+  CS12 = 2;
+  WGM12 = 3;
+  WGM13 = 4;
 
-  WGM20  = 0;
-  WGM21  = 1;
+  WGM20 = 0;
+  WGM21 = 1;
   COM2B0 = 4;
   COM2B1 = 5;
   COM2A0 = 6;
   COM2A1 = 7;
 
-  CS20   = 0;
-  CS21   = 1;
-  CS22   = 2;
-  WGM22  = 3;
-  FOC2B  = 6;
-  FOC2A  = 7;
+  CS20 = 0;
+  CS21 = 1;
+  CS22 = 2;
+  WGM22 = 3;
+  FOC2B = 6;
+  FOC2A = 7;
 
 const
   LOW = 0;
   HIGH = 1;
 
-type                                                                  
+type
   TAVRPort = (avrpUndefined, avrpA, avrpB, avrpC, avrpD, avrpE, avrpF, avrpG, avrpH,
     avrpNone, avrpJ, avrpK, avrpL);
   TAVRTimer = (avrtNo, avrt0A, avrt0B, avrt1A, avrt1B, avrt2A, avrt2B);
@@ -51,55 +50,55 @@ type
 { begin pins_arduino.h }
 const
   { port_to_mode_PGM }
-  PortToModePGM: array[TAVRPort] of PByte = (
-{avrpUndefined} nil,
-{        avrpA} nil,
-{        avrpB} @DDRB,
-{        avrpC} @DDRC,
-{        avrpD} @DDRD,
-{        avrpE} nil,
-{        avrpF} nil,
-{        avrpG} nil,
-{        avrpH} nil,
-{     avrpNone} nil,
-{        avrpJ} nil,
-{        avrpK} nil,
-{        avrpL} nil
-  );
+  PortToModePGM: array[TAVRPort] of Pbyte = (
+    {avrpUndefined} nil,
+    {        avrpA} nil,
+    {        avrpB} @DDRB,
+    {        avrpC} @DDRC,
+    {        avrpD} @DDRD,
+    {        avrpE} nil,
+    {        avrpF} nil,
+    {        avrpG} nil,
+    {        avrpH} nil,
+    {     avrpNone} nil,
+    {        avrpJ} nil,
+    {        avrpK} nil,
+    {        avrpL} nil
+    );
 
   { port_to_output_PGM }
-  PortToOutputPGM: array[TAVRPort] of PByte = (
-{avrpUndefined} nil,
-{        avrpA} nil,
-{        avrpB} @PORTB,
-{        avrpC} @PORTC,
-{        avrpD} @PORTD,
-{        avrpE} nil,
-{        avrpF} nil,
-{        avrpG} nil,
-{        avrpH} nil,
-{     avrpNone} nil,
-{        avrpJ} nil,
-{        avrpK} nil,
-{        avrpL} nil
-  );
+  PortToOutputPGM: array[TAVRPort] of Pbyte = (
+    {avrpUndefined} nil,
+    {        avrpA} nil,
+    {        avrpB} @PORTB,
+    {        avrpC} @PORTC,
+    {        avrpD} @PORTD,
+    {        avrpE} nil,
+    {        avrpF} nil,
+    {        avrpG} nil,
+    {        avrpH} nil,
+    {     avrpNone} nil,
+    {        avrpJ} nil,
+    {        avrpK} nil,
+    {        avrpL} nil
+    );
 
   { port_to_input_PGM }
-  PortToInputPGM: array[TAVRPort] of PByte = (
-{avrpUndefined} nil,
-{        avrpA} nil,
-{        avrpB} @PINB,
-{        avrpC} @PINC,
-{        avrpD} @PIND,
-{        avrpE} nil,
-{        avrpF} nil,
-{        avrpG} nil,
-{        avrpH} nil,
-{     avrpNone} nil,
-{        avrpJ} nil,
-{        avrpK} nil,
-{        avrpL} nil
-  );
+  PortToInputPGM: array[TAVRPort] of Pbyte = (
+    {avrpUndefined} nil,
+    {        avrpA} nil,
+    {        avrpB} @PINB,
+    {        avrpC} @PINC,
+    {        avrpD} @PIND,
+    {        avrpE} nil,
+    {        avrpF} nil,
+    {        avrpG} nil,
+    {        avrpH} nil,
+    {     avrpNone} nil,
+    {        avrpJ} nil,
+    {        avrpK} nil,
+    {        avrpL} nil
+    );
 
   { digital_pin_to_timer_PGM }
   DigitalPinTimerPGM: array[0..19] of TAVRTimer = (
@@ -147,7 +146,7 @@ const
     avrpC,
     avrpC,
     avrpC
-    );       
+    );
 
   { digital_pin_to_bit_mask_PGM }
   DigitalPinToBitMaskPGM: array[0..19] of Byte = (
@@ -173,34 +172,34 @@ const
     1 shl 5
     );
 
-  TimerCounterControlRegister: array[TAVRTimer] of PByte = (
+  TimerCounterControlRegister: array[TAVRTimer] of Pbyte = (
     {avrtNo}nil,
-    {avrt0A}@TCCR0A,
-    {avrt0B}@TCCR0A,
-    {avrt1A}@TCCR1A,
-    {avrt1B}@TCCR1A,
-    {avrt2A}@TCCR2A,
-    {avrt2B}@TCCR2A
+    {avrt0A} @TCCR0A,
+    {avrt0B} @TCCR0A,
+    {avrt1A} @TCCR1A,
+    {avrt1B} @TCCR1A,
+    {avrt2A} @TCCR2A,
+    {avrt2B} @TCCR2A
     );
 
-  TimerClockControlRegister: array[TAVRTimer] of PByte = (
+  TimerClockControlRegister: array[TAVRTimer] of Pbyte = (
     {avrtNo}nil,
-    {avrt0A}@TCCR0B,
-    {avrt0B}@TCCR0B,
-    {avrt1A}@TCCR1B,
-    {avrt1B}@TCCR1B,
-    {avrt2A}@TCCR2B,
-    {avrt2B}@TCCR2B
+    {avrt0A} @TCCR0B,
+    {avrt0B} @TCCR0B,
+    {avrt1A} @TCCR1B,
+    {avrt1B} @TCCR1B,
+    {avrt2A} @TCCR2B,
+    {avrt2B} @TCCR2B
     );
 
-  TimerOutputCompareRegister: array[TAVRTimer] of PByte = (
+  TimerOutputCompareRegister: array[TAVRTimer] of Pbyte = (
     {avrtNo}nil,
-    {avrt0A}@OCR0A,
-    {avrt0B}@OCR0B,
-    {avrt1A}@OCR1A,
-    {avrt1B}@OCR1B,
-    {avrt2A}@OCR2A,
-    {avrt2B}@OCR2B
+    {avrt0A} @OCR0A,
+    {avrt0B} @OCR0B,
+    {avrt1A} @OCR1A,
+    {avrt1B} @OCR1B,
+    {avrt2A} @OCR2A,
+    {avrt2B} @OCR2B
     );
 
   TimerRegisterOutputMode: array[TAVRTimer] of Byte = (
@@ -213,7 +212,7 @@ const
     {avrt2B} COM2B
     );
 
-{ end pins_arduino.h }
+  { end pins_arduino.h }
 
   DigitalPinToPortMask: array[0..19] of Byte = (
     0, (* 0 - port D *)
@@ -237,25 +236,24 @@ const
     4,
     5
     );
-  //
-  //TimerOutputCompareRegister_PGM: array[TAVRTimer] of PByte = (
-  //  {avrtNo}nil,
-  //  {avrt0A}@OCR0A,
-  //  {avrt0B}@OCR0A,
-  //  {avrt1A}@OCR1A,
-  //  {avrt1B}@OCR1B,
-  //  {avrt2A}@OCR2A,
-  //  {avrt2B}@OCR2B
-  //  );
-  //
+//
+//TimerOutputCompareRegister_PGM: array[TAVRTimer] of PByte = (
+//  {avrtNo}nil,
+//  {avrt0A}@OCR0A,
+//  {avrt0B}@OCR0A,
+//  {avrt1A}@OCR1A,
+//  {avrt1B}@OCR1B,
+//  {avrt2A}@OCR2A,
+//  {avrt2B}@OCR2B
+//  );
+//
 
-             
-procedure sbi(const AAddr: PByte; const ABit: Byte);
-procedure cbi(const AAddr: PByte; const ABit: Byte);
-procedure UARTInit;
+
+procedure sbi(const AAddr: Pbyte; const ABit: Byte);
+procedure cbi(const AAddr: Pbyte; const ABit: Byte);
 procedure UARTWrite(s: String); overload;
 procedure UARTWriteLn(s: String);
-procedure UARTWrite(c: Char);overload;
+procedure UARTWrite(c: Char); overload;
 function UARTReadChar: Char;
 //
 procedure ADCInit;
@@ -264,11 +262,9 @@ function DigitalRead(const APin: Byte): Boolean;
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
 function AnalogRead(const APin: Byte): Word;
 procedure AnalogWrite(const APin: Byte; const AValue: Integer);
-procedure Sleep10ms(Time: Byte);
-procedure Wait(Time: Byte);
-procedure SleepMicroSecs(const ATime: LongWord);
+procedure SleepMicroSecs(const ATime: Longword);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
-function IntToStr(AValue: longint): string;
+function IntToStr(AValue: Longint): String;
 
 
 type
@@ -320,7 +316,7 @@ begin
     Result := Result or Byte((1 shl ABytes[i]));
 end;
 
-function IntToStr(AValue: longint): string;
+function IntToStr(AValue: Longint): String;
 begin
   Str(AValue, Result);
 end;
@@ -341,14 +337,14 @@ begin
   VBit := DigitalPinToBitMaskPGM[APin];
   VPort := DigitalPinToPortPGM[APin];
   Result := PortToInputPGM[VPort]^ and VBit <> 0;
-end;     
+end;
 
-procedure sbi(const AAddr: PByte; const ABit: Byte);
+procedure sbi(const AAddr: Pbyte; const ABit: Byte);
 begin
   AAddr^ := AAddr^ or (Byte(1) shl ABit);
 end;
 
-procedure cbi(const AAddr: PByte; const ABit: Byte);
+procedure cbi(const AAddr: Pbyte; const ABit: Byte);
 begin
   AAddr^ := AAddr^ and not (1 shl ABit);
 end;
@@ -409,32 +405,23 @@ begin
   Result := ADC;  // Read out the measured value
 end;
 
-procedure UARTInit;
-begin
-  UBRR0 := Divider;
-
-  UCSR0A := (0 shl U2X0);
-  UCSR0B := (1 shl TXEN0) or (1 shl RXEN0);
-  UCSR0C := %011 shl UCSZ0;              // 8-bit word, 1 stop bit
-end;
-
 function UARTReadChar: Char;
 begin
   while UCSR0A and (1 shl RXC0) = 0 do
-  asm
-    nop;                                        // Wait for a character to arrive
-  end;
+    asm
+             NOP;                                        // Wait for a character to arrive
+    end;
   Result := Char(UDR0);                    // Read character
 end;
 
 procedure UARTWrite(c: Char);
 begin
   while UCSR0A and (1 shl UDRE0) = 0 do
-  asm
-    nop;                                        // Wait for the last character to be sent
-  end;
+    asm
+             NOP;                                        // Wait for the last character to be sent
+    end;
   UDR0 := Byte(c);                         // Send character
-end;   
+end;
 
 procedure UARTWrite(s: String);
 var
@@ -451,7 +438,7 @@ begin
   UARTWrite(#13);
 end;
 
-procedure SleepMicroSecs(const ATime: LongWord); assembler;  
+procedure SleepMicroSecs(const ATime: Longword); assembler;
 label
   loop, compl;
   (* ~ 32/16 мкс возможный минимум запуска sleep *)
@@ -495,59 +482,7 @@ asm
          // RET                        // 4
 end;
 
-procedure Wait(Time: Byte);
-const
-  Faktor = 15 * ClockCyclesPerMicrosecond;
-label                 // Labels, here for the loop, has to be declared explicitly
-  outer, inner1, inner2;
-var
-  tmpByte: byte;      // In Inline assembler local variables are accesed by the instructions LDD and STD, global variables are accessed by LDS and STS.
-begin
-  asm                 // asm states inline assembly block until the next END statement
-    ldd r20,Time      // Variables can be accessed, here a local variable
-    outer:
-      ldi r21, Faktor
-      inner1:         // 640*Faktor= 640*15*1 = 9600 cycles/1MHz
-        ldi r22,128
-        inner2:       // 5*128 = 640 cycles
-          nop         // 1 cycle
-          nop         // 1 cycle
-          dec r22     // 1 cycle
-        brne inner2   // 2 cycles in case of branch //one loop in sum 5 cycles
-        dec r21
-      brne inner1
-      dec r20
-    brne outer
-  end['r20','r21','r22']; // Used registers to be published to compiler
-end;  // procedure
-
-// Waitingtime = Time * 10 Milliseconds
-procedure Sleep10ms(Time: Byte);
-const
-  Faktor = 10 * ClockCyclesPerMicrosecond;
-label                 // Labels, here for the loop, has to be declared explicitly
-  outer, inner1, inner2;
-var
-  tmpByte: byte;      // In Inline assembler local variables are accesed by the instructions LDD and STD, global variables are accessed by LDS and STS.
-begin
-  asm                 // asm states inline assembly block until the next END statement
-    ldd r20,Time      // Variables can be accessed, here a local variable
-    outer:
-      ldi r21, Faktor
-      inner1:         // 1000*Faktor= 714*10 = 10000 cycles/1MHz
-        ldi r22,250
-        inner2:       // 4*250 = 1000 cycles
-          nop         // 1 cycle
-          dec r22     // 1 cycle
-        brne inner2   // 2 cycles
-        dec r21
-      brne inner1
-      dec r20
-    brne outer
-  end['r20','r21','r22']; // Used registers to be published to compiler
-end;  // procedure
-
-function CountPulse(const APort: PByte; const ABit, AStateMask: Byte; AMaxLoops: Word): Cardinal;
+function CountPulse(const APort: Pbyte; const ABit, AStateMask: Byte; AMaxLoops: Word): Cardinal;
 begin
   Result := 0;
   while APort^ and ABit = AStateMask do
@@ -635,4 +570,3 @@ begin
 end;
 
 end.
-

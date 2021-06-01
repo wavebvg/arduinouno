@@ -10,14 +10,16 @@ uses
   UARTI;
 
 var
-  VUART: TUARTI;
   c: Byte;
 
 begin
-  VUART.Init(BaudRate);
-  VUART.WriteLnString('Start');
+  UARTIConsole.Init(BaudRate);
+  UARTIConsole.WriteLnString('Start');
+  InterruptsEnable;
+  SleepMicroSecs(8000000);
   repeat
-    c := VUART.ReadByte;
-    VUART.WriteLnString(Char(c));
+    UARTIConsole.WriteLnString('Read');
+    c := UARTIConsole.ReadByte;
+    UARTIConsole.WriteLnString(Char(c));
   until False;
 end.
