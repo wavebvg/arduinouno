@@ -430,6 +430,7 @@ begin
       CarriageReturn;
     end;
     MemoTTY.CaretPos := Point(FTermCursor.X, FTermCursor.Y + 1);
+    MemoTTY.Perform(LM_VSCROLL, SB_LINEDOWN, 0);
   finally
     MemoTTY.Lines.EndUpdate;
   end;

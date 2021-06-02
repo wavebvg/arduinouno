@@ -7,18 +7,17 @@
       <Unit>
         <Filename Value="SleepsTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="11"/>
-        <CursorPos X="25" Y="67"/>
+        <TopLine Value="33"/>
+        <CursorPos X="37" Y="48"/>
         <UsageCount Value="144"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="446"/>
-        <CursorPos X="45" Y="441"/>
+        <CursorPos X="13" Y="4"/>
         <UsageCount Value="97"/>
         <Loaded Value="True"/>
       </Unit>

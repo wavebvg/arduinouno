@@ -6,10 +6,9 @@ program IRTest;
 uses
   ArduinoTools,
   UInterrupts,
-  Servo,
   KeyMap,
   IR,
-  UARTI;
+  UART;
 
 const
   IR_PIN_PORT = 11;
@@ -19,11 +18,14 @@ var
   Value: TIRValue;
 
 begin
-  UARTIConsole.Init(9600);
+  UARTConsole.Init(9600);
   IRData.Init(IR_PIN_PORT);
-  UARTIConsole.WriteLnString('start');
+  InterruptsEnable;
+  UARTConsole.WriteLnString('start');
+  SleepMicroSecs(4000000);     
+  UARTConsole.WriteLnString('waited');
   repeat
     Value := IRData.Read;
-    UARTIConsole.WriteLnString('Key: ' + GetKeyName(Value.Command));
+    UARTConsole.WriteLnString('Key: ' + GetKeyName(Value.Command));
   until False;
 end.

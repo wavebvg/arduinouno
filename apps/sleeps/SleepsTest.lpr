@@ -45,23 +45,23 @@ uses
   begin
     for i := 1 to 5 do
     begin
-      SleepMicroSecs(ASecs * 1000000 - ASecs * 1000);
+      SleepMicroSecs(ASecs * 1000000);
       UARTIConsole.WriteString(IntToStr(ASecs));
       UARTIConsole.WriteLnString('s+');
     end;
-    for i := 1 to 5 do
-    begin
-      j := 0;
-      while j < ASecs - 1 do
-      begin
-        Sleep10ms(ASecs * 200);
-        Inc(j, 2);
-      end;
-      if j < ASecs then
-        Sleep10ms(ASecs * 200);
-      UARTIConsole.WriteString(IntToStr(ASecs));
-      UARTIConsole.WriteLnString('s');
-    end;
+    //for i := 1 to 5 do
+    //begin
+    //  j := 0;
+    //  while j < ASecs - 1 do
+    //  begin
+    //    Sleep10ms(ASecs * 200);
+    //    Inc(j, 2);
+    //  end;
+    //  if j < ASecs then
+    //    Sleep10ms(ASecs * 200);
+    //  UARTIConsole.WriteString(IntToStr(ASecs));
+    //  UARTIConsole.WriteLnString('s');
+    //end;
   end;
 
 begin

@@ -81,8 +81,8 @@ object FormTerminal: TFormTerminal
     object EditLastKeys: TEdit
       AnchorSideRight.Side = asrBottom
       Left = 8
-      Height = 27
-      Top = 360
+      Height = 23
+      Top = 364
       Width = 432
       Anchors = [akLeft, akRight, akBottom]
       Color = clInfoBk
