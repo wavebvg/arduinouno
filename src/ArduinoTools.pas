@@ -1,6 +1,7 @@
 unit ArduinoTools;
 
 {$mode objfpc}{$H-}
+{$DEFINE DIV1024}
 
 interface
 
@@ -251,10 +252,6 @@ const
 
 procedure sbi(const AAddr: Pbyte; const ABit: Byte);
 procedure cbi(const AAddr: Pbyte; const ABit: Byte);
-procedure UARTWrite(s: String); overload;
-procedure UARTWriteLn(s: String);
-procedure UARTWrite(c: Char); overload;
-function UARTReadChar: Char;
 //
 procedure ADCInit;
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
@@ -263,6 +260,7 @@ procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
 function AnalogRead(const APin: Byte): Word;
 procedure AnalogWrite(const APin: Byte; const AValue: Integer);
 procedure SleepMicroSecs(const ATime: Longword);
+procedure Sleep10ms(const ATime: Byte);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(AValue: Longint): String;
 
@@ -405,38 +403,33 @@ begin
   Result := ADC;  // Read out the measured value
 end;
 
-function UARTReadChar: Char;
-begin
-  while UCSR0A and (1 shl RXC0) = 0 do
-    asm
-             NOP;                                        // Wait for a character to arrive
-    end;
-  Result := Char(UDR0);                    // Read character
-end;
-
-procedure UARTWrite(c: Char);
-begin
-  while UCSR0A and (1 shl UDRE0) = 0 do
-    asm
-             NOP;                                        // Wait for the last character to be sent
-    end;
-  UDR0 := Byte(c);                         // Send character
-end;
-
-procedure UARTWrite(s: String);
+// Waiting time = Time * 10 Milliseconds
+procedure Sleep10ms(const ATime: Byte);
+const
+  Faktor = 10 * ClockCyclesPerMicrosecond;
+label                 // Labels, here for the loop, has to be declared explicitly
+  outer, inner1, inner2;
 var
-  i: Integer;
+  tmpByte: byte;
+  // In Inline assembler local variables are accesed by the instructions LDD and STD, global variables are accessed by LDS and STS.
 begin
-  for i := 1 to Length(s) do
-    UARTWrite(s[i]);  // send characters one by one
-end;
+  asm                              // asm states inline assembly block until the next END statement
+           LDD     r20, ATime      // Variables can be accessed, here a local variable
+           outer:
+           LDI     r21, Faktor    // 1 cycle
+           inner1:                // 1000*Faktor = 160000/16 = 10000 cycles/1MHz
+           LDI     r22,250        // 1 cycle
+           inner2:                // 4*250 = 1000 cycles
+           NOP                    // 1 cycle
+           DEC     r22            // 1 cycle
+           BRNE    inner2         // 2 cycles
+           DEC     r21            // 1 cycle
+           BRNE    inner1         // 2 cycles
+           DEC     r20
+           BRNE    outer
+  end; // Used registers to be published to compiler
+end;  // procedure
 
-procedure UARTWriteLn(s: String);
-begin
-  UARTWrite(s);
-  UARTWrite(#10);
-  UARTWrite(#13);
-end;
 
 procedure SleepMicroSecs(const ATime: Longword); assembler;
 label
@@ -445,31 +438,69 @@ label
 asm
          // CALL                       // 4 + 4 
          // PUSH stack
-         PUSH    R16                   // 2
+         PUSH    R17                   // 2
+{$IFDEF DIV1024}
+         // DEC DIV 1024               // 29...33
+         // PUSH
+         PUSH    R18                   // 2
+         PUSH    R19                   // 2
+         // BYTE 0
+         MOV     R17, R23              // 1
+         LSR     R17                   // 1
+         LSR     R17                   // 1
+         // BYTE 1
+         MOV     R18, R24              // 1
+         SBRC    R18, 0                // 1|2
+         ORI     R17, 64               // 1
+         LSR     R18                   // 1
+         SBRC    R18, 0                // 1|2
+         ORI     R17, 128              // 1
+         LSR     R18                   // 1
+         // BYTE 2
+         MOV     R19, R25              // 1
+         SBRC    R19, 0                // 1|2
+         ORI     R18, 64               // 1
+         LSR     R19                   // 1
+         SBRC    R19, 0                // 1|2
+         ORI     R18, 128              // 1
+         LSR     R19                   // 1
+         // MINUS
+         SBC     R22, R17              // 1
+         SBC     R23, R18              // 1
+         SBC     R24, R19              // 1
+         SBCI    R25, 0                // 1
+         // POP                          
+         POP     R19                   // 2
+         POP     R18                   // 2
+{$ENDIF}                
+         // Load values
+         LDI     R17, 0                // 1
          // Wait start                       
-         CP      R16, R22              // 1
-         CPC     R16, R23              // 1
-         CPC     R16, R24              // 1
-         CPC     R16, R25              // 1
-         BREQ    compl                 // 1|2
+         CP      R17, R22              // 1
+         CPC     R17, R23              // 1
+         CPC     R17, R24              // 1
+         CPC     R17, R25              // 1
+         BREQ    compl                 // 1|2    
+{$IFDEF DIV1024}
+         SUBI    r22, 4                // 1
+{$ELSE}
          SUBI    r22, 2                // 1
+{$ENDIF}
          SBCI    r23, 0                // 1
          SBCI    r24, 0                // 1
          SBCI    r25, 0                // 1
-         // Load values
-         LDI     R16, 0                // 1
          // Loop
          loop:
-         CP      R16, R22              // 1
-         CPC     R16, R23              // 1
-         CPC     R16, R24              // 1
-         CPC     R16, R25              // 1
+         CP      R17, R22              // 1
+         CPC     R17, R23              // 1
+         CPC     R17, R24              // 1
+         CPC     R17, R25              // 1
          // Decrement
          SUBI    r22, 1                // 1
          SBCI    r23, 0                // 1
          SBCI    r24, 0                // 1
          SBCI    r25, 0                // 1
-         BREQ    compl                // 1|2
+         BREQ    compl                 // 1|2
          NOP                           // 1
          NOP                           // 1
          NOP                           // 1
@@ -478,7 +509,7 @@ asm
          RJMP    loop                  // 2
          compl:
          // POP stack
-         POP     R16                   // 2
+         POP     R17                   // 2
          // RET                        // 4
 end;
 
