@@ -1,5 +1,12 @@
+cd /media/WORK2/builds/simulavr/build/app/ && ./simulavr -d atmega328 -g
+
+avr-gdb /media/fa/FA-FLASH/projects/git/arduinouno/apps/IR/bin/IRTest.elf
 
 target remote localhost:1212
 load
 info registers
 layout regs
+layout next
+
+
+avr-objdump -S /media/fa/FA-FLASH/projects/git/arduinouno/apps/IR/bin/IRTest.elf > /media/fa/FA-FLASH/projects/git/arduinouno/apps/IR/bin/IRTest.asm

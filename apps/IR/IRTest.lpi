@@ -29,30 +29,25 @@
           </SearchPaths>
           <Parsing>
             <SyntaxOptions>
-              <IncludeAssertionCode Value="True"/>
               <UseAnsiStrings Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <CodeGeneration>
-            <Checks>
-              <IOChecks Value="True"/>
-              <RangeChecks Value="True"/>
-              <OverflowChecks Value="True"/>
-              <StackChecks Value="True"/>
-            </Checks>
-            <VerifyObjMethodCallValidity Value="True"/>
+            <SmartLinkUnit Value="True"/>
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
+            <Optimizations>
+              <OptimizationLevel Value="2"/>
+            </Optimizations>
           </CodeGeneration>
           <Linking>
             <Debugging>
               <UseLineInfoUnit Value="False"/>
-              <UseExternalDbgSyms Value="True"/>
             </Debugging>
           </Linking>
           <Other>
-            <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al"/>
+            <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al -a -s"/>
             <ExecuteAfter>
               <CompileReasons Compile="False"/>
             </ExecuteAfter>
@@ -81,6 +76,9 @@
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
+            <Optimizations>
+              <OptimizationLevel Value="0"/>
+            </Optimizations>
           </CodeGeneration>
           <Linking>
             <Debugging>

@@ -20,7 +20,7 @@ type
   end;
 
 var
-  UARTIConsole: TUARTI;
+  UARTConsole: TUARTI;
 
 implementation
 
@@ -71,7 +71,7 @@ end;
 
 function TUARTI.ReadByte: byte;
 begin
-  UCSR0B := UCSR0B and not (1 shl RXCIE0);
+  UCSR0B := UCSR0B and not (Byte(1) shl RXCIE0);
   if (UARTContext.ReadPos = UARTContext.ReadStart) and not (uartffRead in UARTContext.FullFlags) then
     Result := inherited ReadByte
   else

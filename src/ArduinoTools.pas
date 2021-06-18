@@ -490,16 +490,16 @@ asm
          SBCI    r24, 0                // 1
          SBCI    r25, 0                // 1
          // Loop
-         loop:
-         CP      R17, R22              // 1
-         CPC     R17, R23              // 1
-         CPC     R17, R24              // 1
-         CPC     R17, R25              // 1
+         loop:                
          // Decrement
          SUBI    r22, 1                // 1
          SBCI    r23, 0                // 1
          SBCI    r24, 0                // 1
          SBCI    r25, 0                // 1
+         CP      R17, R22              // 1
+         CPC     R17, R23              // 1
+         CPC     R17, R24              // 1
+         CPC     R17, R25              // 1
          BREQ    compl                 // 1|2
          NOP                           // 1
          NOP                           // 1
