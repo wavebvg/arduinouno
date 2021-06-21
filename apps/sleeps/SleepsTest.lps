@@ -7,17 +7,17 @@
       <Unit>
         <Filename Value="SleepsTest.lpr"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <TopLine Value="33"/>
-        <CursorPos X="37" Y="48"/>
+        <CursorPos X="7" Y="69"/>
         <UsageCount Value="144"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <CursorPos X="13" Y="4"/>
+        <CursorPos X="27" Y="3"/>
         <UsageCount Value="97"/>
         <Loaded Value="True"/>
       </Unit>
@@ -216,21 +216,12 @@
       <Unit>
         <Filename Value="../../src/UART.pas"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="7"/>
-        <CursorPos X="21" Y="27"/>
+        <CursorPos X="27" Y="2"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="440" Column="75" TopLine="403"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="261" Column="22" TopLine="239"/>
-      </Position>
       <Position>
         <Filename Value="../../../../../fpc/3.2.0/src/rtl/embedded/avr/atmega328p.pp"/>
         <Caret Line="76" Column="3" TopLine="54"/>
@@ -342,6 +333,14 @@
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="485" Column="48" TopLine="433"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="3" Column="27"/>
+      </Position>
+      <Position>
+        <Filename Value="SleepsTest.lpr"/>
+        <Caret Line="7" Column="19"/>
       </Position>
     </JumpHistory>
     <RunParams>

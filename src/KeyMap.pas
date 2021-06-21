@@ -1,6 +1,6 @@
 unit KeyMap;
 
-{$mode ObjFPC}
+{$mode objfpc}{$H-}{$Z1}
 
 interface
 

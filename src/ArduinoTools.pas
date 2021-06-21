@@ -1,6 +1,6 @@
 unit ArduinoTools;
 
-{$mode objfpc}{$H-}
+{$mode objfpc}{$H-}{$Z1}
 {$DEFINE DIV1024}
 
 interface
@@ -263,6 +263,8 @@ procedure SleepMicroSecs(const ATime: Longword);
 procedure Sleep10ms(const ATime: Byte);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(AValue: Longint): String;
+procedure InterruptsEnable;
+procedure InterruptsDisable;
 
 
 type
@@ -304,6 +306,14 @@ type
 function ByteMap(const ABytes: array of Byte): Byte;
 
 implementation
+
+procedure InterruptsEnable; assembler;
+asm
+         SEI end;
+
+procedure InterruptsDisable; assembler;
+asm
+         CLI end;
 
 function ByteMap(const ABytes: array of Byte): Byte;
 var
@@ -472,7 +482,7 @@ asm
          // POP                          
          POP     R19                   // 2
          POP     R18                   // 2
-{$ENDIF}                
+{$ENDIF}
          // Load values
          LDI     R17, 0                // 1
          // Wait start                       
@@ -490,7 +500,7 @@ asm
          SBCI    r24, 0                // 1
          SBCI    r25, 0                // 1
          // Loop
-         loop:                
+         loop:
          // Decrement
          SUBI    r22, 1                // 1
          SBCI    r23, 0                // 1

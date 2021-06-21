@@ -5,7 +5,6 @@ program SleepsTest;
 
 uses
   ArduinoTools,
-  UInterrupts,
   UARTI;
 
   //function Div1024(const AValue: Longint): Longint; assembler;
@@ -46,8 +45,8 @@ uses
     for i := 1 to 5 do
     begin
       SleepMicroSecs(ASecs * 1000000);
-      UARTIConsole.WriteString(IntToStr(ASecs));
-      UARTIConsole.WriteLnString('s+');
+      UARTConsole.WriteString(IntToStr(ASecs));
+      UARTConsole.WriteLnString('s+');
     end;
     //for i := 1 to 5 do
     //begin
@@ -65,9 +64,9 @@ uses
   end;
 
 begin
-  UARTIConsole.Init(9600);
+  UARTConsole.Init(9600);
   InterruptsEnable;
-  UARTIConsole.WriteLnString('start');
+  UARTConsole.WriteLnString('start');
   TestSleep(1);
   TestSleep(2);
   TestSleep(5);

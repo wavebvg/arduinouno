@@ -10,7 +10,7 @@
         <Runnable Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="MeArm10"/>
+      <Title Value="TimersTest"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -20,7 +20,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10"/>
+            <Filename Value="bin/TimersTest"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -29,32 +29,25 @@
           </SearchPaths>
           <Parsing>
             <SyntaxOptions>
-              <IncludeAssertionCode Value="True"/>
               <UseAnsiStrings Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <CodeGeneration>
-            <Checks>
-              <IOChecks Value="True"/>
-              <RangeChecks Value="True"/>
-              <OverflowChecks Value="True"/>
-              <StackChecks Value="True"/>
-            </Checks>
-            <VerifyObjMethodCallValidity Value="True"/>
-            <TargetProcessor Value="avr5"/>
+            <SmartLinkUnit Value="True"/>
+            <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
+            <Optimizations>
+              <OptimizationLevel Value="2"/>
+            </Optimizations>
           </CodeGeneration>
           <Linking>
             <Debugging>
-              <DebugInfoType Value="dsDwarf2Set"/>
-              <UseHeaptrc Value="True"/>
-              <TrashVariables Value="True"/>
-              <UseExternalDbgSyms Value="True"/>
+              <UseLineInfoUnit Value="False"/>
             </Debugging>
           </Linking>
           <Other>
-            <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al"/>
+            <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al -a -s"/>
             <ExecuteAfter>
               <CompileReasons Compile="False"/>
             </ExecuteAfter>
@@ -65,7 +58,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/MeArm10"/>
+            <Filename Value="bin/TimersTest"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -84,7 +77,7 @@
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
             <Optimizations>
-              <OptimizationLevel Value="3"/>
+              <OptimizationLevel Value="2"/>
             </Optimizations>
           </CodeGeneration>
           <Linking>
@@ -111,7 +104,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="MeArm10.lpr"/>
+        <Filename Value="TimersTest.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
@@ -119,15 +112,27 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/ServoI.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/Servo.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="UInterrupts.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IRRemote.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IRRemoteISR.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IR.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/KeyMap.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/Timers.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
@@ -135,7 +140,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="bin/MeArm10"/>
+      <Filename Value="bin/TimersTest"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

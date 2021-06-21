@@ -1,12 +1,11 @@
 program MeArm10;
 
-{$mode objfpc}{$H-}
-{$goto on}
+{$mode objfpc}{$H-}{$Z1}
 
 uses
   UInterrupts,
   ArduinoTools,
-  TimedServo,
+  ServoI,
   IR,
   KeyMap,
   UARTI;
@@ -21,23 +20,23 @@ const
 
 var
   VIR: TIRReceiver;
-  VServos: array[1..SERVO_COUNT] of TTimedServo;
+  VServos: array[1..SERVO_COUNT] of TServoI;
   VServoNo: SmallInt;    
   Value: TIRValue;
   i: Byte;
   VMin, VMax: Byte;
 
 begin     
-  UARTIConsole.Init(9600);
+  UARTConsole.Init(9600);
   VIR.Init(IR_PIN_PORT);
   InterruptsEnable;
   for i := 1 to SERVO_COUNT do
     VServos[i].Init(MIN_PIN_PORT + i - 1, SERVO_ANGE_DEF[i]);
-  UARTIConsole.WriteLnString('started2');
+  UARTConsole.WriteLnString('started2');
   VServoNo := 1;
   repeat
     Value := VIR.Read;
-    UARTIConsole.WriteLnString(GetKeyName(Value.Command));
+    UARTConsole.WriteLnString(GetKeyName(Value.Command));
     VMin := SERVO_ANGE_MIN[VServoNo];
     VMax := SERVO_ANGE_MAX[VServoNo];
     case Value.Command of
@@ -49,12 +48,12 @@ begin
           VServos[VServoNo].Angle := VServos[VServoNo].Angle - 5;
       KeyOK:
       begin
-        UARTIConsole.WriteString('Active ');
-        UARTIConsole.WriteString(IntToStr(VServoNo));
+        UARTConsole.WriteString('Active ');
+        UARTConsole.WriteString(IntToStr(VServoNo));
         for i := 1 to SERVO_COUNT do
         begin
-          UARTIConsole.WriteString(' ');
-          UARTIConsole.WriteLnString(IntToStr(VServos[i].Angle));
+          UARTConsole.WriteString(' ');
+          UARTConsole.WriteLnString(IntToStr(VServos[i].Angle));
         end;
       end;
       KeyA:

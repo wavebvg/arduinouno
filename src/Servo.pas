@@ -1,7 +1,6 @@
 unit Servo;
 
-{$mode objfpc}{$H-}
-{$goto on}
+{$mode objfpc}{$H-}{$Z1}
 
 interface
 

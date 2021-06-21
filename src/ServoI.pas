@@ -1,12 +1,37 @@
-unit TimedServoISR;
+unit ServoI;
 
-{$mode objfpc}{$H-}
-{$goto on}
+{$mode objfpc}{$H-}{$Z1}
 
 interface
 
 uses
-  TimedServo;
+  Servo;   
+
+const
+  MAX_SERVO_COUNT = 4;
+
+type
+
+  { TServoI }
+
+  TServoI = object(TCustomServo)
+  private
+    FIndex: smallint;
+    function GetPosition: word;
+  protected
+    function GetInitComplete: boolean; virtual;
+    procedure SetAngle(const AValue: TServoAngle); virtual;
+    property Position: word read GetPosition;
+  public
+    constructor Init(const APin: byte; const AAngle: TServoAngle);
+    destructor Deinit; virtual;
+  end;
+
+implementation
+
+uses
+  ArduinoTools,
+  UInterrupts;
 
 type
   PServoInfo = ^TServoInfo;
@@ -14,19 +39,11 @@ type
     Pin: byte;
     Position: Word;
     Active: boolean;
-  end;        
+  end;   
 
 var
   // Угол поворота сервы (1 тик таймера 0,004ms, нетральное положение 0,6ms).
   ServoInfos: array[0..MAX_SERVO_COUNT - 1] of TServoInfo;
-
-procedure CheckTimer;
-
-implementation
-
-uses
-  UInterrupts,
-  ArduinoTools;
 
 const
   // 4-верть сигнала в 50Hz, импульсы идут один за другим.
@@ -34,38 +51,7 @@ const
 
 var
   // Переменная номер шага для прерывния TIMER1_COMPA_vect.
-  ServoTakt: byte = 0;
-
-procedure TIMER1_COMPA_ISR; Alias: 'TIMER1_COMPA_ISR'; interrupt; public;  
-var
-  VInfo: PServoInfo;
-
-  procedure SetValue(const AValue: word);
-  begin
-    OCR1A := AValue;
-    OCR1A := AValue;
-    OCR1A := AValue;
-  end;
-
-begin
-  VInfo := @ServoInfos[ServoTakt div 2];
-  if VInfo^.Active then
-  begin
-    DigitalWrite(VInfo^.Pin, VInfo^.Active and (ServoTakt mod 2 = 0));
-    if ServoTakt mod 2 = 0 then
-      SetValue(VInfo^.Position)
-    else
-      SetValue(SERVO_CYCLE - VInfo^.Position);
-  end
-  else
-    SetValue(0);
-  // Увеличиваем шаг.
-  Inc(ServoTakt);
-
-  // Обнуляем шаг.
-  if ServoTakt = MAX_SERVO_COUNT * 2 then
-    ServoTakt := 0;
-end;
+  ServoTakt: byte = 0;     
 
 procedure CheckTimer;
 var
@@ -164,6 +150,94 @@ begin
     end;
     InterruptsEnable;
   end;
+end;
+
+{ TServoI }
+
+constructor TServoI.Init(const APin: byte; const AAngle: TServoAngle);
+var
+  i: integer;
+  VServo: PServoInfo;
+begin
+  inherited;
+  for i := 0 to MAX_SERVO_COUNT - 1 do
+  begin
+    VServo := @ServoInfos[i];
+    if not VServo^.Active then
+    begin
+      PinMode(APin, avrmOutput);
+      FIndex := i;
+      VServo^.Position := Position;
+      VServo^.Pin := APin;
+      VServo^.Active := True;
+      CheckTimer;
+      Break;
+    end;
+  end;
+end;
+
+destructor TServoI.Deinit;
+var
+  VServo: PServoInfo;
+begin
+  InterruptsDisable;
+  VServo := @ServoInfos[FIndex];
+  FIndex := -1;
+  VServo^.Position := 0;
+  VServo^.Pin := 0;
+  VServo^.Active := False;
+  InterruptsEnable;
+  inherited;
+end;
+
+function TServoI.GetPosition: word;
+begin
+  Result := 126 + 494 * word(Angle) div 180;
+end;
+
+function TServoI.GetInitComplete: boolean;
+begin
+  Result := FIndex >= 0;
+end;
+
+procedure TServoI.SetAngle(const AValue: TServoAngle);
+var
+  VServo: PServoInfo;
+begin
+  inherited;
+  VServo := @ServoInfos[FIndex];
+  VServo^.Position := Position;
+end;         
+
+procedure TIMER1_COMPA_ISR; Alias: 'TIMER1_COMPA_ISR'; interrupt; public;
+var
+  VInfo: PServoInfo;
+
+  procedure SetValue(const AValue: word);
+  begin
+    OCR1A := AValue;
+    OCR1A := AValue;
+    OCR1A := AValue;
+  end;
+
+begin
+  VInfo := @ServoInfos[ServoTakt div 2];
+  if VInfo^.Active then
+  begin
+    DigitalWrite(VInfo^.Pin, VInfo^.Active and (ServoTakt mod 2 = 0));
+    if ServoTakt mod 2 = 0 then
+      SetValue(VInfo^.Position)
+    else
+      SetValue(SERVO_CYCLE - VInfo^.Position);
+  end
+  else
+    SetValue(0);
+  // Увеличиваем шаг.
+  Inc(ServoTakt);
+
+  // Обнуляем шаг.
+  if ServoTakt = MAX_SERVO_COUNT * 2 then
+    ServoTakt := 0;
 end;
 
 end.

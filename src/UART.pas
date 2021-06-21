@@ -1,6 +1,6 @@
 unit UART;
 
-{$mode objfpc}
+{$mode objfpc}{$H-}{$Z1}
 
 interface
 
