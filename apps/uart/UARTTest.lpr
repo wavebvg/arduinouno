@@ -15,10 +15,17 @@ begin
   UARTConsole.Init(BaudRate);
   UARTConsole.WriteLnString('Start');
   InterruptsEnable;
-  SleepMicroSecs(8000000);
   repeat
-    UARTConsole.WriteLnString('Read');
+    while not UARTConsole.ReadBufferEmpty do
+    begin
+      c := UARTConsole.ReadByte;
+      UARTConsole.WriteString(Char(c));
+    end;
+    UARTConsole.WriteLnString('');
+    UARTConsole.WriteLnString('Read wait');
+    SleepMicroSecs(10000000);
+    UARTConsole.WriteLnString('Read start');
     c := UARTConsole.ReadByte;
-    UARTConsole.WriteLnString(Char(c));
+    UARTConsole.WriteString(Char(c));
   until False;
 end.

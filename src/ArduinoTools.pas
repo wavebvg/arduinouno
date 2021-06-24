@@ -450,7 +450,7 @@ asm
          // PUSH stack
          PUSH    R17                   // 2
 {$IFDEF DIV1024}
-         // DEC DIV 1024               // 29...33
+         // DEC ATime DIV 1024               // 29...33
          // PUSH
          PUSH    R18                   // 2
          PUSH    R19                   // 2

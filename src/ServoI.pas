@@ -30,8 +30,7 @@ type
 implementation
 
 uses
-  ArduinoTools,
-  UInterrupts;
+  ArduinoTools;
 
 type
   PServoInfo = ^TServoInfo;

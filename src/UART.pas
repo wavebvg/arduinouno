@@ -13,15 +13,22 @@ type
 
   TUART = object
   private
+  protected
+    function GetReadBufferEmpty: Boolean; virtual;
+    procedure NopWait;
   public
     constructor Init(const ABaudRate: Word);
-    procedure WriteByte(const AValue: byte); virtual;
+    procedure WriteBuffer(ABuffer: Pbyte; ASize: Byte); virtual;
+    procedure ReadBuffer(ABuffer: Pbyte; ASize: Byte); virtual;
+    procedure WriteByte(const AValue: byte);
     procedure WriteChar(const AValue: Char);
     procedure WriteString(const AValue: String);
     procedure WriteLnString(const AValue: String);
-    function ReadByte: byte; virtual;
+    function ReadByte: byte;
     function ReadChar: Char;
-  end; 
+    //
+    property ReadBufferEmpty: Boolean read GetReadBufferEmpty;
+  end;
 
 var
   UARTConsole: TUART;
@@ -34,6 +41,18 @@ const
 
 { TUART }
 
+function TUART.GetReadBufferEmpty: Boolean;
+begin
+  Result := True;
+end;
+
+procedure TUART.NopWait; assembler;
+asm
+         NOP
+         NOP
+         NOP
+end;
+
 constructor TUART.Init(const ABaudRate: Word);
 begin
   UBRR0 := F_CPU div (16 * ABaudRate) - 1;
@@ -42,23 +61,43 @@ begin
   UCSR0C := (1 shl UCSZ00) or (1 shl UCSZ01);
 end;
 
+procedure TUART.WriteBuffer(ABuffer: Pbyte; ASize: Byte);
+begin
+  while ASize > 0 do
+  begin
+    while UCSR0A and (1 shl UDRE0) = 0 do
+      NopWait;
+    UDR0 := ABuffer^;
+    Inc(ABuffer);
+    Dec(ASize);
+  end;
+end;
+
+procedure TUART.ReadBuffer(ABuffer: Pbyte; ASize: Byte);
+begin
+  while ASize > 0 do
+  begin
+    while UCSR0A and (1 shl RXC0) = 0 do
+      ;
+    ABuffer^ := UDR0;
+    Inc(ABuffer);
+    Dec(ASize);
+  end;
+end;
+
 procedure TUART.WriteByte(const AValue: byte);
 begin
-  while UCSR0A and (1 shl UDRE0) = 0 do ;
-  UDR0 := AValue;
+  WriteBuffer(@AValue, 1);
 end;
 
 procedure TUART.WriteChar(const AValue: Char);
 begin
-  WriteByte(Byte(AValue));
+  WriteBuffer(@AValue, 1);
 end;
 
 procedure TUART.WriteString(const AValue: String);
-var
-  i: SizeInt;
 begin
-  for i := 1 to Length(AValue) do
-    WriteChar(AValue[i]);
+  WriteBuffer(@AValue[1], Length(AValue));
 end;
 
 procedure TUART.WriteLnString(const AValue: String);
@@ -69,8 +108,7 @@ end;
 
 function TUART.ReadByte: byte;
 begin
-  while UCSR0A and (1 shl RXC0) = 0 do ;
-  Result := UDR0;                    // Read character
+  ReadBuffer(@Result, 1);
 end;
 
 function TUART.ReadChar: Char;

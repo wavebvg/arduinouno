@@ -126,7 +126,6 @@ uses
 constructor TFormTerminal.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  FTermCursor := MemoTTY.CaretPos;
   FIniFile := TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini'));
   CheckTTYExist;
   LoadConfig;
@@ -216,7 +215,7 @@ end;
 
 procedure TFormTerminal.ActionClearExecute(Sender: TObject);
 begin
-  MemoTTY.Clear;
+  MemoTTY.Lines.Clear;
   FTermCursor := MemoTTY.CaretPos;
   FTotalPressedKeys := 0;
   FCurrentPressedKeysIndex := 0;
@@ -412,6 +411,7 @@ begin
       NewLine;
       CarriageReturn;
     end;
+    WriteLn(Length(AText));
     for i := 1 to Length(AText) do
     begin
       c := AText[i];

@@ -31,8 +31,10 @@ begin
   VIR.Init(IR_PIN_PORT);
   InterruptsEnable;
   for i := 1 to SERVO_COUNT do
+  begin
+    VServos[i] := Default(TServoI);
     VServos[i].Init(MIN_PIN_PORT + i - 1, SERVO_ANGE_DEF[i]);
-  UARTConsole.WriteLnString('started2');
+  end;
   VServoNo := 1;
   repeat
     Value := VIR.Read;
@@ -48,8 +50,6 @@ begin
           VServos[VServoNo].Angle := VServos[VServoNo].Angle - 5;
       KeyOK:
       begin
-        UARTConsole.WriteString('Active ');
-        UARTConsole.WriteString(IntToStr(VServoNo));
         for i := 1 to SERVO_COUNT do
         begin
           UARTConsole.WriteString(' ');

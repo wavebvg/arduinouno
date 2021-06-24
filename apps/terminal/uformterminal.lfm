@@ -7,7 +7,7 @@ object FormTerminal: TFormTerminal
   ClientHeight = 392
   ClientWidth = 543
   OnCloseQuery = FormCloseQuery
-  LCLVersion = '2.1.0.0'
+  LCLVersion = '2.3.0.0'
   object PanelButton: TPanel
     Left = 448
     Height = 392
