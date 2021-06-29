@@ -7,8 +7,6 @@
       <Unit>
         <Filename Value="UARTTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="3"/>
         <CursorPos X="22" Y="26"/>
         <UsageCount Value="144"/>
         <Loaded Value="True"/>
@@ -66,7 +64,7 @@
       <Unit>
         <Filename Value="../../src/UARTI.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="68"/>
         <CursorPos X="52" Y="71"/>
         <UsageCount Value="24"/>
@@ -215,33 +213,23 @@
       <Unit>
         <Filename Value="../../src/UART.pas"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="12"/>
-        <CursorPos X="15" Y="26"/>
+        <TopLine Value="39"/>
+        <CursorPos X="41" Y="60"/>
         <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
+        <UnitName Value="ATmega328P"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="118"/>
+        <CursorPos X="7" Y="142"/>
+        <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="../../src/UARTI.pas"/>
-        <Caret Line="85" Column="26" TopLine="79"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UARTI.pas"/>
-        <Caret Line="16" Column="21" TopLine="6"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UARTI.pas"/>
-        <Caret Line="99" Column="5" TopLine="75"/>
-      </Position>
-      <Position>
-        <Filename Value="UARTTest.lpr"/>
-        <Caret Line="21" Column="38" TopLine="2"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UARTI.pas"/>
-        <Caret Line="89" Column="17" TopLine="81"/>
-      </Position>
       <Position>
         <Filename Value="../../src/UARTI.pas"/>
         <Caret Line="96" Column="65" TopLine="81"/>
@@ -341,6 +329,26 @@
       <Position>
         <Filename Value="UARTTest.lpr"/>
         <Caret Line="12" Column="40" TopLine="3"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="39" Column="6" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="12" Column="9"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="38" Column="15" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="142" Column="7" TopLine="118"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="135" Column="7" TopLine="118"/>
       </Position>
     </JumpHistory>
     <RunParams>

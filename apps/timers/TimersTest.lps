@@ -8,8 +8,9 @@
         <Filename Value="TimersTest.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="24" Y="9"/>
-        <UsageCount Value="166"/>
+        <TopLine Value="7"/>
+        <CursorPos X="35" Y="13"/>
+        <UsageCount Value="168"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -18,14 +19,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="454"/>
         <CursorPos X="21" Y="480"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
       </Unit>
       <Unit>
         <Filename Value="UInterrupts.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="17"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="100"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemote.pas"/>
@@ -33,7 +34,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="16" Y="16"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="100"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemoteISR.pas"/>
@@ -41,29 +42,29 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="52"/>
         <CursorPos X="21" Y="55"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="100"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IR.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="22" Y="3"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="48"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/KeyMap.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="30" Y="3"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="48"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/Timers.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="13"/>
-        <CursorPos X="31" Y="26"/>
-        <UsageCount Value="25"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="24" Y="11"/>
+        <UsageCount Value="27"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="KeyMap.pas"/>
@@ -238,15 +239,134 @@
         <CursorPos X="11" Y="1279"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/inc/objpash.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="175"/>
+        <CursorPos X="8" Y="196"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="1">
+    <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="TimersTest.lpr"/>
-        <Caret Line="15" Column="28"/>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="63" Column="16" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="62" Column="14" TopLine="42"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="65" Column="15" TopLine="44"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="62" Column="52" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="26" Column="19" TopLine="14"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="139" Column="114" TopLine="118"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="216" Column="37" TopLine="195"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="44" Column="65" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="224" Column="16" TopLine="203"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="219" Column="16" TopLine="193"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="230" Column="37" TopLine="199"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="226" Column="58" TopLine="205"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="230" Column="30" TopLine="209"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="30" Column="67" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="225" Column="20" TopLine="104"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="21" Column="3" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="20" Column="66" TopLine="7"/>
       </Position>
       <Position>
         <Filename Value="TimersTest.lpr"/>
-        <Caret Line="18" Column="48"/>
+        <Caret Line="17" Column="23"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="85" Column="3" TopLine="64"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="71" Column="3" TopLine="64"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="22" Column="19" TopLine="14"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="25" Column="63" TopLine="14"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="232" Column="56" TopLine="210"/>
+      </Position>
+      <Position>
+        <Filename Value="TimersTest.lpr"/>
+        <Caret Line="21" Column="51"/>
+      </Position>
+      <Position>
+        <Filename Value="TimersTest.lpr"/>
+        <Caret Line="16" Column="52"/>
+      </Position>
+      <Position>
+        <Filename Value="TimersTest.lpr"/>
+        <Caret Line="19" Column="39"/>
+      </Position>
+      <Position>
+        <Filename Value="TimersTest.lpr"/>
+        <Caret Line="18" Column="25"/>
+      </Position>
+      <Position>
+        <Filename Value="TimersTest.lpr"/>
+        <Caret Line="11" Column="65"/>
+      </Position>
+      <Position>
+        <Filename Value="TimersTest.lpr"/>
+        <Caret Line="45" Column="29" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="59" Column="43" TopLine="31"/>
       </Position>
     </JumpHistory>
     <RunParams>
