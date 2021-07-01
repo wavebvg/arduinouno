@@ -214,9 +214,7 @@ var
 
   procedure SetValue(const AValue: word);
   begin
-    OCR1A := AValue;
-    OCR1A := AValue;
-    OCR1A := AValue;
+    SetTEMPWord(@OCR1A, AValue);
   end;
 
 begin

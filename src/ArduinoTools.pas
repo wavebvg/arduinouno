@@ -1,7 +1,7 @@
 unit ArduinoTools;
 
 {$mode objfpc}{$H-}{$Z1}
-{$DEFINE DIV1024}
+{.$DEFINE DIV1024}
 
 interface
 
@@ -265,6 +265,8 @@ function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardin
 function IntToStr(AValue: Longint): String;
 procedure InterruptsEnable;
 procedure InterruptsDisable;
+procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
+procedure SetTEMPWord(var ADest: PByte; const ASrc: Word);
 
 
 type
@@ -309,11 +311,32 @@ implementation
 
 procedure InterruptsEnable; assembler;
 asm
-         SEI end;
+         SEI
+end;
 
 procedure InterruptsDisable; assembler;
 asm
-         CLI end;
+         CLI
+end;
+
+procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
+begin
+{$HINTS OFF}
+  ADest := Pbyte(Word(ASrc) and $00FF);
+{$HINTS ON}
+end;
+
+procedure SetTEMPWord(var ADest: PByte; const ASrc: Word);
+type
+  PTWord = ^TWord;
+  TWord = packed record
+    Low, High: Byte;
+  end;
+
+begin
+  PTWord(ADest)^.High := TWord(ASrc).High;
+  PTWord(ADest)^.Low := TWord(ASrc).Low;
+end;
 
 function ByteMap(const ABytes: array of Byte): Byte;
 var

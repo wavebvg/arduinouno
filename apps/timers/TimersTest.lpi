@@ -71,17 +71,15 @@
             </SyntaxOptions>
           </Parsing>
           <CodeGeneration>
-            <SmartLinkUnit Value="True"/>
-            <RelocatableUnit Value="True"/>
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
+            <SmallerCode Value="True"/>
           </CodeGeneration>
           <Linking>
             <Debugging>
               <GenerateDebugInfo Value="False"/>
             </Debugging>
-            <LinkSmart Value="True"/>
           </Linking>
           <Other>
             <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al"/>

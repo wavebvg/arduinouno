@@ -7,43 +7,61 @@ uses
   UART,
   Timers;
 
-var
-  CounterCompareA, CounterCompareB, CounterOverflow: Longint;
-
   procedure Timer1Event(const {%H-}ATimer: PCustomTimer; const AType: TTimerSubscribeEventType);
+  var
+    VNewValue: Word;
   begin
     case AType of
       tsetCompareA:
+      begin
         Inc(CounterCompareA);
+        //if ATimer^.Bits = 16 then
+        //begin
+        //  VNewValue := PTimer16(ATimer)^.Counter + 1024;
+        //  PTimer16(ATimer)^.ValueA := VNewValue;
+        //end;
+      end;
       tsetCompareB:
+      begin
         Inc(CounterCompareB);
+        //if ATimer^.Bits = 16 then
+        //begin
+        //  VNewValue := PTimer16(ATimer)^.Counter + 1024;
+        //  PTimer16(ATimer)^.ValueB := VNewValue;
+        //end;
+      end;
       tsetOverflow:
         Inc(CounterOverflow);
     end;
   end;
 
 begin
+  InterruptsDisable;
   UARTConsole.Init(9600);
-  Timer1.Subscribe(@Timer1Event, [tsetCompareA, tsetCompareB, tsetOverflow]);
+  Timer0.Subscribe(@Timer1Event, [tsetCompareA, tsetCompareB, tsetOverflow]);
+  //
+  Timer0.OutputModes := [];
+  Timer0.CounterModes := [tcmCompareA, tcmCompareB, tcmOverflow];
+  //
+  Timer0.CLKMode := tclkm64;
+  //Timer0.CTCMode := True;
+  //Timer0.ValueA := 1024;
+  //Timer0.ValueB := 2048;
+  //
+  SleepMicroSecs(500000);
+  //
+  UARTConsole.WriteLnString('start');
   //
   InterruptsEnable;
   //
-  UARTConsole.WriteLnString('start');
+  SleepMicroSecs(1000000);
+  //
+  InterruptsDisable;
+  UARTConsole.WriteString(IntToStr(CounterCompareA));
+  UARTConsole.WriteString(' ');
+  UARTConsole.WriteString(IntToStr(CounterCompareB));
+  UARTConsole.WriteString(' ');
+  UARTConsole.WriteLnString(IntToStr(CounterOverflow));
   repeat
-    SleepMicroSecs(5000000);
-    Timer1.CounterModes := [];
-    Timer1.ValueA := 0;
-    Timer1.ValueB := 0;
-    UARTConsole.WriteString(IntToStr(CounterCompareA));
-    UARTConsole.WriteString(' ');
-    UARTConsole.WriteString(IntToStr(CounterCompareB));
-    UARTConsole.WriteString(' ');
-    UARTConsole.WriteLnString(IntToStr(CounterOverflow));
-    CounterCompareA := 0;
-    CounterCompareB := 0;
-    CounterOverflow := 0;
-    Timer1.ValueA := System.High(Word) div 4;
-    Timer1.ValueB := System.High(Word) div 2;
-    Timer1.CounterModes := [tcmOverflow, tcmCompareA, tcmCompareB];
   until False;
 end.
