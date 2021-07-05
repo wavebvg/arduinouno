@@ -266,7 +266,7 @@ function IntToStr(AValue: Longint): String;
 procedure InterruptsEnable;
 procedure InterruptsDisable;
 procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
-procedure SetTEMPWord(var ADest: PByte; const ASrc: Word);
+procedure SetTEMPWord(var ADest: Word; const ASrc: Word);
 
 
 type
@@ -326,16 +326,15 @@ begin
 {$HINTS ON}
 end;
 
-procedure SetTEMPWord(var ADest: PByte; const ASrc: Word);
+procedure SetTEMPWord(var ADest: Word; const ASrc: Word);
 type
-  PTWord = ^TWord;
   TWord = packed record
     Low, High: Byte;
   end;
 
 begin
-  PTWord(ADest)^.High := TWord(ASrc).High;
-  PTWord(ADest)^.Low := TWord(ASrc).Low;
+  TWord(ADest).High := TWord(ASrc).High;
+  TWord(ADest).Low := TWord(ASrc).Low;
 end;
 
 function ByteMap(const ABytes: array of Byte): Byte;
