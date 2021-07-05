@@ -5,18 +5,22 @@ program servoapp;
 uses
   ArduinoTools,
   Servo,
-  UARTI;
+  Timers,
+  UART,
+  ServoI2;
 
 const
   SERVO_PIN = 14;
 
 var
-  Servo1: TServo;
-  c: char;
+  Servo1: TServoI;
+  c: Char;
 begin
-  SleepMicroSecs(100000);
+  Timer0.CLKMode := tclkm64;
+  Timer0.CounterModes := [tcmOverflow];
   UARTConsole.Init(9600);
-  Servo1.Init(SERVO_PIN);
+  Servo1.Init(SERVO_PIN, 0);
+  SleepMicroSecs(100000);
   while True do
   begin
     c := UARTConsole.ReadChar;

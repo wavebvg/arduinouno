@@ -214,7 +214,7 @@ var
 
   procedure SetValue(const AValue: word);
   begin
-    SetTEMPWord(@OCR1A, AValue);
+    SetTEMPWord(OCR1A, AValue);
   end;
 
 begin
@@ -222,10 +222,10 @@ begin
   if VInfo^.Active then
   begin
     DigitalWrite(VInfo^.Pin, VInfo^.Active and (ServoTakt mod 2 = 0));
-    if ServoTakt mod 2 = 0 then
-      SetValue(VInfo^.Position)
-    else
-      SetValue(SERVO_CYCLE - VInfo^.Position);
+    if ServoTakt mod 2 = 0 then    
+      SetTEMPWord(OCR1A, VInfo^.Position)
+    else                           
+      SetTEMPWord(OCR1A, SERVO_CYCLE - VInfo^.Position)   ;
   end
   else
     SetValue(0);

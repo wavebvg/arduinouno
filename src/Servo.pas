@@ -39,7 +39,7 @@ type
   protected
     procedure SetAngle(const AValue: TServoAngle); virtual;
   public
-    constructor Init(const APin: byte);
+    constructor Init(const APin: byte; const AAngle: TServoAngle);
   end;
 
 implementation
@@ -76,7 +76,7 @@ end;
 
 { TServo }
 
-constructor TServo.Init(const APin: byte);
+constructor TServo.Init(const APin: byte; const AAngle: TServoAngle);
 begin
   inherited;
   PinMode(Pin, avrmOutput);
