@@ -171,12 +171,21 @@ end;
 procedure TFormTerminal.ActionFlashExecute(Sender: TObject);
 var
   VLastConnected: Boolean;
+  VHEXPath: String;
+  VOut: string;
 begin
   VLastConnected := Serial.Active;
   TTYClose;
   DisplayText('Begin flashing');
   FInFlashing := True;
-  try         
+  try
+    VHEXPath := BinPath;
+    if ExtractFileExt(VHEXPath) = '.elf' then
+    begin
+      ForceDirectories('/tmp/terminal/');
+      VHEXPath := '/tmp/terminal/out.hex';
+      RunCommand('avr-objcopy', ['-j', '.text', '-j', '.data', '-O', 'ihex', BinPath, VHEXPath],VOut, [poWaitOnExit]);
+    end;
     ActionConnect.Update;
     ActionFlash.Update;
     ProcessAVRDude.Parameters.Clear;
@@ -189,7 +198,7 @@ begin
     ProcessAVRDude.Parameters.Add('-b115200');
     ProcessAVRDude.Parameters.Add('-D');
     ProcessAVRDude.Parameters.Add(Format('-P%s', [Device]));
-    ProcessAVRDude.Parameters.Add(Format('-Uflash:w:%s:i', [BinPath]));
+    ProcessAVRDude.Parameters.Add(Format('-Uflash:w:%s:i', [VHEXPath]));
     TTYOpen;
     Application.ProcessMessages;
     Sleep(300);

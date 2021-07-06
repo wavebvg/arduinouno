@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Debug"/>
     <Units>
       <Unit>
         <Filename Value="terminal.lpr"/>
@@ -20,8 +20,8 @@
         <UnitName Value="UFormTerminal"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="392"/>
-        <CursorPos Y="405"/>
+        <TopLine Value="252"/>
+        <CursorPos X="3" Y="254"/>
         <UsageCount Value="54"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -33,10 +33,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UFormDialogPreferences"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="85"/>
-        <CursorPos X="41" Y="125"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="72"/>
+        <CursorPos X="64" Y="84"/>
         <UsageCount Value="47"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="ucomport.pas"/>
@@ -217,20 +219,18 @@
       <Unit>
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
         <UnitName Value="LazSerial"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="313"/>
-        <CursorPos X="9" Y="327"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="280"/>
+        <CursorPos X="53" Y="299"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
         <UnitName Value="LazSynaSer"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="467"/>
         <CursorPos X="14" Y="480"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/lazarus/share/lazarus/components/lazutils/utf8process.pp"/>
@@ -254,127 +254,143 @@
         <CursorPos X="22" Y="136"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/objpas/sysutils/osutilsh.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="6" Y="15"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/fcl-process/src/processbody.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="166"/>
+        <CursorPos X="10" Y="185"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/fcl-process/src/process.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="21"/>
+        <CursorPos X="48" Y="25"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="418" TopLine="410"/>
+        <Caret Line="76" Column="35" TopLine="67"/>
       </Position>
       <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="424" TopLine="410"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="415" TopLine="410"/>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="108" Column="35" TopLine="88"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="437" TopLine="419"/>
+        <Caret Line="192" Column="68" TopLine="167"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="273" Column="21" TopLine="266"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="172" Column="14" TopLine="159"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="319" Column="23" TopLine="315"/>
+        <Caret Line="185" Column="92" TopLine="166"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="405" TopLine="392"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="316" Column="34" TopLine="313"/>
+        <Caret Line="186" Column="105" TopLine="166"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="405" TopLine="392"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="316" Column="29" TopLine="313"/>
+        <Caret Line="181" Column="39" TopLine="168"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="405" TopLine="392"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="318" TopLine="313"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="319" TopLine="313"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="321" TopLine="313"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="324" TopLine="313"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1246" TopLine="1231"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1247" TopLine="1231"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1249" TopLine="1231"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1250" TopLine="1244"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1258" TopLine="1256"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1259" TopLine="1254"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1260" TopLine="1254"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1262" TopLine="1254"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1263" TopLine="1254"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1264" TopLine="1254"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1265" TopLine="1254"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazsynaser.pas"/>
-        <Caret Line="1286" TopLine="1272"/>
+        <Caret Line="178" TopLine="168"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="405" TopLine="392"/>
+        <Caret Line="179" TopLine="168"/>
       </Position>
       <Position>
-        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
-        <Caret Line="327" Column="9" TopLine="313"/>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="180" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="181" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="182" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="181" Column="37" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="178" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="179" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="180" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="181" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="182" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="184" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="185" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="178" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="186" TopLine="168"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="181" Column="57" TopLine="160"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="189" Column="61" TopLine="167"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="193" Column="57" TopLine="167"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="187" TopLine="167"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="179" Column="43" TopLine="167"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="84" Column="64" TopLine="72"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="62" Column="24" TopLine="44"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="180" Column="27" TopLine="165"/>
       </Position>
     </JumpHistory>
     <RunParams>

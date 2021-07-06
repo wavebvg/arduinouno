@@ -18,7 +18,7 @@ uses
   Dialogs,
   ExtCtrls,
   ButtonPanel,
-  StdCtrls;
+  StdCtrls, Menus;
 
 type
 
@@ -39,6 +39,7 @@ type
     LabelAvrdude: TLabel;
     LabelTTY: TLabel;
     OpenDialog: TOpenDialog;
+    OpenDialogBin: TOpenDialog;
     PanelBody: TPanel;
     procedure ButtonAvrdudeClick(Sender: TObject);
     procedure ButtonBinPathClick(Sender: TObject);
@@ -79,8 +80,9 @@ end;
 
 procedure TFormDialogPreferences.ButtonBinPathClick(Sender: TObject);
 begin
-  if OpenDialog.Execute then
-    EditBinPath.Text := OpenDialog.FileName;
+  OpenDialogBin.FileName := EditBinPath.Text;
+  if OpenDialogBin.Execute then
+    EditBinPath.Text := OpenDialogBin.FileName;
 end;
 
 procedure TFormDialogPreferences.ButtonAvrdudeClick(Sender: TObject);

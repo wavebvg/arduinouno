@@ -1,28 +1,28 @@
 object FormDialogPreferences: TFormDialogPreferences
   Left = 363
-  Height = 195
+  Height = 211
   Top = 246
   Width = 373
   BorderStyle = bsDialog
   Caption = 'Preferences'
-  ClientHeight = 195
+  ClientHeight = 211
   ClientWidth = 373
   Position = poMainFormCenter
-  LCLVersion = '2.1.0.0'
+  LCLVersion = '2.3.0.0'
   Scaled = False
   object PanelBody: TPanel
     Left = 0
-    Height = 195
+    Height = 211
     Top = 0
     Width = 373
     Align = alClient
-    ClientHeight = 195
+    ClientHeight = 211
     ClientWidth = 373
     TabOrder = 0
     object ButtonPanel: TButtonPanel
       Left = 7
-      Height = 34
-      Top = 154
+      Height = 38
+      Top = 166
       Width = 359
       OKButton.Name = 'OKButton'
       OKButton.DefaultCaption = True
@@ -37,7 +37,7 @@ object FormDialogPreferences: TFormDialogPreferences
     end
     object ComboBoxTTY: TComboBox
       Left = 56
-      Height = 27
+      Height = 29
       Top = 8
       Width = 296
       ItemHeight = 0
@@ -48,21 +48,20 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = ComboBoxTTY
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = ComboBoxTTY
-      Left = 32
-      Height = 16
-      Top = 13
-      Width = 24
+      Left = 35
+      Height = 15
+      Top = 15
+      Width = 21
       Anchors = [akTop, akRight]
       Caption = 'TTY'
-      ParentColor = False
     end
     object EditConfigPath: TEdit
       AnchorSideLeft.Control = EditAvrdude
       AnchorSideTop.Control = EditAvrdude
       AnchorSideTop.Side = asrBottom
       Left = 56
-      Height = 25
-      Top = 70
+      Height = 27
+      Top = 74
       Width = 264
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 5
@@ -76,7 +75,7 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideRight.Side = asrBottom
       Left = 320
       Height = 25
-      Top = 70
+      Top = 75
       Width = 32
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 5
@@ -88,33 +87,31 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = EditConfigPath
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = EditConfigPath
-      Left = 15
-      Height = 16
-      Top = 74
-      Width = 41
+      Left = 20
+      Height = 15
+      Top = 80
+      Width = 36
       Anchors = [akTop, akRight]
       Caption = 'Config'
-      ParentColor = False
     end
     object LabelBinPath: TLabel
       AnchorSideTop.Control = EditBinPath
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = EditBinPath
-      Left = 36
-      Height = 16
-      Top = 104
-      Width = 20
+      Left = 38
+      Height = 15
+      Top = 112
+      Width = 18
       Anchors = [akTop, akRight]
       Caption = 'Bin'
-      ParentColor = False
     end
     object EditBinPath: TEdit
       AnchorSideLeft.Control = ComboBoxTTY
       AnchorSideTop.Control = EditConfigPath
       AnchorSideTop.Side = asrBottom
       Left = 56
-      Height = 25
-      Top = 100
+      Height = 27
+      Top = 106
       Width = 264
       BorderSpacing.Top = 5
       ParentFont = False
@@ -128,7 +125,7 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideRight.Side = asrBottom
       Left = 320
       Height = 25
-      Top = 100
+      Top = 107
       Width = 32
       BorderSpacing.Top = 5
       Caption = '...'
@@ -139,21 +136,20 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = EditAvrdude
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = EditAvrdude
-      Left = 6
-      Height = 16
-      Top = 44
-      Width = 50
+      Left = 11
+      Height = 15
+      Top = 48
+      Width = 45
       Anchors = [akTop, akRight]
       Caption = 'avrdude'
-      ParentColor = False
     end
     object EditAvrdude: TEdit
       AnchorSideLeft.Control = ComboBoxTTY
       AnchorSideTop.Control = ComboBoxTTY
       AnchorSideTop.Side = asrBottom
       Left = 56
-      Height = 25
-      Top = 40
+      Height = 27
+      Top = 42
       Width = 264
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 5
@@ -167,7 +163,7 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideRight.Side = asrBottom
       Left = 320
       Height = 25
-      Top = 40
+      Top = 42
       Width = 32
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 5
@@ -180,16 +176,22 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = EditBinPath
       AnchorSideTop.Side = asrBottom
       Left = 56
-      Height = 21
-      Top = 130
-      Width = 85
+      Height = 23
+      Top = 138
+      Width = 83
       BorderSpacing.Top = 5
       Caption = 'Show time'
       TabOrder = 8
     end
   end
   object OpenDialog: TOpenDialog
-    Left = 24
-    Top = 16
+    Left = 104
+    Top = 40
+  end
+  object OpenDialogBin: TOpenDialog
+    DefaultExt = '.hex'
+    Filter = 'Atmel AVR HEX file|*.hex|Atmel AVR ELF file|*.elf'
+    Left = 184
+    Top = 40
   end
 end
