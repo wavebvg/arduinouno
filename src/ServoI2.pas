@@ -40,7 +40,7 @@ var
   ServoIndex: Byte = 0;
   Servos: TServos;
 
-procedure DoTimerOverflow(const ATimer: PCustomTimer; const AType: TTimerSubscribeEventType);
+procedure DoTimerOverflow(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
 var
   i: Byte;
 begin

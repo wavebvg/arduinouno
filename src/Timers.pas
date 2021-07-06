@@ -20,10 +20,10 @@ type
   TTimerSubscribeEventType = (tsetCompareA, tsetCompareB, tsetOverflow);
   TTimerSubscribeEventTypes = set of TTimerSubscribeEventType;
 
-  PCustomTimer = ^TSyncTimer;
+  PTimer = ^TAbstractTimer;
 
-  TTimerInterruptEvent = procedure(const ATimer: PCustomTimer; const AType: TTimerSubscribeEventType) of object;
-  TTimerInterruptProc = procedure(const ATimer: PCustomTimer; const AType: TTimerSubscribeEventType);
+  TTimerInterruptEvent = procedure(const ATimer: PTimer; const AType: TTimerSubscribeEventType) of object;
+  TTimerInterruptProc = procedure(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
 
   TTimerSubscriber = packed record
     Event: TMethod;
@@ -38,15 +38,25 @@ type
   private
     FSubscribers: TTimerSubscribers;
     procedure DoEvent(const AEventType: TTimerSubscribeEventType);
+  protected
+    function GetCounterModes: TTimerCounterModes; virtual; abstract;
+    procedure SetCounterModes(const AValue: TTimerCounterModes); virtual; abstract;
+    function GetOutputModes: TTimerOutputModes; virtual; abstract;
+    procedure SetOutputModes(const AValue: TTimerOutputModes); virtual; abstract;
+    function GetCTCMode: Boolean; virtual; abstract;
+    procedure SetCTCMode(const AValue: Boolean); virtual; abstract;
   public
     constructor Init;
     function Bits: Byte; virtual; abstract;
     function Subscribe(const AEvent: TTimerInterruptEvent; const AEventTypes: TTimerSubscribeEventTypes): Shortint;
       overload;
-    function Subscribe(const AEvent: TTimerInterruptProc; const AEventTypes: TTimerSubscribeEventTypes): Shortint;
+    function Subscribe(const AProc: TTimerInterruptProc; const AEventTypes: TTimerSubscribeEventTypes): Shortint;
       overload;
-    //procedure Unsubscribe(const AEvent: TTimerInterruptEvent); overload;
-    procedure Unsubscribe(const AEvent: TTimerInterruptProc); overload;
+    procedure Unsubscribe(const AEvent: TTimerInterruptEvent);
+    procedure Unsubscribe(const AProc: TTimerInterruptProc); overload;
+    property CounterModes: TTimerCounterModes read GetCounterModes write SetCounterModes;
+    property OutputModes: TTimerOutputModes read GetOutputModes write SetOutputModes;
+    property CTCMode: Boolean read GetCTCMode write SetCTCMode;
   end;
 
   { TSyncTimer }
@@ -54,19 +64,10 @@ type
   TSyncTimer = object(TAbstractTimer)
   private
   protected
-    function GetCTCMode: Boolean; virtual; abstract;
-    procedure SetCTCMode(const AValue: Boolean); virtual; abstract;
     function GetCLKMode: TTimerCLKMode; virtual; abstract;
-    function GetCounterModes: TTimerCounterModes; virtual; abstract;
-    function GetOutputModes: TTimerOutputModes; virtual; abstract;
     procedure SetCLKMode(const AValue: TTimerCLKMode); virtual; abstract;
-    procedure SetCounterModes(const AValue: TTimerCounterModes); virtual; abstract;
-    procedure SetOutputModes(const AValue: TTimerOutputModes); virtual; abstract;
   public
-    property CounterModes: TTimerCounterModes read GetCounterModes write SetCounterModes;
-    property OutputModes: TTimerOutputModes read GetOutputModes write SetOutputModes;
     property CLKMode: TTimerCLKMode read GetCLKMode write SetCLKMode;
-    property CTCMode: Boolean read GetCTCMode write SetCTCMode;
   end;
 
   { TTimer0 }
@@ -84,9 +85,9 @@ type
     procedure SetCTCMode(const AValue: Boolean); virtual;
     function GetCLKMode: TTimerCLKMode; virtual;
     function GetCounterModes: TTimerCounterModes; virtual;
-    function GetOutputModes: TTimerOutputModes; virtual;
     procedure SetCLKMode(const AValue: TTimerCLKMode); virtual;
     procedure SetCounterModes(const AValue: TTimerCounterModes); virtual;
+    function GetOutputModes: TTimerOutputModes; virtual;
     procedure SetOutputModes(const AValue: TTimerOutputModes); virtual;
   public
     function Bits: Byte; virtual;
@@ -133,21 +134,22 @@ type
     function GetAsyncMode: Boolean;
     function GetCLKMode: TTimer2CLKMode;
     function GetCounter: Byte;
-    function GetCounterModes: TTimerCounterModes;
-    function GetCTCMode: Boolean;
     function GetExternalMode: Boolean;
-    function GetOutputModes: TTimerOutputModes;
     function GetValueA: Byte;
     function GetValueB: Byte;
     procedure SetAsyncMode(const AValue: Boolean);
     procedure SetCLKMode(const AValue: TTimer2CLKMode);
     procedure SetCounter(const AValue: Byte);
-    procedure SetCounterModes(AValue: TTimerCounterModes);
-    procedure SetCTCMode(AValue: Boolean);
     procedure SetExternalMode(const AValue: Boolean);
-    procedure SetOutputModes(AValue: TTimerOutputModes);
     procedure SetValueA(const AValue: Byte);
     procedure SetValueB(const AValue: Byte);
+  protected
+    function GetCounterModes: TTimerCounterModes; virtual;
+    procedure SetCounterModes(const AValue: TTimerCounterModes); virtual;
+    function GetOutputModes: TTimerOutputModes; virtual;
+    procedure SetOutputModes(const AValue: TTimerOutputModes); virtual;
+    function GetCTCMode: Boolean; virtual;
+    procedure SetCTCMode(const AValue: Boolean); virtual;
   public
     function Bits: Byte; virtual;
     //
@@ -156,10 +158,7 @@ type
     property Counter: Byte read GetCounter write SetCounter;
     property ExternalMode: Boolean read GetExternalMode write SetExternalMode;
     property AsyncMode: Boolean read GetAsyncMode write SetAsyncMode;
-    property CLKMode: TTimer2CLKMode read GetCLKMode write SetCLKMode;   
-    property CTCMode: Boolean read GetCTCMode write SetCTCMode;    
-    property OutputModes: TTimerOutputModes read GetOutputModes write SetOutputModes;      
-    property CounterModes: TTimerCounterModes read GetCounterModes write SetCounterModes;
+    property CLKMode: TTimer2CLKMode read GetCLKMode write SetCLKMode;
   end;
 
 var
@@ -168,7 +167,7 @@ var
   Timer2: TTimer2;
 
 var
-  CounterCompareA, CounterCompareB, CounterOverflow: LongWord;
+  CounterCompareA, CounterCompareB, CounterOverflow: Longword;
 
 implementation
 
@@ -187,7 +186,6 @@ var
   i: Byte;
   VSubscriber: TTimerSubscriber;
 begin
-  //UARTConsole.WriteLnString('DoEvent');
   for i := 1 to MAX_INERRUPT_EVENT_SUBSCRIBES do
     if AEventType in FSubscribers[i].EventTypes then
     begin
@@ -239,24 +237,29 @@ begin
   end;
 end;
 
-function TAbstractTimer.Subscribe(const AEvent: TTimerInterruptProc;
+function TAbstractTimer.Subscribe(const AProc: TTimerInterruptProc;
   const AEventTypes: TTimerSubscribeEventTypes): Shortint;
 var
   VMethod: TMethod;
 begin
   VMethod.Data := nil;
-  VMethod.Code := AEvent;
+  VMethod.Code := AProc;
   Result := Subscribe(TTimerInterruptEvent(VMethod), AEventTypes);
 end;
 
-//procedure TAbstractTimer.Unsubscribe(const AEvent: TTimerInterruptEvent);
-//begin
-//  Subscribe(AEvent, []);
-//end;
-
-procedure TAbstractTimer.Unsubscribe(const AEvent: TTimerInterruptProc);
+procedure TAbstractTimer.Unsubscribe(const AEvent: TTimerInterruptEvent);
 begin
+  asm
+           NOP
+           NOP
+           NOP
+  end;
   Subscribe(AEvent, []);
+end;
+
+procedure TAbstractTimer.Unsubscribe(const AProc: TTimerInterruptProc);
+begin
+  Subscribe(AProc, []);
 end;
 
 { TTimer0 }
@@ -421,7 +424,7 @@ end;
 function TTimer1.Bits: Byte;
 begin
   Result := 16;
-end;     
+end;
 
 { TTimer2 }
 
@@ -489,12 +492,12 @@ begin
   TCNT2 := AValue;
 end;
 
-procedure TTimer2.SetCounterModes(AValue: TTimerCounterModes);
+procedure TTimer2.SetCounterModes(const AValue: TTimerCounterModes);
 begin
   TTimerCounterModes(TIMSK2) := AValue;
 end;
 
-procedure TTimer2.SetCTCMode(AValue: Boolean);
+procedure TTimer2.SetCTCMode(const AValue: Boolean);
 begin
   TCCR2B := TCCR2B and not (1 shr WGM22) or (Byte(AValue) shr WGM22);
 end;
@@ -504,7 +507,7 @@ begin
   ASSR := ASSR and not (1 shr EXCLK) or (Byte(AValue) shr EXCLK);
 end;
 
-procedure TTimer2.SetOutputModes(AValue: TTimerOutputModes);
+procedure TTimer2.SetOutputModes(const AValue: TTimerOutputModes);
 begin
   TTimerOutputModes(TCCR2A) := AValue;
 end;

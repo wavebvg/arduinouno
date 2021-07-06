@@ -7,7 +7,7 @@ uses
   UART,
   Timers;
 
-  procedure TimerEvent(const {%H-}ATimer: PCustomTimer; const AType: TTimerSubscribeEventType);
+  procedure TimerEvent(const {%H-}ATimer: PTimer; const AType: TTimerSubscribeEventType);
   begin
     case AType of
       tsetCompareA:

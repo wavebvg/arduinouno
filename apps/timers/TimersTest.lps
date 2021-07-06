@@ -8,8 +8,7 @@
         <Filename Value="TimersTest.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="23"/>
-        <CursorPos X="30" Y="34"/>
+        <CursorPos X="10" Y="28"/>
         <UsageCount Value="178"/>
         <Loaded Value="True"/>
       </Unit>
@@ -63,8 +62,8 @@
         <Filename Value="../../src/Timers.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="478"/>
-        <CursorPos X="28" Y="494"/>
+        <TopLine Value="223"/>
+        <CursorPos X="18" Y="255"/>
         <UsageCount Value="37"/>
         <Loaded Value="True"/>
       </Unit>
@@ -250,43 +249,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
-      <Position>
-        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
-        <Caret Line="42" Column="30" TopLine="35"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
-        <Caret Line="194" Column="50" TopLine="182"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
-        <Caret Line="26" Column="9" TopLine="17"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
-        <Caret Line="176" Column="59" TopLine="164"/>
-      </Position>
-      <Position>
-        <Filename Value="TimersTest.lpr"/>
-        <Caret Line="30" Column="33" TopLine="16"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/Timers.pas"/>
-        <Caret Line="46" Column="14" TopLine="35"/>
-      </Position>
-      <Position>
-        <Filename Value="TimersTest.lpr"/>
-        <Caret Line="30" Column="33" TopLine="22"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/Timers.pas"/>
-        <Caret Line="66" Column="14" TopLine="56"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/Timers.pas"/>
-        <Caret Line="63" Column="30" TopLine="56"/>
-      </Position>
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="../../src/Timers.pas"/>
         <Caret Line="66" Column="89" TopLine="56"/>
@@ -366,6 +329,46 @@
       <Position>
         <Filename Value="../../src/Timers.pas"/>
         <Caret Line="494" Column="28" TopLine="478"/>
+      </Position>
+      <Position>
+        <Filename Value="TimersTest.lpr"/>
+        <Caret Line="6" Column="22"/>
+      </Position>
+      <Position>
+        <Filename Value="TimersTest.lpr"/>
+        <Caret Line="10" Column="44"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="251" TopLine="231"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="55" Column="65" TopLine="35"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="250" Column="38" TopLine="230"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="55" Column="28" TopLine="55"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="253" Column="7" TopLine="231"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="250" Column="26" TopLine="230"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="55" Column="18" TopLine="36"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="254" Column="6" TopLine="231"/>
       </Position>
     </JumpHistory>
     <RunParams>
