@@ -8,6 +8,8 @@ uses
   Timers;
 
   procedure TimerEvent(const {%H-}ATimer: PTimer; const AType: TTimerSubscribeEventType);
+  var
+    VValue1, VValue2: Word;
   begin
     case AType of
       tsetCompareA:
@@ -18,20 +20,26 @@ uses
       begin
         Inc(CounterCompareB);
       end;
-      tsetOverflow:
+      tsetOverflow:   
+      begin           
+        VValue1 := Timer1.Counter;
         Inc(CounterOverflow);
+        VValue2 := Timer1.Counter;
+        UARTConsole.WriteFormat('%s => %s', [VValue1, VValue2]);
+      end;
     end;
   end;
 
 begin
   InterruptsDisable;
   UARTConsole.Init(9600);
-  Timer2.Subscribe(@TimerEvent, [tsetCompareA, tsetCompareB, tsetOverflow]);
+  Timer0.Subscribe(@TimerEvent, [tsetCompareA, tsetCompareB, tsetOverflow]);
   //
-  Timer2.OutputModes := [];
-  Timer2.CounterModes := [tcmCompareA, tcmCompareB, tcmOverflow];
+  Timer0.OutputModes := [];
+  Timer0.CounterModes := [tcmCompareA, tcmCompareB, tcmOverflow];
+  Timer0.CLKMode := tclkm1024;
   //
-  Timer2.CLKMode := t2clkm256;
+  Timer1.CLKMode := tclkm1;
   //
   SleepMicroSecs(500000);
   //

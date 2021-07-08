@@ -77,7 +77,7 @@
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
             <Optimizations>
-              <OptimizationLevel Value="3"/>
+              <OptimizationLevel Value="2"/>
             </Optimizations>
             <SmallerCode Value="True"/>
           </CodeGeneration>
@@ -89,9 +89,6 @@
           </Linking>
           <Other>
             <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al"/>
-            <ExecuteAfter>
-              <Command Value="avr-size -t "/>
-            </ExecuteAfter>
           </Other>
         </CompilerOptions>
       </Item>
