@@ -11,6 +11,9 @@ const
   ClockCyclesPerMicrosecond = F_CPU div 1000000;
 
 const
+  HexChars: array[0..15] of Char = '0123456789ABCDEF';
+
+const
   WGM10 = 0;
   WGM11 = 1;
   COM1B0 = 4;
@@ -37,10 +40,6 @@ const
   WGM22 = 3;
   FOC2B = 6;
   FOC2A = 7;
-
-const
-  LOW = 0;
-  HIGH = 1;
 
 type
   TAVRPort = (avrpUndefined, avrpA, avrpB, avrpC, avrpD, avrpE, avrpF, avrpG, avrpH,
@@ -262,7 +261,8 @@ procedure AnalogWrite(const APin: Byte; const AValue: Integer);
 procedure SleepMicroSecs(const ATime: Longword);
 procedure Sleep10ms(const ATime: Byte);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
-function IntToStr(AValue: Longint): String;
+function IntToStr(const AValue: Longint): String;
+function IntToHex(Value: Integer; Digits: Integer): String;
 procedure InterruptsEnable;
 procedure InterruptsDisable;
 procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
@@ -346,9 +346,20 @@ begin
     Result := Result or Byte((1 shl ABytes[i]));
 end;
 
-function IntToStr(AValue: Longint): String;
+function IntToStr(const AValue: Longint): String;
 begin
   Str(AValue, Result);
+end;
+
+function IntToHex(Value: Integer; Digits: Integer): String;
+begin
+  Result := '';
+  while (Digits > 0) or (Value > 0) do
+  begin
+    Result := HexChars[(Value shr 4) and $F] + HexChars[Value and $F] + Result;
+    Dec(Digits, 2);
+    Value := Value shr 8;
+  end;
 end;
 
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
