@@ -24,6 +24,7 @@ type
     procedure WriteChar(const AValue: Char);
     procedure WriteString(const AValue: String);
     procedure WriteFormat(const AFormat: String; const AArgs: array of const);
+    procedure WriteFormat1(const AFormat: String; const AArgs: array of const);
     procedure WriteLnString(const AValue: String);
     function ReadByte: byte;
     function ReadChar: Char;
@@ -100,7 +101,7 @@ begin
   WriteBuffer(@AValue[1], Length(AValue));
 end;
 
-procedure TUART.WriteFormat(const AFormat: String; const AArgs: array of const);
+procedure TUART.WriteFormat1(const AFormat: String; const AArgs: array of const);
 var
   i, j, c, L: Integer;
   VDecim: String;
@@ -163,12 +164,92 @@ begin
           'd': if VType = vtInteger then
               WriteString(IntToStr(VInteger));
           'x', 'p': if VType in [vtInteger, vtPointer] then
-              WriteString(IntToHex(VInteger, 8))
+              WriteString(IntToHex(VInteger, 4))
         end;
       Inc(c);
     end;
     Inc(i);
   end;
+end;
+
+procedure TUART.WriteFormat(const AFormat: String; const AArgs: array of const);
+type
+  TFormatState = (fsFind);
+  TFormatStates = set of TFormatState;
+var
+  b, e, p, i: Byte;
+  c: Char;
+  s: TFormatStates;
+
+begin
+  if (Length(AFormat) > 1) and (Length(AArgs) > 0) then
+  begin
+    b := 1;
+    e := Length(AFormat);
+    p := 1;
+    i := 0;
+    s := [];
+    repeat
+      c := AFormat[p];
+      if fsFind in s then
+      begin
+        with AArgs[i] do
+          case c of
+            '%':
+              WriteChar('%');
+            's':
+            begin
+              case VType of
+                vtString:
+                  WriteString(VString^);
+                vtAnsiString:
+                  WriteString(PChar(VAnsiString));
+                vtPChar:
+                  WriteString(VPChar);
+                vtChar:
+                  WriteChar(VChar);
+                else
+                  WriteChar('?')
+              end;
+            end;
+            'd':
+            begin
+              if VType = vtInteger then
+                WriteString(IntToStr(VInteger))
+              else if VType = vtInt64 then
+                WriteString(IntToStr(VInt64^))
+              else
+                WriteChar('?');
+            end;
+            'x', 'p':
+            begin
+              if VType in [vtInteger, vtPointer] then
+                WriteString(IntToHex(VInteger, 4))
+              else
+                WriteChar('?');
+            end;
+            else
+            begin
+              WriteChar('?');
+            end;
+          end;
+        b := p + 1;
+        s := [];
+      end
+      else
+      if c = '%' then
+      begin
+        if p > b then
+          WriteString(Copy(AFormat, b, p - b));
+        s := [fsFind];
+      end;
+      Inc(p);
+    until p > e;
+    if p > b then
+      WriteString(Copy(AFormat, b, p - b));
+  end
+  else
+    WriteString(AFormat);
 end;
 
 procedure TUART.WriteLnString(const AValue: String);

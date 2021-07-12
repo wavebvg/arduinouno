@@ -7,8 +7,7 @@
       <Unit>
         <Filename Value="UARTTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="40" Y="13"/>
+        <CursorPos X="30" Y="15"/>
         <UsageCount Value="145"/>
         <Loaded Value="True"/>
       </Unit>
@@ -214,9 +213,10 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/UART.pas"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="87"/>
-        <CursorPos X="27" Y="123"/>
+        <TopLine Value="216"/>
+        <CursorPos X="49" Y="227"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit>
@@ -238,54 +238,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="UARTTest.lpr"/>
-        <Caret Line="24" Column="28" TopLine="3"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UART.pas"/>
-        <Caret Line="26" Column="15" TopLine="12"/>
-      </Position>
-      <Position>
-        <Filename Value="UARTTest.lpr"/>
-        <Caret Line="12" Column="40" TopLine="3"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UART.pas"/>
-        <Caret Line="39" Column="6" TopLine="27"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
-        <Caret Line="12" Column="9"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UART.pas"/>
-        <Caret Line="38" Column="15" TopLine="27"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
-        <Caret Line="142" Column="7" TopLine="118"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
-        <Caret Line="135" Column="7" TopLine="118"/>
-      </Position>
-      <Position>
-        <Filename Value="UARTTest.lpr"/>
-        <Caret Line="17" Column="40"/>
-      </Position>
-      <Position>
-        <Filename Value="UARTTest.lpr"/>
-        <Caret Line="7" Column="9"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UART.pas"/>
-        <Caret Line="26" Column="20"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UART.pas"/>
-        <Caret Line="109" Column="29" TopLine="103"/>
-      </Position>
       <Position>
         <Filename Value="../../src/UART.pas"/>
         <Caret Line="125" Column="46" TopLine="103"/>
@@ -313,10 +265,6 @@
       <Position>
         <Filename Value="../../src/UART.pas"/>
         <Caret Line="26" Column="15" TopLine="6"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/UART.pas"/>
-        <Caret Line="108" Column="3" TopLine="160"/>
       </Position>
       <Position>
         <Filename Value="../../src/UART.pas"/>
@@ -357,6 +305,58 @@
       <Position>
         <Filename Value="../../src/UART.pas"/>
         <Caret Line="162" Column="69" TopLine="145"/>
+      </Position>
+      <Position>
+        <Filename Value="UARTTest.lpr"/>
+        <Caret Line="15" Column="30"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="27" Column="27" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="180" Column="19" TopLine="167"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="186" Column="23" TopLine="167"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="200" Column="19" TopLine="167"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="248" Column="28" TopLine="229"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="186" Column="30" TopLine="172"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="182" Column="22" TopLine="178"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="233" Column="24" TopLine="214"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="210" Column="28" TopLine="187"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="220" Column="28" TopLine="200"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="227" Column="28" TopLine="209"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="249" Column="18" TopLine="225"/>
       </Position>
     </JumpHistory>
     <RunParams>
