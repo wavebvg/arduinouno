@@ -34,14 +34,15 @@ type
   { TFormTerminal }
 
   TFormTerminal = class(TForm)
-    ActionFlash: TAction;
+    ActionStopFlash: TAction;
+    ActionStartFlash: TAction;
     ActionClear: TAction;
     ActionConnect: TAction;
     ActionPreferences: TAction;
     ActionList: TActionList;
     ButtonClear: TButton;
     ButtonPreferences: TButton;
-    ButtonPreferences1: TButton;
+    ButtonFlash: TButton;
     EditLastKeys: TEdit;
     MemoTTY: TMemo;
     PanelBody: TPanel;
@@ -53,9 +54,11 @@ type
     procedure ActionClearExecute(Sender: TObject);
     procedure ActionConnectExecute(Sender: TObject);
     procedure ActionConnectUpdate(Sender: TObject);
-    procedure ActionFlashExecute(Sender: TObject);
-    procedure ActionFlashUpdate(Sender: TObject);
+    procedure ActionStartFlashExecute(Sender: TObject);
+    procedure ActionStartFlashUpdate(Sender: TObject);
     procedure ActionPreferencesExecute(Sender: TObject);
+    procedure ActionStopFlashExecute(Sender: TObject);
+    procedure ActionStopFlashUpdate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure MemoTTYKeyPress(Sender: TObject; var Key: Char);
     procedure SerialRxData(Sender: TObject);
@@ -81,6 +84,7 @@ type
     FStartTime: TDateTime;
     FInShowTime: Boolean;
     FInFlashing: Boolean;
+    FFlashingIsKilled: Boolean;
     procedure CheckTTYExist;
     procedure DisplayTerminal(const AText: String; const ANewLine: Boolean = False);
     procedure DisplayText(const AText: String);
@@ -168,15 +172,15 @@ begin
   ToggleBoxConnect.Enabled := TCustomAction(Sender).Enabled;
 end;
 
-procedure TFormTerminal.ActionFlashExecute(Sender: TObject);
+procedure TFormTerminal.ActionStartFlashExecute(Sender: TObject);
 var
   VLastConnected: Boolean;
   VHEXPath: String;
-  VOut: string;
+  VOut: String;
 begin
   VLastConnected := Serial.Active;
   TTYClose;
-  DisplayText('Begin flashing');
+  DisplayText('Begin  flashing');
   FInFlashing := True;
   try
     VHEXPath := BinPath;
@@ -184,10 +188,10 @@ begin
     begin
       ForceDirectories('/tmp/terminal/');
       VHEXPath := '/tmp/terminal/out.hex';
-      RunCommand('avr-objcopy', ['-j', '.text', '-j', '.data', '-O', 'ihex', BinPath, VHEXPath],VOut, [poWaitOnExit]);
+      RunCommand('avr-objcopy', ['-j', '.text', '-j', '.data', '-O', 'ihex', BinPath, VHEXPath], VOut, [poWaitOnExit]);
     end;
     ActionConnect.Update;
-    ActionFlash.Update;
+    ActionStartFlash.Update;
     ProcessAVRDude.Parameters.Clear;
     ProcessAVRDude.Executable := AvrdudePath;
     ProcessAVRDude.Parameters.Add(Format('-C%s', [ConfigPath]));
@@ -204,20 +208,28 @@ begin
     Sleep(300);
     Application.ProcessMessages;
     TTYClose;
+    ButtonFlash.Action := ActionStopFlash;
     ProcessAVRDude.Execute;
     while not ProcessAVRDude.WaitOnExit(100) do
       Application.ProcessMessages;
     ActionConnect.Update;
     ProcessAVRDude.Active := False;
   finally
+    ButtonFlash.Action := ActionStartFlash;
     FInFlashing := False;
   end;
-  DisplayText('End  flashing');
+  if FFlashingIsKilled then
+  begin
+    DisplayText('Killed flashing');
+    FFlashingIsKilled := False;
+  end
+  else
+    DisplayText('End    flashing');
   if VLastConnected then
     TTYOpen;
 end;
 
-procedure TFormTerminal.ActionFlashUpdate(Sender: TObject);
+procedure TFormTerminal.ActionStartFlashUpdate(Sender: TObject);
 begin
   TCustomAction(Sender).Enabled := not FInFlashing and FTTYExist;
 end;
@@ -247,6 +259,19 @@ begin
     ShowTime := FormDialogPreferences.ShowTime;
     SaveConfig;
   end;
+end;
+
+procedure TFormTerminal.ActionStopFlashExecute(Sender: TObject);
+var
+  VOut: String;
+begin
+  RunCommand('kill', [IntToStr(ProcessAVRDude.ProcessID)], VOut);
+  FFlashingIsKilled := True;
+end;
+
+procedure TFormTerminal.ActionStopFlashUpdate(Sender: TObject);
+begin
+  TCustomAction(Sender).Enabled := FInFlashing and FTTYExist;
 end;
 
 procedure TFormTerminal.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -323,7 +348,6 @@ end;
 procedure TFormTerminal.TimerTTYCheckTimer(Sender: TObject);
 begin
   CheckTTYExist;
-  ActionConnect.Update;
 end;
 
 procedure TFormTerminal.ToggleBoxConnectChange(Sender: TObject);
@@ -360,6 +384,9 @@ end;
 procedure TFormTerminal.CheckTTYExist;
 begin
   FTTYExist := FileExists(Device);
+  ActionConnect.Update;
+  ActionStartFlash.Update;
+  ActionStopFlash.Update;
 end;
 
 procedure TFormTerminal.DisplayText(const AText: String);

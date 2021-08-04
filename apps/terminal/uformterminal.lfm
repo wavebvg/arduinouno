@@ -3,7 +3,7 @@ object FormTerminal: TFormTerminal
   Height = 392
   Top = 308
   Width = 543
-  Caption = 'FormTerminal'
+  Caption = 'TTY terminal'
   ClientHeight = 392
   ClientWidth = 543
   OnCloseQuery = FormCloseQuery
@@ -42,12 +42,12 @@ object FormTerminal: TFormTerminal
       Action = ActionClear
       TabOrder = 2
     end
-    object ButtonPreferences1: TButton
+    object ButtonFlash: TButton
       Left = 8
       Height = 25
       Top = 56
       Width = 78
-      Action = ActionFlash
+      Action = ActionStartFlash
       TabOrder = 3
     end
   end
@@ -124,10 +124,15 @@ object FormTerminal: TFormTerminal
       Caption = 'Clear'
       OnExecute = ActionClearExecute
     end
-    object ActionFlash: TAction
-      Caption = 'Flash'
-      OnExecute = ActionFlashExecute
-      OnUpdate = ActionFlashUpdate
+    object ActionStartFlash: TAction
+      Caption = 'Start flash'
+      OnExecute = ActionStartFlashExecute
+      OnUpdate = ActionStartFlashUpdate
+    end
+    object ActionStopFlash: TAction
+      Caption = 'Stop flash'
+      OnExecute = ActionStopFlashExecute
+      OnUpdate = ActionStopFlashUpdate
     end
   end
   object ProcessAVRDude: TProcessUTF8
