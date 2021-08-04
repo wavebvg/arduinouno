@@ -18,20 +18,15 @@ type
   TServoI = object(TCustomServo)
   private
     FIndex: Byte;
-    FValue: Word;
+  public     
     FState: Boolean;
-  protected
-    procedure SetAngle(const AValue: TServoAngle); virtual;
-  public
+    FValue: Word;
     constructor Init(const APin: byte; const AAngle: TServoAngle);
     destructor Deinit; virtual;
   end;
 
-implementation
-
-uses
-  ArduinoTools,
-  Timers;
+var
+  TestIndex: Integer;
 
 type
   TServos = array[0..MAX_SERVO_COUNT - 1] of PServoI;
@@ -40,10 +35,17 @@ var
   ServoIndex: Byte = 0;
   Servos: TServos;
 
+implementation
+
+uses
+  ArduinoTools,
+  Timers;
+
 procedure DoTimerOverflow(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
 var
   i: Byte;
 begin
+  Inc(TestIndex);
   for i := 0 to ServoIndex - 1 do
   begin
     if Servos[i]^.FValue = 0 then
@@ -51,7 +53,7 @@ begin
       Servos[i]^.FState := not Servos[i]^.FState;
       DigitalWrite(Servos[i]^.Pin, Servos[i]^.FState);
       if Servos[i]^.FState then
-        Servos[i]^.FValue := Servos[i]^.Angle * 10
+        Servos[i]^.FValue := Servos[i]^.Angle * 10 div 200 + 31
       else
         Servos[i]^.FValue := 100;
     end
@@ -65,8 +67,8 @@ end;
 constructor TServoI.Init(const APin: byte; const AAngle: TServoAngle);
 begin
   inherited;
-  PinMode(Pin, avrmOutput);
   FIndex := ServoIndex;
+  Servos[FIndex] := @Self;
   Inc(ServoIndex);
   FValue := 0;
   FState := False;
@@ -83,11 +85,6 @@ begin
   Dec(ServoIndex);
   if ServoIndex = 0 then
     Timer0.Unsubscribe(@DoTimerOverflow);
-end;
-
-procedure TServoI.SetAngle(const AValue: TServoAngle);
-begin
-  inherited;
 end;
 
 end.

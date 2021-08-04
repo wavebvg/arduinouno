@@ -247,6 +247,8 @@ const
 //  {avrt2B}@OCR2B
 //  );
 //
+type
+  IntString = string[20];
 
 
 procedure sbi(const AAddr: Pbyte; const ABit: Byte);
@@ -262,7 +264,7 @@ procedure SleepMicroSecs(const ATime: Longword);
 procedure Sleep10ms(const ATime: Byte);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(const AValue: Longint): String;
-function IntToHex(Value: Integer; Digits: Integer): String;
+function IntToHex(AValue: LongInt; const ADigits: Byte = 8): String;
 procedure InterruptsEnable;
 procedure InterruptsDisable;
 procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
@@ -309,6 +311,9 @@ function ByteMap(const ABytes: array of Byte): Byte;
 
 implementation
 
+const
+  LOWINTSTR: PChar = '-2147483648';
+
 procedure InterruptsEnable; assembler;
 asm
          SEI
@@ -346,19 +351,74 @@ begin
     Result := Result or Byte((1 shl ABytes[i]));
 end;
 
-function IntToStr(const AValue: Longint): String;
+function IntToStr1(const AValue: Longint): String;
 begin
   Str(AValue, Result);
 end;
 
-function IntToHex(Value: Integer; Digits: Integer): String;
+function IntToStr(const AValue: Longint): String;
+const
+  MAX_POW_INDEX = 9;
+  POWS: array[0..MAX_POW_INDEX] of Longint =
+    (1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000);
+var
+  VHasMinus: Boolean;
+  VPow: PLongInt;
+  n, p, c: Byte;
+  VValue: LongInt;
 begin
-  Result := '';
-  while (Digits > 0) or (Value > 0) do
+  if AValue = 0 then
+    Result := '0'
+  else
+  if AValue = Low(Longint) then
+    Result := LOWINTSTR
+  else
   begin
-    Result := HexChars[(Value shr 4) and $F] + HexChars[Value and $F] + Result;
-    Dec(Digits, 2);
-    Value := Value shr 8;
+    VHasMinus := AValue < 0;
+    if VHasMinus then
+      VValue := -AValue
+    else
+      VValue := AValue;
+    n := 1;
+    VPow := @POWS;
+    while (n <= MAX_POW_INDEX) and (VValue >= VPow^) do
+    begin
+      Inc(VPow);
+      Inc(n);
+    end;
+    if n <= MAX_POW_INDEX then
+    begin
+      Dec(VPow);
+      Dec(n);
+    end;
+    n := n + Byte(VHasMinus);
+    SetLength(Result, n);
+    p := 1 + Byte(VHasMinus);
+    if VHasMinus then
+      Result[1] := '-';
+    repeat
+      c := 0;
+      while VValue >= VPow^ do
+      begin
+        Inc(c);
+        Dec(VValue, VPow^);
+      end;
+      Dec(VPow);
+      Result[p] := Char(c + 48);
+      Inc(p);
+    until p > n;
+  end;
+end;
+
+function IntToHex(AValue: LongInt; const ADigits: Byte): String;
+var
+  i: Byte;
+begin
+  SetLength(Result, ADigits);
+  for i := 1 to ADigits do
+  begin
+    Result[ADigits - i + 1] := HexChars[Byte(AValue and $0000000F)];
+    AValue := AValue shr 4;
   end;
 end;
 
@@ -479,14 +539,13 @@ label
   loop, compl;
   (* ~ 32/16 мкс возможный минимум запуска sleep *)
 asm
-         // CALL                       // 4 + 4 
-         // PUSH stack
-         PUSH    R17                   // 2
+         // CALL                       // 4 + 4
 {$IFDEF DIV1024}
          // DEC ATime DIV 1024               // 29...33
          // PUSH
          PUSH    R18                   // 2
-         PUSH    R19                   // 2
+         PUSH    R19                   // 2  
+         PUSH    R17                   // 2
          // BYTE 0
          MOV     R17, R23              // 1
          LSR     R17                   // 1
@@ -515,14 +574,13 @@ asm
          // POP                          
          POP     R19                   // 2
          POP     R18                   // 2
+         POP     R17                   // 2
 {$ENDIF}
-         // Load values
-         LDI     R17, 0                // 1
          // Wait start                       
-         CP      R17, R22              // 1
-         CPC     R17, R23              // 1
-         CPC     R17, R24              // 1
-         CPC     R17, R25              // 1
+         CP      R1, R22               // 1
+         CPC     R1, R23               // 1
+         CPC     R1, R24               // 1
+         CPC     R1, R25               // 1
          BREQ    compl                 // 1|2    
 {$IFDEF DIV1024}
          SUBI    r22, 4                // 1
@@ -539,10 +597,10 @@ asm
          SBCI    r23, 0                // 1
          SBCI    r24, 0                // 1
          SBCI    r25, 0                // 1
-         CP      R17, R22              // 1
-         CPC     R17, R23              // 1
-         CPC     R17, R24              // 1
-         CPC     R17, R25              // 1
+         CP      R1, R22               // 1
+         CPC     R1, R23               // 1
+         CPC     R1, R24               // 1
+         CPC     R1, R25               // 1
          BREQ    compl                 // 1|2
          NOP                           // 1
          NOP                           // 1
@@ -551,8 +609,6 @@ asm
          NOP                           // 1
          RJMP    loop                  // 2
          compl:
-         // POP stack
-         POP     R17                   // 2
          // RET                        // 4
 end;
 

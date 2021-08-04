@@ -1,43 +1,33 @@
 program servo;
 
 {$mode objfpc}{$H-}{$Z1}
+//{$MACRO ON}
 
 uses
   ArduinoTools,
-  UARTI;
-
-const
-  SERVO_PIN = 14;
-  MIN_PULSE_WIDTH: Longint = 450;
-  MAX_PULSE_WIDTH: Longint = 2400;
-
-  procedure Rotate(const AAngle: byte);
-  var
-    i: byte;
-    VTime: Longint;
-  begin
-    UARTConsole.WriteLnString('Rotate to angle ' + IntToStr(AAngle));
-    VTime := (MAX_PULSE_WIDTH - MIN_PULSE_WIDTH) * AAngle div 180 + MIN_PULSE_WIDTH;
-    for i := 1 to 50 do
-    begin
-      InterruptsEnable;
-      DigitalWrite(SERVO_PIN, True);
-      SleepMicroSecs(VTime * 1000);
-      DigitalWrite(SERVO_PIN, False);
-      InterruptsDisable;
-      SleepMicroSecs(200 * 1000);
-    end;
-  end;
+  UART,
+  Timers,
+  ServoI2;
 
 var
-  c: Char;
+  Servo1: TServoI;
+
 begin
   UARTConsole.Init(9600);
-  Rotate(0);
-  while True do
-  begin
-    c := UARTConsole.ReadChar;
-    if c in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] then
-      Rotate((Ord(c) - 48) * 20);
-  end;
+  //                    
+  Servo1.Init(11, 0);
+  //
+  Timer0.OutputModes := [];
+  Timer0.CounterModes := [tcmOverflow];
+  Timer0.CLKMode := tclkm256;
+  //                 
+  UARTConsole.WriteLnString('Start');
+  //
+  InterruptsEnable;
+  repeat
+    UARTConsole.WriteLnFormat('Index: %d', [TestIndex]);
+    UARTConsole.WriteLnFormat('Servo value: %d', [Servo1.FValue]);
+    UARTConsole.WriteLnFormat('Servo state: %d', [Byte(Servo1.FState)]);
+    SleepMicroSecs(1000000);
+  until False;
 end.

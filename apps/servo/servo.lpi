@@ -14,6 +14,11 @@
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <BuildNr Value="118"/>
+    </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
       <Item Name="Debug">
@@ -79,12 +84,11 @@
           </Parsing>
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
-            <TargetProcessor Value="avr5"/>
+            <RelocatableUnit Value="True"/>
+            <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
-            <Optimizations>
-              <OptimizationLevel Value="3"/>
-            </Optimizations>
+            <SmallerCode Value="True"/>
           </CodeGeneration>
           <Linking>
             <Debugging>

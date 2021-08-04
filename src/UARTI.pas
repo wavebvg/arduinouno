@@ -16,8 +16,8 @@ type
     function GetReadBufferEmpty: Boolean; virtual;
   public
     constructor Init(const ABaudRate: Word);
-    procedure WriteBuffer(AData: Pbyte; ASize: Byte); virtual;
-    procedure ReadBuffer(ABuffer: Pbyte; ASize: Byte); virtual;
+    procedure WriteBuffer(AData: PChar; ASize: Byte); virtual;
+    procedure ReadBuffer(ABuffer: PChar; ASize: Byte); virtual;
   end;
 
 var
@@ -31,8 +31,8 @@ type
   TUARTFlags = set of TUARTFlag;
 
   TUARTContext = packed record
-    WriteBuffer: array[Byte] of Byte;
-    ReadBuffer: array[0..15] of Byte;
+    WriteBuffer: array[Byte] of Char;
+    ReadBuffer: array[0..15] of Char;
     ReadPos, ReadStart: Byte;
     WritePos, WriteStart: Byte;
     Flags: TUARTFlags;
@@ -50,7 +50,7 @@ begin
   UCSR0B := UCSR0B or (1 shl RXCIE0);
 end;
 
-procedure TUARTI.WriteBuffer(AData: Pbyte; ASize: Byte);
+procedure TUARTI.WriteBuffer(AData: PChar; ASize: Byte);
 begin
   while ASize > 0 do
   begin
@@ -78,7 +78,7 @@ begin
   Result := not (uartfReadNotEmpty in UARTContext.Flags);
 end;
 
-procedure TUARTI.ReadBuffer(ABuffer: Pbyte; ASize: Byte);
+procedure TUARTI.ReadBuffer(ABuffer: PChar; ASize: Byte);
 begin
   if ASize = 0 then
     Exit;
@@ -102,9 +102,9 @@ end;
 
 procedure USART__RX_ISR; public Name 'USART__RX_ISR'; interrupt;
 var
-  Value: Byte;
+  Value: Char;
 begin
-  Value := UDR0;
+  Value := Char(UDR0);
   UARTContext.ReadBuffer[UARTContext.ReadPos] := Value;
   Inc(UARTContext.ReadPos);
   UARTContext.ReadPos := UARTContext.ReadPos and $0F;
@@ -118,7 +118,7 @@ end;
 
 procedure USART__UDRE_ISR; public Name 'USART__UDRE_ISR'; interrupt;
 begin
-  UDR0 := UARTContext.WriteBuffer[UARTContext.WriteStart];
+  Char(UDR0) := UARTContext.WriteBuffer[UARTContext.WriteStart];
   Inc(UARTContext.WriteStart);
   UARTContext.Flags := UARTContext.Flags - [uartfWriteFull];
   if UARTContext.WritePos = UARTContext.WriteStart then

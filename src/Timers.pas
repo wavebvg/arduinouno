@@ -11,7 +11,8 @@ type
   TTimerCounterMode = (tcmOverflow, tcmCompareA, tcmCompareB, tcmUndefined3, tcmUndefined4, tcmCapture);
   TTimerCounterModes = set of TTimerCounterMode;
 
-  TTimerOutputMode = (tomWaveForm, tomUndefined1, tomUndefined2, tomUndefined3, tomA, tomUndefined5, tomB);
+  TTimerOutputMode = (tomWaveForm, tomUndefined1, tomUndefined2, tomUndefined3, tomFastPWM,
+    tomUndefined5, tomPhaseCorrectPWM, tomUndefined7);
   TTimerOutputModes = set of TTimerOutputMode;
 
   TTimerCLKMode = (tclkmOff, tclkm1, tclkm8, tclkm64, tclkm256, tclkm1024, tclkmT1Up, tclkmT1Down);
@@ -37,8 +38,8 @@ type
   TAbstractTimer = object
   private
     FSubscribers: TTimerSubscribers;
-    procedure DoEvent(const AEventType: TTimerSubscribeEventType);
   protected
+    procedure DoEvent(const AEventType: TTimerSubscribeEventType);
     function GetCounterModes: TTimerCounterModes; virtual; abstract;
     procedure SetCounterModes(const AValue: TTimerCounterModes); virtual; abstract;
     function GetOutputModes: TTimerOutputModes; virtual; abstract;
@@ -174,6 +175,11 @@ implementation
 uses
   ArduinoTools;
 
+procedure DoEvent(Self: Pointer; const AEventType: TTimerSubscribeEventType);
+begin
+  TAbstractTimer(Self^).DoEvent(AEventType);
+end;
+
 { TAbstractTimer }
 
 constructor TAbstractTimer.Init;
@@ -207,6 +213,7 @@ var
   i: Byte;
   VExist: Boolean;
 begin
+  Result := -1;
   VExist := False;
   for i := 1 to MAX_INERRUPT_EVENT_SUBSCRIBES do
     if (FSubscribers[i].Event.Data = TMethod(AEvent).Data) and (FSubscribers[i].Event.Code = TMethod(AEvent).Code) then
@@ -214,14 +221,9 @@ begin
       FSubscribers[i].EventTypes := AEventTypes;
       VExist := True;
       Result := i;
-      Break;
+      Exit;
     end;
-  if AEventTypes = [] then
-  begin
-    Result := -1;
-  end
-  else
-  if not VExist then
+  if (AEventTypes <> []) and not VExist then
   begin
     for i := 1 to MAX_INERRUPT_EVENT_SUBSCRIBES do
       if FSubscribers[i].EventTypes = [] then
@@ -230,10 +232,8 @@ begin
         FSubscribers[i].EventTypes := AEventTypes;
         VExist := True;
         Result := i;
-        Break;
+        Exit;
       end;
-    if not VExist then
-      Result := -1;
   end;
 end;
 
@@ -321,7 +321,9 @@ end;
 
 procedure TTimer0.SetCLKMode(const AValue: TTimerCLKMode);
 begin
+  //UARTConsole.WriteLnFormat('TCCR0B %d', [TCCR0B]);
   TCCR0B := TCCR0B and %11111000 or Byte(AValue);
+  //UARTConsole.WriteLnFormat('TCCR0B %d', [TCCR0B and %11111000 or Byte(AValue)]);
 end;
 
 procedure TTimer0.SetCounterModes(const AValue: TTimerCounterModes);
@@ -577,7 +579,6 @@ begin
 end;
 
 initialization
-
   Timer0.Init;
   Timer1.Init;
   Timer2.Init;

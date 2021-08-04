@@ -1,12 +1,29 @@
-cd /media/WORK2/builds/simulavr/build/app/ && ./simulavr -d atmega328 -g
-
-avr-gdb /media/fa/FA-FLASH/projects/git/arduinouno/apps/uart/bin/UARTTest.elf
-
+simulavr -d atmega328 -g
+avr-gdb -ex "target remote localhost:1212" -ex "load" -ex "layout split" /media/fa/FA-FLASH/projects/git/arduinouno/apps/uart/bin/UARTTest.elf
 target remote localhost:1212
 load
 info registers
-layout regs
-layout next
+layout split
 
 
 avr-objdump -S /media/fa/FA-FLASH/projects/git/arduinouno/apps/IR/bin/IRTest.elf > /media/fa/FA-FLASH/projects/git/arduinouno/apps/IR/bin/IRTest.asm
+
+
+qemu-system-avr -machine uno -bios TimersTest.elf -s -S
+
+avr-gdb TimersTest.elf
+
+target remote :1234
+
+
+
+
+qemu-system-avr -M uno -bios TimersTest.elf -nographic \
+                -serial tcp::5678,server=on,wait=off
+
+qemu-system-avr -S -s -nographic -machine uno -bios TimersTest.elf
+avr-gdb -ex 'target remote :1234' TimersTest.elf
+
+
+
+qemu-system-avr -machine uno -bios /media/fa/FA-FLASH/projects/git/arduinouno/apps/servo/bin/servo.elf -nographic -serial mon:stdio
