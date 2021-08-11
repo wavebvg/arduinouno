@@ -126,48 +126,51 @@ begin
         case c of
           '%':
           begin
-            WriteChar('%');
+            WriteBuffer('@#', 1);
           end;
           's':
           begin
             case VArg.VType of
               vtString:
-                WriteString(VArg.VString^);
+                WriteBuffer(@VArg.VString^[1], Byte(VArg.VString^[0]));
               vtAnsiString:
-                WriteString(PChar(VArg.VAnsiString));
+                WriteBuffer(VArg.VPChar, StrLen(VArg.VPChar));
               vtPChar:
-                WriteString(VArg.VPChar);
+                WriteBuffer(VArg.VPChar, StrLen(VArg.VPChar));
               vtChar:
-                WriteChar(VArg.VChar);
+                WriteBuffer(@VArg.VChar, 1);
               else
-                WriteChar('?')
+                WriteBuffer('?', 1)
             end;
             Inc(i);
           end;
           'd':
           begin
             if VArg.VType = vtInteger then
-              WriteString(IntToStr(VArg.VInteger))
-            else if VArg.VType = vtInt64 then
-              WriteString(IntToStr(VArg.VInt64^))
+              with IntToStr(VArg.VInteger) do
+                WriteBuffer(@Str[1], Length)
+            {else if VArg.VType = vtInt64 then
+              WriteBuffer(IntToStr(VArg.VInt64^))}
             else
-              WriteChar('?');
+              WriteBuffer('?', 1);
             Inc(i);
           end;
           'x', 'p':
           begin
             if VArg.VType = vtInteger then
-              WriteString(IntToHex(VArg.VInteger, 8))
+              with IntToHex(VArg.VInteger, 8) do
+                WriteBuffer(@Str[1], Length)
             else
             if VArg.VType in [vtInteger, vtPointer] then
-              WriteString(IntToHex(Word(VArg.VPointer), 4))
+              with IntToHex(VArg.VPointer) do
+                WriteBuffer(@Str[1], Length)
             else
-              WriteChar('?');
+              WriteBuffer('?', 1);
             Inc(i);
           end;
           else
           begin
-            WriteChar('?');
+            WriteBuffer('?', 1);
           end;
         end;
         b := p + 1;
@@ -177,16 +180,16 @@ begin
       if c = '%' then
       begin
         if p > b then
-          WriteString(Copy(AFormat, b, p - b));
+          WriteBuffer(@AFormat[b], p - b);
         s := [fsFind];
       end;
       Inc(p);
     until p > e;
     if p > b then
-      WriteString(Copy(AFormat, b, p - b));
+      WriteBuffer(@AFormat[b], p - b);
   end
   else
-    WriteString(AFormat);
+    WriteBuffer(@AFormat[1], Length(AFormat));
 end;
 
 procedure TUART.WriteLnString(const AValue: String);

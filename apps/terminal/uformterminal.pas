@@ -124,7 +124,6 @@ uses
   process;
 
 {$R *.lfm}
-
 { TFormTerminal }
 
 constructor TFormTerminal.Create(TheOwner: TComponent);

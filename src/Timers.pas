@@ -533,17 +533,17 @@ begin
   Result := 8;
 end;
 
-procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt;
+procedure TIMER0_COMPA_ISR1; public Name 'TIMER0_COMPA_ISR'; interrupt;
 begin
   Timer0.DoEvent(tsetCompareA);
 end;
 
-procedure TIMER0_COMPB_ISR; public Name 'TIMER0_COMPB_ISR'; interrupt;
+procedure TIMER0_COMPB_ISR1; public Name 'TIMER0_COMPB_ISR'; interrupt;
 begin
   Timer0.DoEvent(tsetCompareB);
 end;
 
-procedure TIMER0_OVF_ISR; public Name 'TIMER0_OVF_ISR'; interrupt;
+procedure TIMER0_OVF_ISR1; public Name 'TIMER0_OVF_ISR'; interrupt;
 begin
   Timer0.DoEvent(tsetOverflow);
 end;

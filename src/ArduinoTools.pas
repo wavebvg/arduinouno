@@ -248,8 +248,10 @@ const
 //  );
 //
 type
-  IntString = string[20];
-
+  TIntStr = packed record 
+    Str: array[1..11] of Char;
+    Length: Byte;
+  end;
 
 procedure sbi(const AAddr: Pbyte; const ABit: Byte);
 procedure cbi(const AAddr: Pbyte; const ABit: Byte);
@@ -263,8 +265,9 @@ procedure AnalogWrite(const APin: Byte; const AValue: Integer);
 procedure SleepMicroSecs(const ATime: Longword);
 procedure Sleep10ms(const ATime: Byte);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
-function IntToStr(const AValue: Longint): String;
-function IntToHex(AValue: LongInt; const ADigits: Byte = 8): String;
+function IntToStr(const AValue: Longint): TIntStr;
+function IntToHex(AValue: LongInt; const ADigits: Byte = 8): TIntStr; overload;
+function IntToHex(AValue: Pointer): TIntStr; overload;
 procedure InterruptsEnable;
 procedure InterruptsDisable;
 procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
@@ -307,7 +310,13 @@ type
     constructor Init(const APin: byte);
   end;
 
-function ByteMap(const ABytes: array of Byte): Byte;
+function ByteMap(const ABytes: array of Byte): Byte;     
+
+operator := (const AValue: shortstring): TIntStr; inline;
+
+operator := (const AValue: TIntStr): PChar; inline;
+
+operator := (const AValue: TIntStr): shortstring; inline;
 
 implementation
 
@@ -353,10 +362,34 @@ end;
 
 function IntToStr1(const AValue: Longint): String;
 begin
-  Str(AValue, Result);
+  //Str(AValue, Result);
 end;
 
-function IntToStr(const AValue: Longint): String;
+operator := (const AValue: shortstring): TIntStr; inline;
+begin
+  Result.Length := Length(AValue);
+  Move(AValue[1], Result.Str[1], Result.Length);
+  Result.Str[Result.Length+1] := #0;
+end;
+
+operator := (const AValue: TIntStr): PChar; inline;
+begin
+  Result := @AValue.Str[1];
+end;
+
+operator := (const AValue: TIntStr): shortstring; inline;
+begin                
+  Move(AValue.Str[1], Result[1], AValue.Length + 1);
+  SetLength(Result, AValue.Length)    ;
+end;
+
+procedure SetLength(var AStr: TIntStr; const AValue: Byte);
+begin
+  AStr.Length:=AValue;    
+  AStr.Str[AStr.Length+1] := #0;
+end;
+
+function IntToStr(const AValue: Longint): TIntStr;
 const
   MAX_POW_INDEX = 9;
   POWS: array[0..MAX_POW_INDEX] of Longint =
@@ -368,10 +401,15 @@ var
   VValue: LongInt;
 begin
   if AValue = 0 then
-    Result := '0'
+  begin
+    Result := '0';
+  end
   else
   if AValue = Low(Longint) then
-    Result := LOWINTSTR
+  begin
+    Result.Length:= 11;
+    Move(LOWINTSTR^, Result.Str[1], Result.Length);
+  end
   else
   begin
     VHasMinus := AValue < 0;
@@ -395,7 +433,7 @@ begin
     SetLength(Result, n);
     p := 1 + Byte(VHasMinus);
     if VHasMinus then
-      Result[1] := '-';
+      Result.Str[1] := '-';
     repeat
       c := 0;
       while VValue >= VPow^ do
@@ -404,22 +442,27 @@ begin
         Dec(VValue, VPow^);
       end;
       Dec(VPow);
-      Result[p] := Char(c + 48);
+      Result.Str[p] := Char(c + 48);
       Inc(p);
     until p > n;
   end;
 end;
 
-function IntToHex(AValue: LongInt; const ADigits: Byte): String;
+function IntToHex(AValue: LongInt; const ADigits: Byte): TIntStr;
 var
   i: Byte;
 begin
   SetLength(Result, ADigits);
   for i := 1 to ADigits do
   begin
-    Result[ADigits - i + 1] := HexChars[Byte(AValue and $0000000F)];
+    Result.Str[ADigits - i + 1] := HexChars[Byte(AValue and $0000000F)];
     AValue := AValue shr 4;
   end;
+end;
+
+function IntToHex(AValue: Pointer): TIntStr; overload;
+begin
+  Result := IntToHex(Word(AValue), 4);
 end;
 
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);

@@ -27,3 +27,6 @@ avr-gdb -ex 'target remote :1234' TimersTest.elf
 
 
 qemu-system-avr -machine uno -bios /media/fa/FA-FLASH/projects/git/arduinouno/apps/servo/bin/servo.elf -nographic -serial mon:stdio
+
+
+qemu-system-avr -machine uno -bios /media/fa/FA-FLASH/projects/git/arduinouno/apps/uart/bin/UARTTest.elf -nographic -serial mon:stdio

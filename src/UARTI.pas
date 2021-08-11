@@ -82,7 +82,7 @@ procedure TUARTI.ReadBuffer(ABuffer: PChar; ASize: Byte);
 begin
   if ASize = 0 then
     Exit;
-  UCSR0B := UCSR0B and not (Byte(1) shl RXCIE0);
+  UCSR0B := UCSR0B and not (1 shl RXCIE0 and $FF);
   while (uartfReadNotEmpty in UARTContext.Flags) and (ASize > 0) do
   begin
     ABuffer^ := UARTContext.ReadBuffer[UARTContext.ReadStart];

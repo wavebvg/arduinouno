@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?application progid="SMath Studio Desktop" version="0.99.7822.147"?>
+<worksheet xmlns="http://smath.info/schemas/worksheet/1.0">
+  <settings ppi="96">
+    <identity>
+      <id>9fe59c5c-81c2-4bdb-adb8-db719d6c046d</id>
+      <revision>89</revision>
+    </identity>
+    <calculation>
+      <precision>10</precision>
+      <exponentialThreshold>12</exponentialThreshold>
+      <trailingZeros>true</trailingZeros>
+      <significantDigitsMode>true</significantDigitsMode>
+      <roundingMode>1</roundingMode>
+      <fractions>decimal</fractions>
+    </calculation>
+    <pageModel active="true" viewMode="0" printGrid="false" printAreas="true" simpleEqualsOnly="false" printBackgroundImages="true">
+      <paper id="0" orientation="Portrait" width="850" height="1100" />
+      <margins left="39" right="39" top="39" bottom="39" />
+      <header alignment="Center" color="#a9a9a9">&amp;[DATE] &amp;[TIME] - &amp;[FILENAME]</header>
+      <footer alignment="Center" color="#a9a9a9">&amp;[PAGENUM] / &amp;[COUNT]</footer>
+      <backgrounds />
+    </pageModel>
+    <dependencies>
+      <assembly name="SMath Studio Desktop" version="0.99.7822.147" guid="a37cba83-b69c-4c71-9992-55ff666763bd" />
+      <assembly name="MathRegion" version="1.11.7822.147" guid="02f1ab51-215b-466e-a74d-5d8b1cf85e8d" />
+      <assembly name="SpecialFunctions" version="1.12.7822.147" guid="2814e667-4e12-48b1-8d51-194e480eabc5" />
+    </dependencies>
+  </settings>
+  <regions type="content">
+    <region left="9" top="0" width="107" height="34" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Частота контроллера</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">ν.c</e>
+          <e type="operand">16</e>
+          <e type="operand" style="unit">MHz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region left="171" top="0" width="141" height="34" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Интервал  сервопривода для 0°</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">T.smin</e>
+          <e type="operand">500</e>
+          <e type="operand" style="unit">μs</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region left="9" top="54" width="72" height="34" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Делитель таймера</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">d.T</e>
+          <e type="operand">64</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region left="171" top="54" width="151" height="34" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Интервал  сервопривода для 180°</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">T.smax</e>
+          <e type="operand">2500</e>
+          <e type="operand" style="unit">μs</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region left="9" top="108" width="62" height="34" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Разрядность таймера</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">b.T</e>
+          <e type="operand">1</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region left="171" top="108" width="266" height="49" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Частота обновления сервопривода</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">ν.s</e>
+          <e type="operand">1</e>
+          <e type="operand">0.02</e>
+          <e type="operand" style="unit">s</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">/</e>
+          <e type="operator" args="2">:</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">50.00000000</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+        </result>
+      </math>
+    </region>
+    <region left="351" top="189" width="414" height="102" color="#000000" fontSize="12">
+      <math optimize="2">
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Функция округления в большую сторону</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">x</e>
+          <e type="operand">p</e>
+          <e type="function" args="2">ceil</e>
+          <e type="operand">x</e>
+          <e type="operand">p</e>
+          <e type="function" args="2">round</e>
+          <e type="operand">x</e>
+          <e type="operand">p</e>
+          <e type="function" args="2">round</e>
+          <e type="operand">x</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="operand">10</e>
+          <e type="operand">p</e>
+          <e type="operator" args="1">-</e>
+          <e type="operator" args="2">^</e>
+          <e type="operand">0</e>
+          <e type="function" args="3">if</e>
+          <e type="operator" args="2">+</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region left="9" top="198" width="105" height="54" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Количество значений счетчика таймера</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">N.T</e>
+          <e type="operand">2</e>
+          <e type="operand">8</e>
+          <e type="operand">b.T</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">^</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region left="9" top="270" width="231" height="62" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Реальная частота инкремента счетчика таймера</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">ν.T</e>
+          <e type="operand">ν.c</e>
+          <e type="operand">d.T</e>
+          <e type="operator" args="2">/</e>
+          <e type="operator" args="2">:</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">250000.0000</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+        </result>
+      </math>
+    </region>
+    <region left="9" top="351" width="281" height="55" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Интервал инкремента счетчика таймера</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">T.T</e>
+          <e type="operand">1</e>
+          <e type="operand">ν.T</e>
+          <e type="operator" args="2">/</e>
+          <e type="operator" args="2">:</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">0.000004000000000</e>
+          <e type="operand" style="unit">s</e>
+          <e type="operator" args="2">*</e>
+        </result>
+      </math>
+    </region>
+    <region left="9" top="432" width="320" height="64" color="#000000" fontSize="12">
+      <math optimize="2">
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Расчет количества циклов таймера от угла привода</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">α</e>
+          <e type="function" args="1">N</e>
+          <e type="operand">α</e>
+          <e type="operand">T.smax</e>
+          <e type="operand">T.smin</e>
+          <e type="operator" args="2">-</e>
+          <e type="bracket">(</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">180</e>
+          <e type="operand">T.smin</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">+</e>
+          <e type="operand">180</e>
+          <e type="operand">T.T</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">/</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region left="9" top="531" width="178" height="30" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Инкремент счетчика для выставления положения сервопривода 0°</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">0</e>
+          <e type="function" args="1">N</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">125.0000000</e>
+        </result>
+      </math>
+    </region>
+    <region left="9" top="585" width="198" height="30" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Инкремент счетчика для выставления положения сервопривода 180°</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">180</e>
+          <e type="function" args="1">N</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">625.0000000</e>
+        </result>
+      </math>
+    </region>
+    <region left="9" top="639" width="238" height="35" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Оценка количества операций процессора для инициализации цикла управления сервоприводом</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">0</e>
+          <e type="function" args="1">N</e>
+          <e type="operand">T.T</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">ν.c</e>
+          <e type="operator" args="2">*</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">8000.000000</e>
+        </result>
+      </math>
+    </region>
+    <region left="9" top="711" width="372" height="38" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Оценка количества операций процессора для обновления статуса сервопривода</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">1</e>
+          <e type="function" args="1">N</e>
+          <e type="operand">0</e>
+          <e type="function" args="1">N</e>
+          <e type="operator" args="2">-</e>
+          <e type="bracket">(</e>
+          <e type="operand">T.T</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">ν.c</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="1">trunc</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">177.0000000</e>
+        </result>
+      </math>
+    </region>
+    <region left="9" top="783" width="285" height="59" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Максимальное количество циклов таймера (переполнений счётчика) для одного обновления сервопривода</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">180</e>
+          <e type="function" args="1">N</e>
+          <e type="operand">N.T</e>
+          <e type="operator" args="2">/</e>
+          <e type="operand">0</e>
+          <e type="function" args="2">ceil</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">3.000000000</e>
+        </result>
+      </math>
+    </region>
+    <region left="9" top="864" width="277" height="64" color="#000000" fontSize="12">
+      <math>
+        <description active="true" position="Top" lang="eng">
+          <content>
+            <p>Реальное количество циклов таймера (переполнений счётчика) для одного обновления сервопривода</p>
+          </content>
+        </description>
+        <input>
+          <e type="operand">ν.T</e>
+          <e type="operand">ν.s</e>
+          <e type="operand">N.T</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">/</e>
+          <e type="operand">0</e>
+          <e type="function" args="2">ceil</e>
+        </input>
+        <result action="numeric">
+          <e type="operand">20.00000000</e>
+        </result>
+      </math>
+    </region>
+  </regions>
+</worksheet>

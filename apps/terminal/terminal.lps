@@ -275,7 +275,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="uformterminal.pas"/>
         <Caret Line="178" TopLine="168"/>
@@ -355,10 +355,6 @@
       <Position>
         <Filename Value="uformterminal.pas"/>
         <Caret Line="134" Column="11" TopLine="125"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="103" Column="17" TopLine="119"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>

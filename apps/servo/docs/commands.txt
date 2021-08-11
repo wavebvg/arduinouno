@@ -1,1 +1,0 @@
-/home/safiya/.local/share/arduino/hardware/tools/avr/bin/avrdude -C/home/safiya/.local/share/arduino/hardware/tools/avr/etc/avrdude.conf -q -q -patmega328p -carduino -P/dev/ttyACM0 -b115200 -D -Uflash:w:/home/safiya/tmp/projects/git/arduinouno/apps/servo/bin/servoapp.hex:i && busybox microcom /dev/ttyACM0
