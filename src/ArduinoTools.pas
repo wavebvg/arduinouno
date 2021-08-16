@@ -268,8 +268,11 @@ function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardin
 function IntToStr(const AValue: Longint): TIntStr;
 function IntToHex(AValue: LongInt; const ADigits: Byte = 8): TIntStr; overload;
 function IntToHex(AValue: Pointer): TIntStr; overload;
-procedure InterruptsEnable;
-procedure InterruptsDisable;
+procedure IEnable;
+procedure IDisable;
+function HasIEnabled: Boolean;
+procedure IPause;
+procedure IResume;
 procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
 procedure SetTEMPWord(var ADest: Word; const ASrc: Word);
 
@@ -318,19 +321,76 @@ operator := (const AValue: TIntStr): PChar; inline;
 
 operator := (const AValue: TIntStr): shortstring; inline;
 
+var
+  VIPauseIndex: Byte;
+  VIPauseState: Boolean;
+
 implementation
 
 const
   LOWINTSTR: PChar = '-2147483648';
 
-procedure InterruptsEnable; assembler;
+procedure IEnable; assembler;
 asm
          SEI
 end;
 
-procedure InterruptsDisable; assembler;
+procedure IDisable; assembler;
 asm
          CLI
+end;
+
+function HasIEnabled: Boolean; assembler;
+asm
+  LDS   R24, 95 {SREG}
+  ANDI	R24, 128
+  CPSE  R24, R1
+  LDI   R24, 1
+end;
+
+procedure IPause; assembler;
+label
+  goend;
+asm
+	PUSH	R18     {VIPauseIndex}
+
+  LDS	  R18, VIPauseIndex
+  CPI	  R18, 0
+  BRNE  goend
+              
+	PUSH	R24     {VIPauseState}
+  LDS   R24, 95 {SREG}  
+  CLI
+  ANDI	R24, 128
+  CPSE  R24, R1
+  LDI   R24, 1
+  STS	  VIPauseState, R24
+  POP   R24
+
+  goend:
+  INC	  R18
+  STS	  VIPauseIndex, R18
+
+  POP   R18
+end;
+
+procedure IResume; assembler;
+label
+  goend;
+asm
+	PUSH	R18 {VIPauseIndex}
+  LDS	R18, VIPauseIndex 
+  DEC	R18
+  CP  R18, R1
+  BRNE goend        
+	PUSH	R24 {VIPauseState}
+  LDS	R24, VIPauseIndex
+  CPSE  R24, R1
+  SEI   
+  POP R24
+  goend:
+  STS	VIPauseIndex,R18
+  POP R18
 end;
 
 procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
