@@ -26,35 +26,39 @@ type
   TTimerInterruptEvent = procedure(const ATimer: PTimer; const AType: TTimerSubscribeEventType) of object;
   TTimerInterruptProc = procedure(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
 
-  TTimerSubscriber = packed record
-    Event: TMethod;
-    EventTypes: TTimerSubscribeEventTypes;
-  end;
-
-  TTimerSubscribers = array[1..MAX_INERRUPT_EVENT_SUBSCRIBES] of TTimerSubscriber;
+  TTimerSubscriberOFs = array[0..MAX_INERRUPT_EVENT_SUBSCRIBES - 1] of TMethod;
 
   { TAbstractTimer }
 
   TAbstractTimer = object
   private
-    FSubscribers: TTimerSubscribers;
+    FSubscriberOVFs: TTimerSubscriberOFs;
+    FSubscriberOFIndex: Byte;
+    FCompareAEvent, FCompareBEvent: TTimerInterruptEvent;
+    function IndexOfOVFEvent(const AEvent: TTimerInterruptEvent): Shortint;
   protected
-    procedure DoEvent(const AEventType: TTimerSubscribeEventType);
     function GetCounterModes: TTimerCounterModes; virtual; abstract;
     procedure SetCounterModes(const AValue: TTimerCounterModes); virtual; abstract;
     function GetOutputModes: TTimerOutputModes; virtual; abstract;
     procedure SetOutputModes(const AValue: TTimerOutputModes); virtual; abstract;
     function GetCTCMode: Boolean; virtual; abstract;
     procedure SetCTCMode(const AValue: Boolean); virtual; abstract;
+    procedure DoOVFEvents;
+    procedure DoCompareAEvent;
+    procedure DoCompareBEvent;
   public
     constructor Init;
     function Bits: Byte; virtual; abstract;
-    function Subscribe(const AEvent: TTimerInterruptEvent; const AEventTypes: TTimerSubscribeEventTypes): Shortint;
-      overload;
-    function Subscribe(const AProc: TTimerInterruptProc; const AEventTypes: TTimerSubscribeEventTypes): Shortint;
-      overload;
-    procedure Unsubscribe(const AEvent: TTimerInterruptEvent);
-    procedure Unsubscribe(const AProc: TTimerInterruptProc); overload;
+    function SubscribeOVFEvent(const AEvent: TTimerInterruptEvent): Shortint;
+    function SubscribeOVFProc(const AProc: TTimerInterruptProc): Shortint;
+    procedure UnsubscribeOVFEvent(const AEvent: TTimerInterruptEvent);
+    procedure UnsubscribeOVFProc(const AProc: TTimerInterruptProc);
+    procedure SetCompareAEvent(const AEvent: TTimerInterruptEvent);
+    procedure SetCompareAProc(const AProc: TTimerInterruptProc);
+    procedure ClearCompareAEvent;
+    procedure SetCompareBEvent(const AEvent: TTimerInterruptEvent);
+    procedure SetCompareBProc(const AProc: TTimerInterruptProc);
+    procedure ClearCompareBEvent;
     property CounterModes: TTimerCounterModes read GetCounterModes write SetCounterModes;
     property OutputModes: TTimerOutputModes read GetOutputModes write SetOutputModes;
     property CTCMode: Boolean read GetCTCMode write SetCTCMode;
@@ -170,96 +174,148 @@ var
 var
   CounterCompareA, CounterCompareB, CounterOverflow: Longword;
 
+
 implementation
 
 uses
   ArduinoTools;
 
-procedure DoEvent(Self: Pointer; const AEventType: TTimerSubscribeEventType);
-begin
-  TAbstractTimer(Self^).DoEvent(AEventType);
-end;
-
 { TAbstractTimer }
 
-constructor TAbstractTimer.Init;
-begin
-  FSubscribers := Default(TTimerSubscribers);
-end;
-
-procedure TAbstractTimer.DoEvent(const AEventType: TTimerSubscribeEventType);
+procedure TAbstractTimer.DoOVFEvents;
 var
   i: Byte;
-  VSubscriber: TTimerSubscriber;
+  VSubscriber: TMethod;
 begin
-  for i := 1 to MAX_INERRUPT_EVENT_SUBSCRIBES do
-    if AEventType in FSubscribers[i].EventTypes then
-    begin
-      VSubscriber := FSubscribers[i];
-      if VSubscriber.Event.Data = nil then
-      begin
-        TTimerInterruptProc(VSubscriber.Event.Code)(@Self, AEventType);
-      end
-      else
-      begin
-        TTimerInterruptEvent(VSubscriber.Event)(@Self, AEventType);
-      end;
-    end;
-end;
-
-function TAbstractTimer.Subscribe(const AEvent: TTimerInterruptEvent;
-  const AEventTypes: TTimerSubscribeEventTypes): Shortint;
-var
-  i: Byte;
-  VExist: Boolean;
-begin
-  Result := -1;
-  VExist := False;
-  for i := 1 to MAX_INERRUPT_EVENT_SUBSCRIBES do
-    if (FSubscribers[i].Event.Data = TMethod(AEvent).Data) and (FSubscribers[i].Event.Code = TMethod(AEvent).Code) then
-    begin
-      FSubscribers[i].EventTypes := AEventTypes;
-      VExist := True;
-      Result := i;
-      Exit;
-    end;
-  if (AEventTypes <> []) and not VExist then
+  for i := 0 to FSubscriberOFIndex - 1 do
   begin
-    for i := 1 to MAX_INERRUPT_EVENT_SUBSCRIBES do
-      if FSubscribers[i].EventTypes = [] then
-      begin
-        FSubscribers[i].Event := TMethod(AEvent);
-        FSubscribers[i].EventTypes := AEventTypes;
-        VExist := True;
-        Result := i;
-        Exit;
-      end;
+    VSubscriber := Self.FSubscriberOVFs[i];
+    if VSubscriber.Data = nil then
+      TTimerInterruptProc(VSubscriber.Code)(@Self, tsetOverflow)
+    else
+      TTimerInterruptEvent(VSubscriber)(@Self, tsetOverflow);
   end;
 end;
 
-function TAbstractTimer.Subscribe(const AProc: TTimerInterruptProc;
-  const AEventTypes: TTimerSubscribeEventTypes): Shortint;
+procedure TAbstractTimer.DoCompareAEvent;
+var
+  VEvent: TMethod;
+begin             
+  VEvent:= TMethod(FCompareAEvent);
+  if VEvent.Code <> nil then
+    if VEvent.Data = nil then
+      TTimerInterruptProc(VEvent.Code)(@Self, tsetCompareA)
+    else
+      FCompareAEvent(@Self, tsetCompareA);
+end;
+
+procedure TAbstractTimer.DoCompareBEvent;
+var
+  VEvent: TMethod;
+begin
+  VEvent:= TMethod(FCompareBEvent);
+  if VEvent.Code <> nil then
+    if VEvent.Data = nil then
+      TTimerInterruptProc(VEvent.Code)(@Self, tsetCompareB)
+    else
+      FCompareBEvent(@Self, tsetCompareB);
+end;
+
+constructor TAbstractTimer.Init;
+begin
+  FSubscriberOVFs := Default(TTimerSubscriberOFs);
+end;
+
+function TAbstractTimer.IndexOfOVFEvent(const AEvent: TTimerInterruptEvent): Shortint;
+var
+  i: Byte;
+begin
+  Result := -1;
+  for i := 1 to FSubscriberOFIndex do
+    if (FSubscriberOVFs[i].Data = TMethod(AEvent).Data) and (FSubscriberOVFs[i].Code = TMethod(AEvent).Code) then
+    begin
+      Result := i;
+      Exit;
+    end;
+end;
+
+function TAbstractTimer.SubscribeOVFEvent(const AEvent: TTimerInterruptEvent): Shortint;
+begin
+  Result := -1;
+  if FSubscriberOFIndex = MAX_INERRUPT_EVENT_SUBSCRIBES then
+    Exit;
+  Result := IndexOfOVFEvent(AEvent);
+  if Result = -1 then
+  begin
+    FSubscriberOVFs[FSubscriberOFIndex] := TMethod(AEvent);
+    Result := FSubscriberOFIndex;
+    Inc(FSubscriberOFIndex);
+  end;
+end;
+
+function TAbstractTimer.SubscribeOVFProc(const AProc: TTimerInterruptProc): Shortint;
 var
   VMethod: TMethod;
 begin
   VMethod.Data := nil;
   VMethod.Code := AProc;
-  Result := Subscribe(TTimerInterruptEvent(VMethod), AEventTypes);
+  Result := SubscribeOVFEvent(TTimerInterruptEvent(VMethod));
 end;
 
-procedure TAbstractTimer.Unsubscribe(const AEvent: TTimerInterruptEvent);
+procedure TAbstractTimer.UnsubscribeOVFEvent(const AEvent: TTimerInterruptEvent);
+var
+  i: Byte;
 begin
-  asm
-           NOP
-           NOP
-           NOP
-  end;
-  Subscribe(AEvent, []);
+  if FSubscriberOFIndex = 0 then
+    Exit;
+  for i := 1 to MAX_INERRUPT_EVENT_SUBSCRIBES do
+    if (FSubscriberOVFs[i].Data = TMethod(AEvent).Data) and (FSubscriberOVFs[i].Code = TMethod(AEvent).Code) then
+    begin
+      Move(FSubscriberOVFs[i + 1], FSubscriberOVFs[i], (FSubscriberOFIndex - i - 1));
+      Dec(FSubscriberOFIndex);
+      Exit;
+    end;
 end;
 
-procedure TAbstractTimer.Unsubscribe(const AProc: TTimerInterruptProc);
+procedure TAbstractTimer.UnsubscribeOVFProc(const AProc: TTimerInterruptProc);
+var
+  VMethod: TMethod;
 begin
-  Subscribe(AProc, []);
+  VMethod.Code := AProc;  
+  VMethod.Data := nil;
+  UnsubscribeOVFEvent(TTimerInterruptEvent(VMethod));
+end;
+
+procedure TAbstractTimer.SetCompareAEvent(const AEvent: TTimerInterruptEvent);
+begin
+  FCompareAEvent := AEvent;
+end;
+
+procedure TAbstractTimer.SetCompareAProc(const AProc: TTimerInterruptProc);
+begin
+  TMethod(FCompareAEvent).Code := AProc; 
+  TMethod(FCompareAEvent).Data := nil;
+end;
+
+procedure TAbstractTimer.ClearCompareAEvent;
+begin
+  FCompareAEvent := Default(TTimerInterruptEvent);
+end;
+
+procedure TAbstractTimer.SetCompareBEvent(const AEvent: TTimerInterruptEvent);
+begin
+  FCompareBEvent := AEvent;
+end;
+
+procedure TAbstractTimer.SetCompareBProc(const AProc: TTimerInterruptProc);
+begin
+  TMethod(FCompareBEvent).Code := AProc;   
+  TMethod(FCompareBEvent).Data := nil;
+end;
+
+procedure TAbstractTimer.ClearCompareBEvent;
+begin                         
+  FCompareBEvent := Default(TTimerInterruptEvent);
 end;
 
 { TTimer0 }
@@ -533,49 +589,49 @@ begin
   Result := 8;
 end;
 
-procedure TIMER0_COMPA_ISR1; public Name 'TIMER0_COMPA_ISR'; interrupt;
+procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt;
 begin
-  Timer0.DoEvent(tsetCompareA);
+  Timer0.DoCompareAEvent;
 end;
 
-procedure TIMER0_COMPB_ISR1; public Name 'TIMER0_COMPB_ISR'; interrupt;
+procedure TIMER0_COMPB_ISR; public Name 'TIMER0_COMPB_ISR'; interrupt;
 begin
-  Timer0.DoEvent(tsetCompareB);
+  Timer0.DoCompareBEvent;
 end;
 
-procedure TIMER0_OVF_ISR1; public Name 'TIMER0_OVF_ISR'; interrupt;
+procedure TIMER0_OVF_ISR; public Name 'TIMER0_OVF_ISR'; interrupt;
 begin
-  Timer0.DoEvent(tsetOverflow);
+  Timer0.DoOVFEvents;
 end;
 
 procedure TIMER1_COMPA_ISR; public Name 'TIMER1_COMPA_ISR'; interrupt;
 begin
-  Timer1.DoEvent(tsetCompareA);
+  Timer1.DoCompareAEvent;
 end;
 
 procedure TIMER1_COMPB_ISR; public Name 'TIMER1_COMPB_ISR'; interrupt;
 begin
-  Timer1.DoEvent(tsetCompareB);
+  Timer1.DoCompareBEvent;
 end;
 
 procedure TIMER1_OVF_ISR; public Name 'TIMER1_OVF_ISR'; interrupt;
 begin
-  Timer1.DoEvent(tsetOverflow);
+  Timer1.DoOVFEvents;
 end;
 
 procedure TIMER2_COMPA_ISR; public Name 'TIMER2_COMPA_ISR'; interrupt;
 begin
-  Timer2.DoEvent(tsetCompareA);
+  Timer2.DoCompareAEvent;
 end;
 
 procedure TIMER2_COMPB_ISR; public Name 'TIMER2_COMPB_ISR'; interrupt;
 begin
-  Timer2.DoEvent(tsetCompareB);
+  Timer2.DoCompareBEvent;
 end;
 
 procedure TIMER2_OVF_ISR; public Name 'TIMER2_OVF_ISR'; interrupt;
 begin
-  Timer2.DoEvent(tsetOverflow);
+  Timer2.DoOVFEvents;
 end;
 
 initialization
