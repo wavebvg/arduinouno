@@ -57,7 +57,7 @@ begin
     tsetOverflow:
     begin
       if ServoInfoCounter >= 60000 then
-      begin        
+      begin
         BeginCounter := Timer1.Counter;
         for i := ServoCount - 1 to 0 do
         begin
@@ -83,21 +83,26 @@ begin
         ServoInfoCounter := 0;
         ServoInfoIndex := 0;
         Timer0.ValueA := ServoInfos[ServoInfoIndex]^.FCounter mod 256;
+        Timer0.Counter := 0;
       end
       else
+      if Timer0.ValueA = 0 then
         Inc(ServoInfoCounter, 256);
     end;
     tsetCompareA:
     begin
-      if (ServoInfoIndex < ServoCount) and (Timer0.ValueA > 0) then
+      if ServoInfoCounter = 0 then
       begin
-        Inc(ServoInfoCounter, Timer0.ValueA);
-        Timer0.ValueA := 0;
         EndCounter := Timer1.Counter;
         if BeginCounter > EndCounter then
           Counter := High(Word) - BeginCounter + EndCounter
         else
           Counter := EndCounter - BeginCounter;
+      end;
+      if (ServoInfoIndex < ServoCount) and (Timer0.ValueA > 0) then
+      begin
+        Inc(ServoInfoCounter, Timer0.ValueA);
+        Timer0.ValueA := 0;
       end;
     end;
   end;

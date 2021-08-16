@@ -7,12 +7,16 @@ uses
   UART,
   Timers;
 
+var
+  VValue: Word;
+
   procedure TimerEvent(const {%H-}ATimer: PTimer; const AType: TTimerSubscribeEventType);
   begin
     case AType of
       tsetCompareA:
       begin
         Inc(CounterCompareA);
+        VValue := Timer1.Counter;
       end;
       tsetCompareB:
       begin
@@ -21,32 +25,40 @@ uses
       tsetOverflow:
       begin
         Inc(CounterOverflow);
+        Timer1.Counter := 0;
       end;
     end;
   end;
 
 begin
   UARTConsole.Init(9600);
-  Timer0.Subscribe(@TimerEvent, [tsetCompareA, tsetCompareB, tsetOverflow]);
+  Timer0.SubscribeOVFProc(@TimerEvent);
+  Timer0.SetCompareAProc(@TimerEvent);
+  Timer0.SetCompareBProc(@TimerEvent);
   //
-  Timer0.CTCMode := True;
+  Timer0.ValueA := 129;
   Timer0.OutputModes := [];
-  Timer0.CounterModes := [{tcmCompareA, tcmCompareB,} tcmOverflow];
-  Timer0.CLKMode := tclkm256;
+  Timer0.CounterModes := [tcmCompareA {,tcmCompareB}, tcmOverflow];
+  Timer0.CLKMode := tclkm64;
+  //
+  Timer1.OutputModes := [];
+  Timer1.CounterModes := [];
+  Timer1.CLKMode := tclkm64;
   //
   SleepMicroSecs(500000);
-  //                  
+  //
   UARTConsole.WriteLnString('start');
   //
-  InterruptsEnable;
+  IEnable;
   //
   UARTConsole.WriteLnString('work');
   //
-  SleepMicroSecs(2000000);
+  SleepMicroSecs(1000000);
   //
-  InterruptsDisable;
+  IDisable;
   UARTConsole.WriteLnString('finish');
   UARTConsole.WriteLnFormat('%d %d %d', [CounterCompareA, CounterCompareB, CounterOverflow]);
+  UARTConsole.WriteLnFormat('%d', [VValue]);
   repeat
   until False;
 end.
