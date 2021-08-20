@@ -17,7 +17,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="252"/>
+      <BuildNr Value="386"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -131,6 +131,10 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/TimedServoISR.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/TimersMacro.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>

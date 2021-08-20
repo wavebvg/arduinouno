@@ -1,6 +1,7 @@
 unit Timers;
 
 {$mode objfpc}{$H-}{$Z1}
+{$i TimersMacro.inc}
 
 interface
 
@@ -200,8 +201,8 @@ end;
 procedure TAbstractTimer.DoCompareAEvent;
 var
   VEvent: TMethod;
-begin             
-  VEvent:= TMethod(FCompareAEvent);
+begin
+  VEvent := TMethod(FCompareAEvent);
   if VEvent.Code <> nil then
     if VEvent.Data = nil then
       TTimerInterruptProc(VEvent.Code)(@Self, tsetCompareA)
@@ -213,7 +214,7 @@ procedure TAbstractTimer.DoCompareBEvent;
 var
   VEvent: TMethod;
 begin
-  VEvent:= TMethod(FCompareBEvent);
+  VEvent := TMethod(FCompareBEvent);
   if VEvent.Code <> nil then
     if VEvent.Data = nil then
       TTimerInterruptProc(VEvent.Code)(@Self, tsetCompareB)
@@ -281,7 +282,7 @@ procedure TAbstractTimer.UnsubscribeOVFProc(const AProc: TTimerInterruptProc);
 var
   VMethod: TMethod;
 begin
-  VMethod.Code := AProc;  
+  VMethod.Code := AProc;
   VMethod.Data := nil;
   UnsubscribeOVFEvent(TTimerInterruptEvent(VMethod));
 end;
@@ -293,7 +294,7 @@ end;
 
 procedure TAbstractTimer.SetCompareAProc(const AProc: TTimerInterruptProc);
 begin
-  TMethod(FCompareAEvent).Code := AProc; 
+  TMethod(FCompareAEvent).Code := AProc;
   TMethod(FCompareAEvent).Data := nil;
 end;
 
@@ -309,12 +310,12 @@ end;
 
 procedure TAbstractTimer.SetCompareBProc(const AProc: TTimerInterruptProc);
 begin
-  TMethod(FCompareBEvent).Code := AProc;   
+  TMethod(FCompareBEvent).Code := AProc;
   TMethod(FCompareBEvent).Data := nil;
 end;
 
 procedure TAbstractTimer.ClearCompareBEvent;
-begin                         
+begin
   FCompareBEvent := Default(TTimerInterruptEvent);
 end;
 

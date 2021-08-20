@@ -25,6 +25,7 @@ var
       tsetOverflow:
       begin
         Inc(CounterOverflow);
+        Timer0.Counter := 0;
         Timer1.Counter := 0;
       end;
     end;
