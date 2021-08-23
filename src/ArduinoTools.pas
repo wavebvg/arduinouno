@@ -586,8 +586,8 @@ asm
          PUSH    R26  {X} {FAST_BIT_TABLE} {AAddr} {1}
          PUSH    R27  {X} {FAST_BIT_TABLE} {AAddr} {1}
          //
-	       LDI	   R26, LO8(FAST_BIT_TABLE)          {1}
-	       LDI	   R27, HI8(FAST_BIT_TABLE)          {1}
+	     LDI	   R26, LO8(FAST_BIT_TABLE)          {1}
+	     LDI	   R27, HI8(FAST_BIT_TABLE)          {1}
          ADD     R26, R22                          {1}
          ADC     R27, R1                           {1}
          LD      R19, X                            {2}
@@ -602,6 +602,54 @@ asm
          POP     R19                               {1}
          POP     R18                               {1}
          // RET                                    {4}
+end;
+
+procedure DigitalWrite1(const APin: Byte; const AValue: Boolean); assembler;
+label
+  exit, unset;
+asm
+         PUSH    R18  {AValue}
+         PUSH    R26  {X} {DigitalPinToPortPGM} {Addr} {1}
+         PUSH    R27  {X} {DigitalPinToPortPGM} {Addr} {1}
+         MOV     R18, R22							  {1}
+         PUSH    R22  {Mask}                           {1}
+  // VBit := DigitalPinToPortMask[APin];
+         LDI	 R26, LO8(DigitalPinToPortMask)        {1}
+         LDI	 R27, HI8(DigitalPinToPortMask)        {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R22, X                                {2}
+  // VPort := DigitalPinToPortPGM[APin];
+         PUSH    R24                                   {1}
+         LDI	 R26, LO8(DigitalPinToPortPGM)         {1}
+         LDI	 R27, HI8(DigitalPinToPortPGM)         {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R24, X                                {2}
+  // VPortAddr := PortToOutputPGM[VPort];
+         LDI	 R26, LO8(PortToOutputPGM)             {1}
+         LD      R27, HI8(PortToOutputPGM)             {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R24, X+                               {2}
+         LD      R25, X                                {2}
+  //if AValue then
+         CP      r18, R1                               {1}
+         BREQ    unset                                 {1|2}
+    //  sbi(VPort, VMask)
+         RCALL    sbi                                  {3}
+         JMP     exit                                  {2}
+  //else     
+         unset:
+    //  cbi(VPort, VMask);
+         RCALL    cbi                                  {3}
+        //
+         exit:
+         POP     R24                                   {1}
+         POP     R22                                   {1}
+         POP     R27                                   {1}
+         POP     R26                                   {1}
+         POP     R18                                   {1}
 end;
 
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean); inline;
