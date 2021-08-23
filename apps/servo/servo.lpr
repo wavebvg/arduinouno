@@ -6,7 +6,7 @@ uses
   ArduinoTools,
   UART,
   Timers,
-  ServoI2;
+  ServoI;
 
 var
   Servo1, Servo2, Servo3: TServoI;
@@ -18,7 +18,7 @@ begin
   //
   Servo1.Init(11, 0);
   Servo2.Init(12, 0);
-  //Servo3.Init(13, 0);
+  Servo3.Init(13, 0);
   //
   Timer0.OutputModes := [];
   Timer0.CounterModes := [tcmCompareA];
@@ -29,33 +29,29 @@ begin
   Timer1.CLKMode := tclkm64;
   //
   IEnable;
-  //                 
+  //
   UARTConsole.WriteLnString('Start');
-  UARTConsole.WriteLnFormat('SERVO_COUNT_A %d', [SERVO_COUNT_A]);
-  UARTConsole.WriteLnFormat('SERVO_COUNT_B %d', [SERVO_COUNT_B]);
-  UARTConsole.WriteLnFormat('SERVO_COUNT_D %d', [SERVO_COUNT_D]);
   repeat
-    //UARTConsole.WriteLnFormat('LastCurrent[%d]: %d, %d', [LastIndex, LastCounter, LastValueA]);  
     SleepMicroSecs(500000);
     for i := 0 to ServoCount - 1 do
     begin
-      UARTConsole.WriteLnFormat('Servo[%d]: {angle: %d, counter: %d, value: %d}',
-        [i, Servos[i].Servo^.Angle, Counter[i], Servos[i].Counter]);
+      UARTConsole.WriteLnFormat('Servo[%d]: {angle: %d, counter: %d, value: %d, timer: %d}',
+        [i, Servos[i].Servo^.Angle, ServoCounter[i], Servos[i].Counter, Timer0Value[i]]);
     end;
     c := UARTConsole.ReadChar;
     case c of
       '-':
         if Servo1.Angle > 0 then
-          Servo1.Angle := Servo1.Angle - 5;
+          Servo1.Angle := Servo1.Angle - 1;
       '+':
         if Servo1.Angle < 180 then
-          Servo1.Angle := Servo1.Angle + 5;
+          Servo1.Angle := Servo1.Angle + 1;
       '9':
         if Servo2.Angle > 0 then
-          Servo2.Angle := Servo2.Angle - 5;
+          Servo2.Angle := Servo2.Angle - 1;
       '6':
         if Servo2.Angle < 180 then
-          Servo2.Angle := Servo2.Angle + 5;
+          Servo2.Angle := Servo2.Angle + 1;
     end;
   until False;
 end.

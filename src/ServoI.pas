@@ -1,240 +1,179 @@
 unit ServoI;
 
 {$mode objfpc}{$H-}{$Z1}
+{$i TimersMacro.inc}
 
 interface
 
 uses
-  Servo;   
+  ArduinoTools,
+  Servo;
 
 const
-  MAX_SERVO_COUNT = 4;
+  MAX_SERVO_COUNT = 8;
 
 type
+  PServoI = ^TServoI;
 
   { TServoI }
 
   TServoI = object(TCustomServo)
   private
-    FIndex: smallint;
-    function GetPosition: word;
-  protected
-    function GetInitComplete: boolean; virtual;
-    procedure SetAngle(const AValue: TServoAngle); virtual;
-    property Position: word read GetPosition;
   public
+    FCounter: Word;
     constructor Init(const APin: byte; const AAngle: TServoAngle);
     destructor Deinit; virtual;
+    procedure SetAngle(const AValue: TServoAngle); virtual;
   end;
+
+const
+  SERVO_TIME_MIN = 500;
+  SERVO_TIME_MAX = 2500;
+  SERVO_COUNT_A = (SERVO_TIME_MAX - SERVO_TIME_MIN);
+  SERVO_COUNT_B = 180 * SERVO_TIME_MIN;
+  SERVO_COUNT_D = 180 * 64 div ClockCyclesPerMicrosecond;
+  MAX_CYCLE_TIME = (1000000 div 50){1/мкс} div 4{мкс/цикл};
+
+type
+  TServoInfo = packed record
+    Servo: PServoI;
+    Counter: Word;
+  end;
+
+  TServoInfos = array[0..MAX_SERVO_COUNT - 1] of TServoInfo;
+
+var
+  Servos: TServoInfos;
+  CycleTime: Word = MAX_CYCLE_TIME;
+  OldCounterValue: Byte;
+  ServoIndex: Byte;
+  ServoCount: Byte;
+
+var
+  ServoCounter, ServoBeginCounter: array[0..MAX_SERVO_COUNT - 1] of Word;
+  Timer0Value: array[0..MAX_SERVO_COUNT - 1] of Word;
 
 implementation
 
 uses
-  ArduinoTools;
+  Timers;
 
-type
-  PServoInfo = ^TServoInfo;
-  TServoInfo = packed record
-    Pin: byte;
-    Position: Word;
-    Active: boolean;
-  end;   
-
+procedure DoTimer0ServoCompareA(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
 var
-  // Угол поворота сервы (1 тик таймера 0,004ms, нетральное положение 0,6ms).
-  ServoInfos: array[0..MAX_SERVO_COUNT - 1] of TServoInfo;
-
-const
-  // 4-верть сигнала в 50Hz, импульсы идут один за другим.
-  SERVO_CYCLE: word = 1250;
-
-var
-  // Переменная номер шага для прерывния TIMER1_COMPA_vect.
-  ServoTakt: byte = 0;     
-
-procedure CheckTimer;
-var
-  VActive: Boolean;
-  i: Integer;
+  VBuffer: TServoInfo;
+  j, i: Byte;
+  VComplete: Boolean;
+  d: Word;
 begin
-  for i := 0 to MAX_SERVO_COUNT - 1 do
+  if CycleTime >= MAX_CYCLE_TIME then
   begin
-    VActive:=ServoInfos[i].Active;
-    if VActive then
-      Break;
-  end;
-  if (TIMSK1 and (1 shl OCIE1A) > 0) xor VActive then
-  begin
-    InterruptsDisable;
-    if VActive then
+    for i := 0 to ServoCount - 1 do
+      Servos[i].Counter := Servos[i].Servo^.FCounter;
+    if ServoCount > 1 then
+      for i := 1 to ServoCount - 1 do
+      begin
+        VComplete := True;
+        for j := i to ServoCount - 1 do
+          if Servos[j - 1].Counter > Servos[j].Counter then
+          begin
+            VBuffer := Servos[j - 1];
+            Servos[j - 1] := Servos[j];
+            Servos[j] := VBuffer;
+            VComplete := False;
+          end;
+        if VComplete then
+          Break;
+      end;
+    ServoIndex := 0;
+    Timer0_ValueA := 0;
+    for i := 0 to ServoCount - 1 do
     begin
-      // TCCR1A - регистр управления A.
-      TCCR1A := 0;
-
-      // TCCR1B - регистр управления B.
-      TCCR1B := 0;
-
-      // TCCR1A - регистр управления A.
-      // TCCR1B - регистр управления B.
-      // Биты WGM13 (4) , WGM12 (3) регистра TCCR1B и биты WGM11 (1) , WGM10 (0) регистра TCCR1A устанавливают режим работы таймера/счетчика T1:
-      // 0000 - обычный режим
-      // 0001 - коррекция фазы PWM, 8-бит
-      // 0010 - коррекция фазы PWM, 9-бит
-      // 0011 - коррекция фазы PWM, 10-бит
-      // 0100 - режим счета импульсов (OCR1A) (сброс при совпадении)
-      // 0101 - PWM, 8-бит
-      // 0110 - PWM, 9-бит
-      // 0111 - PWM, 10-бит
-      // 1000 - коррекция фазы и частоты PWM (ICR1)
-      // 1001 - коррекция фазы и частоты PWM (OCR1A)
-      // 1010 - коррекция фазы PWM (ICR1)
-      // 1011 - коррекция фазы и частоты PWM (OCR1A)
-      // 1100 - режим счета импульсов (ICR1) (сброс при совпадении)
-      // 1101 - резерв
-      // 1110 - PWM (ICR1)
-      // 1111 - PWM (OCR1A)
-
-      // 0100 - режим счета импульсов (OCR1A) (сброс при совпадении)
-      TCCR1A := TCCR1A or (0 shl WGM11) or (0 shl WGM10);
-
-      TCCR1B := TCCR1B or (1 shl WGM12) or (0 shl WGM13);
-
-      // TCCR1A - регистр управления A.
-      // Биты COM1A1 (7) и COM1A0 (6) влияют на то, какой сигнал появится на выводе OC1A (15 ножка) при совпадении с A (совпадение значения счетного регистра TCNT1 со значением регистра сравнения OCR1A):
-        (* 1. Обычный режим
-        00 - вывод OC1A не функционирует
-        01 - изменение состояния вывода OC1A на противоположное при совпадении с A
-        10 - сброс вывода OC1A в 0 при совпадении с A
-        11 - установка вывода OC1A в 1 при совпадении с A
-            2. Режим ШИМ
-        00 - вывод OC1A не функционирует
-        01 - если биты WGM13 - WGM10 установлены в (0000 - 1101), вывод OC1A не функционирует
-        01 - если биты WGM13 - WGM10 установлены в 1110 или 1111, изменение состояния вывода OC0A на противоположное при совпадении с A
-        10 - сброс вывода OC1A в 0 при совпадении с A, установка  вывода OC1A в 1 если регистр TCNT1 принимает значение 0x00 (неинверсный режим)
-        11 - установка вывода OC1A в 1 при совпадении с A, установка  вывода OC1A в 0 если регистр TCNT1 принимает значение 0x00  (инверсный режим)
-            3. Режим коррекции фазы ШИМ
-        00 - вывод OC1A не функционирует
-        01 - если биты WGM13 - WGM10 установлены в (0000 - 1100, 1010, 1100 - 1111), вывод OC1A не функционирует
-        01 - если биты WGM13 - WGM10 установлены в 1101 или 1011, изменение состояния вывода OC1A на противоположное при совпадении с A
-        10 - сброс вывода OC1A в 0 при совпадении с A во время увеличения значения счетчика, установка  вывода OC1A в 1  при совпадении с A во время уменьшения значения счетчика
-        11 - установка вывода OC1A в 1 при совпадении с A во время увеличения значения счетчика, сброс  вывода OC1A в 0  при совпадении с A во время уменьшения значения счетчика
-        *)
-      TCCR1A := TCCR1A or (0 shl COM1A1) or (0 shl COM1A0);
-
-      // Разрешают прерывания при совпадении с A.
-      TIMSK1 := TIMSK1 or (1 shl OCIE1A);
-
-      // TCCR1B - регистр управления B.
-      // Биты CS12 (2), CS11 (1), CS10 (0) регистра TCCR1B устанавливают режим тактирования и предделителя тактовой частоты таймера/счетчика T1:
-      // 000 - таймер/счетчик T1 остановлен
-      // 001 - тактовый генератор CLK
-      // 010 - CLK/8
-      // 011 - CLK/64
-      // 100 - CLK/256
-      // 101 - CLK/1024
-      // 110 - внешний источник на выводе T1 (11 ножка) по спаду сигнала
-      // 111 - внешний источник на выводе T1 (11 ножка) по возрастанию сигнала
-      // 011 - CLK/64
-      TCCR1B := TCCR1B or (0 shl CS12) or (1 shl CS11) or (1 shl CS10);
-    end else
-    begin
-      // TCCR1A - регистр управления A.
-      TCCR1A := 0;
-
-      // TCCR1B - регистр управления B.
-      TCCR1B := 0;
-
-      // Запрещают прерывания при совпадении с A.
-      TIMSK1 := TIMSK1 and not (1 shl OCIE1A);
+      DigitalWrite(Servos[i].Servo^.Pin, True);
+      ServoBeginCounter[i] := Timer1_Counter;
     end;
-    InterruptsEnable;
+    CycleTime := Timer0_Counter;
+    OldCounterValue := Timer0_Counter;
+  end
+  else
+  begin
+    OldCounterValue := Timer0_ValueA - OldCounterValue;
+    CycleTime := CycleTime + OldCounterValue;
+    while (ServoIndex < ServoCount) and (Servos[ServoIndex].Counter <= CycleTime) do
+    begin
+      DigitalWrite(Servos[ServoIndex].Servo^.Pin, False);
+      ServoCounter[ServoIndex] := CalcWordTime(@ServoBeginCounter[ServoIndex]);
+      Inc(ServoIndex);
+      Timer0Value[ServoIndex - 1] := Timer0CounterCompareA;
+    end;
+    if ServoIndex = ServoCount then
+    begin
+      Timer0Value[ServoIndex - 1] := Timer0CounterCompareA;
+      Inc(ServoIndex);
+    end;
   end;
+  OldCounterValue := Timer0_Counter;
+  if ServoIndex < ServoCount then
+  begin
+    d := Servos[ServoIndex].Counter - CycleTime;
+    if d < TIMER_1B_VALUE_COUNT then
+      Timer0_ValueA := OldCounterValue + d
+    else
+      Timer0_ValueA := OldCounterValue + TIMER_1B_VALUE_COUNT div 2;
+  end
+  else
+    Timer0_ValueA := 0;
 end;
 
 { TServoI }
 
 constructor TServoI.Init(const APin: byte; const AAngle: TServoAngle);
-var
-  i: integer;
-  VServo: PServoInfo;
 begin
   inherited;
-  for i := 0 to MAX_SERVO_COUNT - 1 do
+  IPause;
+  Angle := Angle;
+  Servos[ServoCount].Servo := @Self;
+  Servos[ServoCount].Counter := FCounter;
+  Inc(ServoCount);
+  if ServoCount = 1 then
   begin
-    VServo := @ServoInfos[i];
-    if not VServo^.Active then
-    begin
-      PinMode(APin, avrmOutput);
-      FIndex := i;
-      VServo^.Position := Position;
-      VServo^.Pin := APin;
-      VServo^.Active := True;
-      CheckTimer;
-      Break;
-    end;
+    Timer0_ValueA := 0;
+    Timer0.SetCompareAProc(@DoTimer0ServoCompareA);
   end;
+  IResume;
 end;
 
 destructor TServoI.Deinit;
 var
-  VServo: PServoInfo;
+  i: Byte;
+  VIndex: Integer;
 begin
-  InterruptsDisable;
-  VServo := @ServoInfos[FIndex];
-  FIndex := -1;
-  VServo^.Position := 0;
-  VServo^.Pin := 0;
-  VServo^.Active := False;
-  InterruptsEnable;
-  inherited;
-end;
-
-function TServoI.GetPosition: word;
-begin
-  Result := 126 + 494 * word(Angle) div 180;
-end;
-
-function TServoI.GetInitComplete: boolean;
-begin
-  Result := FIndex >= 0;
+  IPause;
+  VIndex := ServoCount - 1;
+  while (VIndex > 0) and (Servos[VIndex].Servo <> @Self) do
+    Dec(VIndex);
+  if VIndex >= 0 then
+  begin
+    for i := VIndex + 1 to ServoCount - 1 do
+      Servos[i - 1] := Servos[i];
+    Dec(ServoCount);
+    if ServoCount = 0 then
+      Timer0.ClearCompareAEvent;
+  end;
+  IResume;
 end;
 
 procedure TServoI.SetAngle(const AValue: TServoAngle);
 var
-  VServo: PServoInfo;
+  VCounter: Longint;
 begin
   inherited;
-  VServo := @ServoInfos[FIndex];
-  VServo^.Position := Position;
-end;         
-
-procedure TIMER1_COMPA_ISR; Alias: 'TIMER1_COMPA_ISR'; interrupt; public;
-var
-  VInfo: PServoInfo;
-
-  procedure SetValue(const AValue: word);
-  begin
-    SetTEMPWord(OCR1A, AValue);
-  end;
-
-begin
-  VInfo := @ServoInfos[ServoTakt div 2];
-  if VInfo^.Active then
-  begin
-    DigitalWrite(VInfo^.Pin, VInfo^.Active and (ServoTakt mod 2 = 0));
-    if ServoTakt mod 2 = 0 then    
-      SetTEMPWord(OCR1A, VInfo^.Position)
-    else                           
-      SetTEMPWord(OCR1A, SERVO_CYCLE - VInfo^.Position)   ;
-  end
-  else
-    SetValue(0);
-  // Увеличиваем шаг.
-  Inc(ServoTakt);
-
-  // Обнуляем шаг.
-  if ServoTakt = MAX_SERVO_COUNT * 2 then
-    ServoTakt := 0;
+  VCounter := SERVO_COUNT_A;
+  VCounter := VCounter * Angle;
+  VCounter := VCounter + SERVO_COUNT_B;
+  VCounter := VCounter div SERVO_COUNT_D;
+  IPause;
+  FCounter := VCounter;
+  IResume;
 end;
 
 end.

@@ -41,6 +41,10 @@ const
   FOC2B = 6;
   FOC2A = 7;
 
+const
+  TIMER_1B_VALUE_COUNT = High(Byte) + 1;
+  TIMER_2B_VALUE_COUNT = High(Word) + 1;
+
 type
   TAVRPort = (avrpUndefined, avrpA, avrpB, avrpC, avrpD, avrpE, avrpF, avrpG, avrpH,
     avrpNone, avrpJ, avrpK, avrpL);
@@ -325,6 +329,9 @@ var
   VIPauseIndex: Byte;
   VIPauseState: Boolean;
 
+const
+  FAST_BIT_TABLE: array[0..7] of Byte = (1, 2, 4, 8, 16, 32, 64, 128);
+
 implementation
 
 const
@@ -543,22 +550,71 @@ begin
   Result := PortToInputPGM[VPort]^ and VBit <> 0;
 end;
 
-procedure sbi(const AAddr: Pbyte; const ABit: Byte);
-begin
-  AAddr^ := AAddr^ or (Byte(1) shl ABit);
+
+procedure sbi(const AAddr: Pbyte{R24;R25}; const ABit: Byte{R22;R23});  assembler;
+{Total: 28}
+asm
+         // CALL                                   {4}
+         PUSH    R18  {Addr value}                 {1}
+         PUSH    R19  {Flag value}                 {1}
+         PUSH    R26  {X} {FAST_BIT_TABLE} {AAddr} {1}
+         PUSH    R27  {X} {FAST_BIT_TABLE} {AAddr} {1}
+         //
+	       LDI	   R26, LO8(FAST_BIT_TABLE)          {1}
+	       LDI	   R27, HI8(FAST_BIT_TABLE)          {1}
+         ADD     R26, R22                          {1}
+         ADC     R27, R1                           {1}
+         LD      R19, X                            {2}
+         MOVW    R26, R24                          {1}
+         LD      R18, X                            {2}
+         OR	     R18, R19                          {1}
+         ST      X, R18                            {2}
+         //
+         POP     R27                               {1}
+         POP     R26                               {1}
+         POP     R19                               {1}
+         POP     R18                               {1}
+         // RET                                    {4}
 end;
 
-procedure cbi(const AAddr: Pbyte; const ABit: Byte);
-begin
-  AAddr^ := AAddr^ and not (1 shl ABit);
+procedure cbi(const AAddr: Pbyte{R24;R25}; const ABit: Byte{R22;R23}); assembler;  
+{Total: 29}
+asm
+         // CALL                                   {4}
+         PUSH    R18  {Addr value}                 {1}
+         PUSH    R19  {Flag value}                 {1}
+         PUSH    R26  {X} {FAST_BIT_TABLE} {AAddr} {1}
+         PUSH    R27  {X} {FAST_BIT_TABLE} {AAddr} {1}
+         //
+	       LDI	   R26, LO8(FAST_BIT_TABLE)          {1}
+	       LDI	   R27, HI8(FAST_BIT_TABLE)          {1}
+         ADD     R26, R22                          {1}
+         ADC     R27, R1                           {1}
+         LD      R19, X                            {2}
+         COM     R19                               {1}
+         MOVW    R26, R24                          {1}
+         LD      R18, X                            {2}
+         AND	   R18, R19                          {1}
+         ST      X, R18                            {2}
+         //
+         POP     R27                               {1}
+         POP     R26                               {1}
+         POP     R19                               {1}
+         POP     R18                               {1}
+         // RET                                    {4}
 end;
 
-procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
+procedure DigitalWrite(const APin: Byte; const AValue: Boolean); inline;
+var
+  VPort: PByte;
+  VMask: Byte;
 begin
+  VPort := PortToOutputPGM[DigitalPinToPortPGM[APin]];
+  VMask := DigitalPinToPortMask[APin];
   if AValue then
-    sbi(PortToOutputPGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin])
+    sbi(VPort, VMask)
   else
-    cbi(PortToOutputPGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin]);
+    cbi(VPort, VMask);
 end;
 
 function pgm_read_byte(const AFlash: Word): Byte;

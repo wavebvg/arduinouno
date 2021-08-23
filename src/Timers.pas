@@ -6,7 +6,7 @@ unit Timers;
 interface
 
 const
-  MAX_INERRUPT_EVENT_SUBSCRIBES = 8;
+  MAX_INTERRUPT_EVENT_SUBSCRIBES = 8;
 
 type
   TTimerCounterMode = (tcmOverflow, tcmCompareA, tcmCompareB, tcmUndefined3, tcmUndefined4, tcmCapture);
@@ -27,7 +27,7 @@ type
   TTimerInterruptEvent = procedure(const ATimer: PTimer; const AType: TTimerSubscribeEventType) of object;
   TTimerInterruptProc = procedure(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
 
-  TTimerSubscriberOFs = array[0..MAX_INERRUPT_EVENT_SUBSCRIBES - 1] of TMethod;
+  TTimerSubscriberOFs = array[0..MAX_INTERRUPT_EVENT_SUBSCRIBES - 1] of TMethod;
 
   { TAbstractTimer }
 
@@ -172,14 +172,42 @@ var
   Timer1: TTimer1;
   Timer2: TTimer2;
 
+function CalcWordTime(const AOldTime: PWord): Word;
+
 var
-  CounterCompareA, CounterCompareB, CounterOverflow: Longword;
+  Timer0CounterCompareA, Timer0CounterCompareB, Timer0CounterOverflow, Timer0Begin: Word;
 
 
 implementation
 
 uses
   ArduinoTools;
+
+function CalcWordTime(const AOldTime{R24;R25}: PWord): Word; assembler;
+// {Total: 29}
+asm
+         // CALL                                  {4}
+         PUSH    R18  {OldTime}                   {1}
+         PUSH    R19  {OldTime}                   {1}
+         PUSH    R26  {X} {AOldTime}              {1}
+         PUSH    R27  {X} {AOldTime}              {1}
+         //
+         MOVW    R26, R24                         {1}
+         LD      R18, X+                          {2}
+         LD      R19, X                           {2}
+         //VCounter := Timer1_Counter;
+         LDS     R25, TCNT1H {VCounter}           {3}
+         LDS     R24, TCNT1L {VCounter}           {3}
+         //  Result := VCounter - AOldTime^
+         SUB     R24, R18                         {1}
+         SBC     R25, R19                         {1}
+         //
+         POP     R27                              {1}
+         POP     R26                              {1}
+         POP     R19                              {1}
+         POP     R18                              {1}
+         // RET                                   {4}
+end;
 
 { TAbstractTimer }
 
@@ -243,7 +271,7 @@ end;
 function TAbstractTimer.SubscribeOVFEvent(const AEvent: TTimerInterruptEvent): Shortint;
 begin
   Result := -1;
-  if FSubscriberOFIndex = MAX_INERRUPT_EVENT_SUBSCRIBES then
+  if FSubscriberOFIndex = MAX_INTERRUPT_EVENT_SUBSCRIBES then
     Exit;
   Result := IndexOfOVFEvent(AEvent);
   if Result = -1 then
@@ -269,7 +297,7 @@ var
 begin
   if FSubscriberOFIndex = 0 then
     Exit;
-  for i := 1 to MAX_INERRUPT_EVENT_SUBSCRIBES do
+  for i := 1 to MAX_INTERRUPT_EVENT_SUBSCRIBES do
     if (FSubscriberOVFs[i].Data = TMethod(AEvent).Data) and (FSubscriberOVFs[i].Code = TMethod(AEvent).Code) then
     begin
       Move(FSubscriberOVFs[i + 1], FSubscriberOVFs[i], (FSubscriberOFIndex - i - 1));
@@ -378,9 +406,7 @@ end;
 
 procedure TTimer0.SetCLKMode(const AValue: TTimerCLKMode);
 begin
-  //UARTConsole.WriteLnFormat('TCCR0B %d', [TCCR0B]);
   TCCR0B := TCCR0B and %11111000 or Byte(AValue);
-  //UARTConsole.WriteLnFormat('TCCR0B %d', [TCCR0B and %11111000 or Byte(AValue)]);
 end;
 
 procedure TTimer0.SetCounterModes(const AValue: TTimerCounterModes);
@@ -592,17 +618,23 @@ end;
 
 procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt;
 begin
+  //Timer0Begin := Timer1_Counter;
   Timer0.DoCompareAEvent;
+  //Timer0CounterCompareA := CalcWordTime(@Timer0Begin);
 end;
 
 procedure TIMER0_COMPB_ISR; public Name 'TIMER0_COMPB_ISR'; interrupt;
 begin
+  Timer0Begin := Timer1_Counter;
   Timer0.DoCompareBEvent;
+  Timer0CounterCompareB := CalcWordTime(@Timer0Begin);
 end;
 
 procedure TIMER0_OVF_ISR; public Name 'TIMER0_OVF_ISR'; interrupt;
 begin
+  Timer0Begin := Timer1_Counter;
   Timer0.DoOVFEvents;
+  Timer0CounterOverflow := CalcWordTime(@Timer0Begin);
 end;
 
 procedure TIMER1_COMPA_ISR; public Name 'TIMER1_COMPA_ISR'; interrupt;
