@@ -1,5 +1,7 @@
 unit ServoI;
 
+{Only PORTC}
+
 {$mode objfpc}{$H-}{$Z1}
 {$i TimersMacro.inc}
 
@@ -35,6 +37,16 @@ const
   MAX_CYCLE_TIME = (1000000 div 50){1/мкс} div 4{мкс/цикл};
 
 type
+  TServoIs = array[0..MAX_SERVO_COUNT - 1] of PServoI;
+  
+  TSortedServoI = packed record
+    Pin: Byte;
+    // Mask: Byte;
+    Counter: Word;
+  end;
+  
+  TSortedServoIs = array[0..MAX_SERVO_COUNT - 1] of TSortedServoI;
+  
   TServoInfo = packed record
     Servo: PServoI;
     Counter: Word;
@@ -43,15 +55,17 @@ type
   TServoInfos = array[0..MAX_SERVO_COUNT - 1] of TServoInfo;
 
 var
-  Servos: TServoInfos;
+  Servos: TServoIs;
+  SortedServos: TSortedServoIs;
   CycleTime: Word = MAX_CYCLE_TIME;
   OldCounterValue: Byte;
   ServoIndex: Byte;
   ServoCount: Byte;
 
 var
-  ServoCounter, ServoBeginCounter: array[0..MAX_SERVO_COUNT - 1] of Word;
-  Timer0Value: array[0..MAX_SERVO_COUNT - 1] of Word;
+  NeedSort: Boolean;
+  ServoBeginCounter: Word;
+  ServoCounter: array[0..MAX_SERVO_COUNT - 1] of Word;
 
 implementation
 
@@ -60,68 +74,75 @@ uses
 
 procedure DoTimer0ServoCompareA(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
 var
-  VBuffer: TServoInfo;
+  VBuffer: PServoI;
   j, i: Byte;
   VComplete: Boolean;
   d: Word;
 begin
   if CycleTime >= MAX_CYCLE_TIME then
   begin
-    for i := 0 to ServoCount - 1 do
-      Servos[i].Counter := Servos[i].Servo^.FCounter;
-    if ServoCount > 1 then
-      for i := 1 to ServoCount - 1 do
-      begin
-        VComplete := True;
-        for j := i to ServoCount - 1 do
-          if Servos[j - 1].Counter > Servos[j].Counter then
-          begin
-            VBuffer := Servos[j - 1];
-            Servos[j - 1] := Servos[j];
-            Servos[j] := VBuffer;
-            VComplete := False;
-          end;
-        if VComplete then
-          Break;
-      end;
-    ServoIndex := 0;
-    Timer0_ValueA := 0;
-    for i := 0 to ServoCount - 1 do
+    // Если нужно, сортируем пузырьком
+    if NeedSort then
     begin
-      DigitalWrite(Servos[i].Servo^.Pin, True);
-      ServoBeginCounter[i] := Timer1_Counter;
+      if ServoCount > 1 then
+        for i := 1 to ServoCount - 1 do
+        begin
+          VComplete := True;
+          for j := i to ServoCount - 1 do
+            if Servos[j - 1]^.FCounter > Servos[j]^.FCounter then
+            begin
+              VBuffer := Servos[j - 1];
+              Servos[j - 1] := Servos[j];
+              Servos[j] := VBuffer;
+              VComplete := False;
+            end;
+          if VComplete then
+            Break;
+        end;
+      // Загружаем сортированные значения в буфер
+      for i := 0 to ServoCount - 1 do
+      begin
+        SortedServos[i].Counter := Servos[i]^.FCounter;
+        SortedServos[i].Pin := Servos[i]^.Pin;
+      end;
+      NeedSort := True;
     end;
-    CycleTime := Timer0_Counter;
+    // Инициируем счётчики 
+    ServoIndex := 0;
+    CycleTime := 0;
     OldCounterValue := Timer0_Counter;
+    // Включаем флаг на PORTC
+    for i := 0 to ServoCount - 1 do
+      DigitalWrite(SortedServos[i].Pin, True);
+    // Запоминаем текущее значение счетчика для отладки
+    ServoBeginCounter := Timer1_Counter;
   end
   else
   begin
-    OldCounterValue := Timer0_ValueA - OldCounterValue;
-    CycleTime := CycleTime + OldCounterValue;
-    while (ServoIndex < ServoCount) and (Servos[ServoIndex].Counter <= CycleTime) do
-    begin
-      DigitalWrite(Servos[ServoIndex].Servo^.Pin, False);
-      ServoCounter[ServoIndex] := CalcWordTime(@ServoBeginCounter[ServoIndex]);
+    // Рассчитываем, сколько прошло времени с начала ожидания
+    OldCounterValue := Timer0_ValueA - OldCounterValue - 1;
+    CycleTime := CycleTime + OldCounterValue + 1;
+    if ServoIndex >= ServoCount then
+      Exit;
+    OldCounterValue := Timer0_ValueA;
+    // Включаем все сервоприводы, для которых вышло время
+    repeat
+      DigitalWrite(SortedServos[ServoIndex].Pin, False);
+      ServoCounter[ServoIndex] := CalcWordTime(@ServoBeginCounter);
       Inc(ServoIndex);
-      Timer0Value[ServoIndex - 1] := Timer0CounterCompareA;
-    end;
-    if ServoIndex = ServoCount then
-    begin
-      Timer0Value[ServoIndex - 1] := Timer0CounterCompareA;
-      Inc(ServoIndex);
-    end;
+      if ServoIndex >= ServoCount then
+        Exit;
+    until SortedServos[ServoIndex].Counter > CycleTime;
   end;
-  OldCounterValue := Timer0_Counter;
+  // Рассчитываем время активации следующего сервопривода
   if ServoIndex < ServoCount then
   begin
-    d := Servos[ServoIndex].Counter - CycleTime;
+    d := SortedServos[ServoIndex].Counter - CycleTime;
     if d < TIMER_1B_VALUE_COUNT then
       Timer0_ValueA := OldCounterValue + d
     else
       Timer0_ValueA := OldCounterValue + TIMER_1B_VALUE_COUNT div 2;
-  end
-  else
-    Timer0_ValueA := 0;
+  end;
 end;
 
 { TServoI }
@@ -130,7 +151,7 @@ constructor TServoI.Init(const APin: byte; const AAngle: TServoAngle);
 begin
   inherited;
   IPause;
-  Angle := Angle;
+  Angle := AAngle;
   Servos[ServoCount].Servo := @Self;
   Servos[ServoCount].Counter := FCounter;
   Inc(ServoCount);
@@ -173,6 +194,7 @@ begin
   VCounter := VCounter div SERVO_COUNT_D;
   IPause;
   FCounter := VCounter;
+  NeedSort := True;
   IResume;
 end;
 
