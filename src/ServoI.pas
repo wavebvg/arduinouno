@@ -58,9 +58,9 @@ var
   ServoAllMask: Byte;
   ServoCount: Byte;
   TmpCounter: Byte;
-
-var
+           
 {$IfDef USE_DEBUG_COUNTER}
+var
   ServoBeginCounter: Word;
   ServoCounter: array[0..MAX_SERVO_COUNT - 1] of Word;
 {$EndIf USE_DEBUG_COUNTER}
@@ -131,154 +131,152 @@ begin
   ServoAllMask := VAllMask;
 end;
 
-procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt;
+procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt; assembler;
 //procedure DoTimer0ServoCompareA(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
 label
-  notneedsort, inwaiting, inwork, exit;
-begin
-  if SortedServoIndex >= 30 then
-  begin
-    // Инициируем счётчики
-    asm
-             PUSH    R18                             {1}
-             PUSH    R19                             {1}
-             PUSH    R26  {X}                        {1}
-             PUSH    R27  {X}                        {1}
-             //if NeedSort then
-             LDS     r18,NeedSort
-             CP      r18,r1
-             BREQ    notneedsort
-             //begin
-             //  SortTimers;
-             CALL    SortTimers
-             //  NeedSort := False;
-             STS     NeedSort, r1
-             //end;
-             notneedsort:
-             //SortedServoIndex := 0;
-             STS     SortedServoIndex,  R1
-             //CycleTime := 0;
-             STS     CycleTime,   R1
-             STS     CycleTime+1, R1
-             // R18 := SortedServos[0].Counter
-             LDI     R26, LO8(SortedServos)
-             LDI     R27, HI8(SortedServos)
-             ADIW    R26, 1
-             LD      R18, X
-             SBCI    R18, 2
-             // Включаем флаг на PORTB
-             //PORTB := PORTB or ServoAllMask; 
-             IN      R27, 5
-             LDS     R26, ServoAllMask
-             OR      R26, R27
-             OUT     5, R26
-             // Timer0_ValueA := Timer0_Counter + SortedServos[SortedServoIndex].Counter;      
-             IN      r19, 38
-             ADD     r19, r18
-             OUT     39,r19
+  notneedsort, inwaiting, inwork, exit, inits, nexts;
+  //begin
+asm
+         PUSH    R18 {SortedServoIndex}          {1}
+         PUSH    R19                             {1}
+         PUSH    R20                             {1}
+         PUSH    R21                             {1}
+         PUSH    R22                             {1}
+         PUSH    R23                             {1}
+         PUSH    R26  {X} {SortedServos}         {1}
+         PUSH    R27  {X} {SortedServos}         {1}
 {$IfDef USE_DEBUG_COUNTER}
-             // Запоминаем текущее значение счетчика для отладки
-             //ServoBeginCounter := Timer1_Counter;  
-             LDS     R0, 132
-             STS     ServoBeginCounter, R0
-             LDS     R0, 133
-             STS     ServoBeginCounter + 1, R0
+         PUSH    R28  {Y}                        {1}
+         PUSH    R29  {Y}                        {1}
 {$EndIf USE_DEBUG_COUNTER}
-             POP     R27                             {1}
-             POP     R26                             {1}
-             POP     R19                             {1}
-             POP     R18                             {1}
-    end;
-  end
-  else
-  begin
-    asm
-             PUSH    R18 {SortedServoIndex}          {1}
-             PUSH    R19                             {1}
-             PUSH    R20                             {1}
-             PUSH    R21                             {1}
-             PUSH    R22                             {1}
-             PUSH    R23                             {1}
-             PUSH    R26  {X} {SortedServos}         {1}
-             PUSH    R27  {X} {SortedServos}         {1}
-             PUSH    R28  {Y}                        {1}
-             PUSH    R29  {Y}                        {1}
-
-             //if SortedServoIndex < SortedServoCount then
-             LDS     R18, SortedServoIndex
-             LDS     R19, SortedServoCount
-             CP      R18, R19
-             BRLO    inwork
-             JMP     inwaiting
-             //begin
-             inwork:
-             // OldCounterValue := Timer0.ValueA;
-             IN      R0,39
-             STS     OldCounterValue, R0
-             // Включаем все сервоприводы, для которых вышло время
-             // PORTB := PORTB and SortedServos[SortedServoIndex].NotMask;
-             (*LDS     R18, SortedServoIndex*)
-             LSL     R18
-             LDI     R26, LO8(SortedServos)
-             LDI     R27, HI8(SortedServos)
-             ADD     R26, R18
-             ADC     R27, r1
-             LD      R22, X
-             IN      R23, 5
-             AND     R23, R22
-             OUT     5,   R23
+         //  if SortedServoIndex >= 30 then
+         //  begin
+         //    Инициируем счётчики
+         LDS     R18, SortedServoIndex
+         CPI     R18, 30
+         brsh    inits
+         RJMP    nexts
+         inits:
+         //    if NeedSort then
+         LDS     R19, NeedSort
+         CP      R19, R1
+         BREQ    notneedsort
+         //    begin
+         //      SortTimers;
+         CALL    SortTimers
+         //      NeedSort := False;
+         STS     NeedSort, R1
+         //    end;
+         notneedsort:
+         //    SortedServoIndex := 0;
+         STS     SortedServoIndex,  R1
+         //    CycleTime := 0;
+         STS     CycleTime,   R1
+         STS     CycleTime+1, R1
+         //    R20 := SortedServos[0].Counter - 1
+         LDI     R26, LO8(SortedServos)
+         LDI     R27, HI8(SortedServos)
+         ADIW    R26, 1
+         LD      R20, X
+         SBCI    R20, 1
+         //    Включаем флаг на PORTB
+         //    PORTB := PORTB or ServoAllMask;
+         IN      R27, 5
+         LDS     R26, ServoAllMask
+         OR      R26, R27
+         OUT     5, R26
+         //    Timer0_ValueA := Timer0_Counter + SortedServos[SortedServoIndex].Counter;
+         IN      R19, 38
+         ADD     R19, R20
+         OUT     39,  R19
 {$IfDef USE_DEBUG_COUNTER}
-             //ServoCounter[SortedServoIndex] := Timer1_Counter - ServoBeginCounter;
-             LDS     R20, ServoBeginCounter
-             LDS     R21, ServoBeginCounter + 1
-             LDI     R28, LO8(ServoCounter)
-             LDI     R29, HI8(ServoCounter)
+         //    Запоминаем текущее значение счетчика для отладки
+         //    ServoBeginCounter := Timer1_Counter;
+         LDS     R0, 132
+         STS     ServoBeginCounter, R0
+         LDS     R0, 133
+         STS     ServoBeginCounter + 1, R0
+{$EndIf USE_DEBUG_COUNTER}
+         JMP     exit
+         //  end
+         //  else
+         //  begin
+         nexts:
+         //    if SortedServoIndex < SortedServoCount then
+         {LDS     R18, SortedServoIndex}
+         LDS     R19, SortedServoCount
+         CP      R18, R19
+         BRLO    inwork
+         JMP     inwaiting
+         //    begin
+         inwork:
+         //      OldCounterValue := Timer0.ValueA;
+         IN      R0,39
+         STS     OldCounterValue, R0
+         //      Включаем все сервоприводы, для которых вышло время
+         //      PORTB := PORTB and SortedServos[SortedServoIndex].NotMask;
+         (*LDS     R18, SortedServoIndex*)
+         LSL     R18
+         LDI     R26, LO8(SortedServos)
+         LDI     R27, HI8(SortedServos)
+         ADD     R26, R18
+         ADC     R27, R1
+         LD      R22, X
+         IN      R23, 5
+         AND     R23, R22
+         OUT     5,   R23
+{$IfDef USE_DEBUG_COUNTER}
+         //      ServoCounter[SortedServoIndex] := Timer1_Counter - ServoBeginCounter;
+         LDS     R20, ServoBeginCounter
+         LDS     R21, ServoBeginCounter + 1
+         LDI     R28, LO8(ServoCounter)
+         LDI     R29, HI8(ServoCounter)
              (*LDS     R18, SortedServoIndex
              LSL     R18*)
-             ADD     R28, R18
-             ADC     R29, R1
-             LDS     R22, 132
-             LDS     R23, 133
-             SUB     R22, R20
-             SBC     R23, R21
-             ST      Y+,  R22
-             ST      Y,   R23
+         ADD     R28, R18
+         ADC     R29, R1
+         LDS     R22, 132
+         LDS     R23, 133
+         SUB     R22, R20
+         SBC     R23, R21
+         ST      Y+,  R22
+         ST      Y,   R23
 {$EndIf USE_DEBUG_COUNTER}
-             //end;
-             inwaiting:
-             //Inc(SortedServoIndex);    
-             LDS     R18, SortedServoIndex
-             INC     R18
-             STS     SortedServoIndex, R18
-             //if SortedServoIndex < SortedServoCount then    
-             CP      R18, R19
-             BRSH    exit
-             //Timer0_ValueA := Timer0_ValueA + SortedServos[SortedServoIndex].Counter;
+         //    end;
+         inwaiting:
+         //    Inc(SortedServoIndex);
+         LDS     R18, SortedServoIndex
+         INC     R18
+         STS     SortedServoIndex, R18
+         //    if SortedServoIndex < SortedServoCount then
+         CP      R18, R19
+         BRSH    exit
+         //      Timer0_ValueA := Timer0_ValueA + SortedServos[SortedServoIndex].Counter;
              (*LDS     R18, SortedServoIndex
              LSL     R18
              LDI     r26, lo8(SortedServos)
              LDI     R27, hi8(SortedServos)
              ADD     r26, R18
-             ADC     R27, r1*)
-             ADIW    R26, 3
-             LD      R20, X
-             IN      R21, 39
-             ADD     R21, R20
-             OUT     39,  R21
-             //end;
-             exit:
-             POP     R29                             {1}
-             POP     R28                             {1}
-             POP     R27                             {1}
-             POP     R26                             {1}
-             POP     R23                             {1}
-             POP     R22                             {1}
-             POP     R21                             {1}
-             POP     R20                             {1}
-             POP     R19                             {1}
-             POP     R18                             {1}
-    end;
-  end;
+             ADC     R27, R1*)
+         ADIW    R26, 3
+         LD      R20, X
+         IN      R21, 39
+         ADD     R21, R20
+         OUT     39,  R21
+         //  end;
+         exit:
+{$IfDef USE_DEBUG_COUNTER}
+         POP     R29                             {1}
+         POP     R28                             {1}
+{$EndIf USE_DEBUG_COUNTER}
+         POP     R27                             {1}
+         POP     R26                             {1}
+         POP     R23                             {1}
+         POP     R22                             {1}
+         POP     R21                             {1}
+         POP     R20                             {1}
+         POP     R19                             {1}
+         POP     R18                             {1}
 end;
 
 { TServoI }
