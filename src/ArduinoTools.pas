@@ -72,19 +72,19 @@ const
 
   { port_to_output_PGM }
   PortToOutputPGM: array[TAVRPort] of Pbyte = (
-    {avrpUndefined} nil,
-    {        avrpA} nil,
+    {avrpUndefined} Pbyte(255),
+    {        avrpA} Pbyte(255),
     {        avrpB} @PORTB,
     {        avrpC} @PORTC,
     {        avrpD} @PORTD,
-    {        avrpE} nil,
-    {        avrpF} nil,
-    {        avrpG} nil,
-    {        avrpH} nil,
-    {     avrpNone} nil,
-    {        avrpJ} nil,
-    {        avrpK} nil,
-    {        avrpL} nil
+    {        avrpE} Pbyte(255),
+    {        avrpF} Pbyte(255),
+    {        avrpG} Pbyte(255),
+    {        avrpH} Pbyte(255),
+    {     avrpNone} Pbyte(255),
+    {        avrpJ} Pbyte(255),
+    {        avrpK} Pbyte(255),
+    {        avrpL} Pbyte(255)
     );
 
   { port_to_input_PGM }
@@ -152,8 +152,7 @@ const
     avrpC
     );
 
-  { digital_pin_to_bit_mask_PGM }
-  DigitalPinToBitMaskPGM: array[0..19] of Byte = (
+  DigitalPinToBitMask: array[0..19] of Byte = (
     1 shl 0, (* 0 - port D *)
     1 shl 1,
     1 shl 2,
@@ -216,9 +215,7 @@ const
     {avrt2B} COM2B
     );
 
-  { end pins_arduino.h }
-
-  DigitalPinToPortMask: array[0..19] of Byte = (
+  DigitalPinToPortIndex: array[0..19] of Byte = (
     0, (* 0 - port D *)
     1,
     2,
@@ -292,11 +289,15 @@ type
   TCustomPined = object
   private
     FPin: byte;
+    function GetDigitalValue: Boolean;
+    procedure SetDigitalValue(const AValue: Boolean);
   public
     constructor Init(const APin: byte);
     destructor Deinit; virtual;
     //
     property Pin: byte read FPin;
+    //
+    property DigitalValue: Boolean read GetDigitalValue write SetDigitalValue;
   end;
 
   { TCustomPinOutput }
@@ -535,9 +536,9 @@ end;
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
 begin
   if AMode = avrmOutput then
-    sbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin])
+    sbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortIndex[APin])
   else
-    cbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortMask[APin]);
+    cbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortIndex[APin]);
 end;
 
 function DigitalRead(const APin: Byte): Boolean;
@@ -545,7 +546,7 @@ var
   VBit: Byte;
   VPort: TAVRPort;
 begin
-  VBit := DigitalPinToBitMaskPGM[APin];
+  VBit := DigitalPinToBitMask[APin];
   VPort := DigitalPinToPortPGM[APin];
   Result := PortToInputPGM[VPort]^ and VBit <> 0;
 end;
@@ -586,8 +587,8 @@ asm
          PUSH    R26  {X} {FAST_BIT_TABLE} {AAddr} {1}
          PUSH    R27  {X} {FAST_BIT_TABLE} {AAddr} {1}
          //
-	     LDI	   R26, LO8(FAST_BIT_TABLE)          {1}
-	     LDI	   R27, HI8(FAST_BIT_TABLE)          {1}
+	       LDI	   R26, LO8(FAST_BIT_TABLE)          {1}
+	       LDI	   R27, HI8(FAST_BIT_TABLE)          {1}
          ADD     R26, R22                          {1}
          ADC     R27, R1                           {1}
          LD      R19, X                            {2}
@@ -604,65 +605,55 @@ asm
          // RET                                    {4}
 end;
 
-procedure DigitalWrite1(const APin: Byte; const AValue: Boolean); assembler;
+procedure DigitalWrite(const APin: Byte; const AValue: Boolean); assembler;
+{Total: 75}
 label
   exit, unset;
-asm
-         PUSH    R18  {AValue}
+asm                 
+         // CALL                                       {4}
+         PUSH    R18  {AValue}                         {1}
          PUSH    R26  {X} {DigitalPinToPortPGM} {Addr} {1}
          PUSH    R27  {X} {DigitalPinToPortPGM} {Addr} {1}
-         MOV     R18, R22							  {1}
-         PUSH    R22  {Mask}                           {1}
-  // VBit := DigitalPinToPortMask[APin];
-         LDI	 R26, LO8(DigitalPinToPortMask)        {1}
-         LDI	 R27, HI8(DigitalPinToPortMask)        {1}
+         MOV     R18, R22							                 {1}
+         PUSH    R22  {Bit}                            {1}
+  // VBit := DigitalPinToPortIndex[APin];
+         LDI	   R26, LO8(DigitalPinToPortIndex)        {1}
+         LDI	   R27, HI8(DigitalPinToPortIndex)        {1}
          ADD     R26, R24                              {1}
          ADC     R27, R1                               {1}
          LD      R22, X                                {2}
   // VPort := DigitalPinToPortPGM[APin];
-         PUSH    R24                                   {1}
-         LDI	 R26, LO8(DigitalPinToPortPGM)         {1}
-         LDI	 R27, HI8(DigitalPinToPortPGM)         {1}
+         LDI	   R26, LO8(DigitalPinToPortPGM)         {1}
+         LDI	   R27, HI8(DigitalPinToPortPGM)         {1}
          ADD     R26, R24                              {1}
-         ADC     R27, R1                               {1}
-         LD      R24, X                                {2}
+         ADC     R27, R1                               {1} 
+         PUSH    R24                                   {1}
+         LD      R24, X                                {2}   
+         LSL     R24                                   {1}
   // VPortAddr := PortToOutputPGM[VPort];
-         LDI	 R26, LO8(PortToOutputPGM)             {1}
-         LD      R27, HI8(PortToOutputPGM)             {1}
+         LDI	   R26, LO8(PortToOutputPGM)             {1}
+         LDI     R27, HI8(PortToOutputPGM)             {1}
          ADD     R26, R24                              {1}
          ADC     R27, R1                               {1}
          LD      R24, X+                               {2}
          LD      R25, X                                {2}
   //if AValue then
-         CP      r18, R1                               {1}
-         BREQ    unset                                 {1|2}
-    //  sbi(VPort, VMask)
-         RCALL    sbi                                  {3}
-         JMP     exit                                  {2}
-  //else     
-         unset:
+         SBRC    r18, 0                                {1|2}
+    //  sbi(VPort, VMask);   
+         RCALL   sbi                                   {3+28}
+         NOP                                           {1}
+  //if not AValue then
+         SBRS    r18, 0                                {1|2}
     //  cbi(VPort, VMask);
-         RCALL    cbi                                  {3}
+         RCALL    cbi                                  {3+29}
         //
          exit:
          POP     R24                                   {1}
          POP     R22                                   {1}
          POP     R27                                   {1}
          POP     R26                                   {1}
-         POP     R18                                   {1}
-end;
-
-procedure DigitalWrite(const APin: Byte; const AValue: Boolean); inline;
-var
-  VPort: PByte;
-  VMask: Byte;
-begin
-  VPort := PortToOutputPGM[DigitalPinToPortPGM[APin]];
-  VMask := DigitalPinToPortMask[APin];
-  if AValue then
-    sbi(VPort, VMask)
-  else
-    cbi(VPort, VMask);
+         POP     R18                                   {1}  
+         // RET                                        {4}
 end;
 
 function pgm_read_byte(const AFlash: Word): Byte;
@@ -859,7 +850,7 @@ begin
   // cache the port and bit of the pin in order to speed up the
   // pulse width measuring loop and achieve finer resolution.  calling
   // digitalRead() instead yields much coarser resolution.
-  VBit := DigitalPinToBitMaskPGM[APin];
+  VBit := DigitalPinToBitMask[APin];
   VPort := DigitalPinToPortPGM[APin];
   if AState then
     VStateMask := VBit
@@ -887,6 +878,16 @@ begin
 end;
 
 { TCustomPined }
+
+function TCustomPined.GetDigitalValue: Boolean;
+begin
+  Result := DigitalRead(Pin);
+end;
+
+procedure TCustomPined.SetDigitalValue(const AValue: Boolean);
+begin
+  DigitalWrite(Pin, AValue);
+end;
 
 constructor TCustomPined.Init(const APin: byte);
 begin

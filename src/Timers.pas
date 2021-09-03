@@ -174,9 +174,6 @@ var
 
 function CalcWordTime(const AOldTime: PWord): Word;
 
-var
-  Timer0CounterCompareA, Timer0CounterCompareB, Timer0CounterOverflow, Timer0Begin: Word;
-
 
 implementation
 
@@ -616,25 +613,19 @@ begin
   Result := 8;
 end;
 
-procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt;
-begin
-  //Timer0Begin := Timer1_Counter;
-  Timer0.DoCompareAEvent;
-  //Timer0CounterCompareA := CalcWordTime(@Timer0Begin);
-end;
+//procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt;
+//begin
+//  Timer0.DoCompareAEvent;
+//end;
 
 procedure TIMER0_COMPB_ISR; public Name 'TIMER0_COMPB_ISR'; interrupt;
 begin
-  Timer0Begin := Timer1_Counter;
   Timer0.DoCompareBEvent;
-  Timer0CounterCompareB := CalcWordTime(@Timer0Begin);
 end;
 
 procedure TIMER0_OVF_ISR; public Name 'TIMER0_OVF_ISR'; interrupt;
 begin
-  Timer0Begin := Timer1_Counter;
   Timer0.DoOVFEvents;
-  Timer0CounterOverflow := CalcWordTime(@Timer0Begin);
 end;
 
 procedure TIMER1_COMPA_ISR; public Name 'TIMER1_COMPA_ISR'; interrupt;
