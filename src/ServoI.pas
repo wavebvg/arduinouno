@@ -160,7 +160,7 @@ begin
              //CycleTime := 0;
              STS     CycleTime,   R1
              STS     CycleTime+1, R1
-             // R18 := SortedServos[0].Counter
+             // R18 := SortedServos[0].Counter - 2
              LDI     R26, LO8(SortedServos)
              LDI     R27, HI8(SortedServos)
              ADIW    R26, 1
