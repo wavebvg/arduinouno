@@ -45,8 +45,6 @@ type
     function GetCTCMode: Boolean; virtual; abstract;
     procedure SetCTCMode(const AValue: Boolean); virtual; abstract;
     procedure DoOVFEvents;
-    procedure DoCompareAEvent;
-    procedure DoCompareBEvent;
   public
     constructor Init;
     function Bits: Byte; virtual; abstract;
@@ -181,7 +179,7 @@ uses
   ArduinoTools;
 
 function CalcWordTime(const AOldTime{R24;R25}: PWord): Word; assembler;
-// {Total: 29}
+         // {Total: 29}
 asm
          // CALL                                  {4}
          PUSH    R18  {OldTime}                   {1}
@@ -223,28 +221,102 @@ begin
   end;
 end;
 
-procedure TAbstractTimer.DoCompareAEvent;
-var
-  VEvent: TMethod;
-begin
-  VEvent := TMethod(FCompareAEvent);
-  if VEvent.Code <> nil then
-    if VEvent.Data = nil then
-      TTimerInterruptProc(VEvent.Code)(@Self, tsetCompareA)
-    else
-      FCompareAEvent(@Self, tsetCompareA);
+procedure AbstractTimerDoCompareAEvent(const Self: TAbstractTimer); assembler;
+label
+  exit, hasevent;
+asm
+         PUSH    R26 {Self}
+         PUSH    R27 {Self}
+         PUSH    R30 {VEvent.Code}
+         PUSH    R31 {VEvent.Code}
+         //  R18 {VEvent.Data}
+         //  R19 {VEvent.Data}
+         //
+         // VEvent := TMethod(Self.FCompareAEvent);
+         MOVW     R26,R24
+         //
+         ADIW    R26,34
+         //
+         LD      R30, X+
+         LD      R31, X+
+         LD      R18, X+
+         LD      R19, X
+         //if VEvent.Code <> nil then
+         CP      R30, R1
+         CPC     R31, R1
+         BREQ    exit
+         //if VEvent.Data = nil then
+         CP      R18, R1
+         CPC     r19, R1
+         BRNE    hasevent
+         //TTimerInterruptProc(VEvent.Code)(@Self, tsetCompareA)
+         MOV     R22, R1
+         //MOV     r23,r1
+         ICALL
+         RJMP    exit
+         //else
+         hasevent:
+         // Self.FCompareAEvent(@Self, tsetCompareA);
+         MOVW    R24, R18
+         MOVW    R22, R26
+         MOV     R20, R1
+         //MOV     R21, R1
+         ICALL
+         //
+         exit:
+         POP     R31
+         POP     R30
+         POP     R26
+         POP     R27
 end;
 
-procedure TAbstractTimer.DoCompareBEvent;
-var
-  VEvent: TMethod;
-begin
-  VEvent := TMethod(FCompareBEvent);
-  if VEvent.Code <> nil then
-    if VEvent.Data = nil then
-      TTimerInterruptProc(VEvent.Code)(@Self, tsetCompareB)
-    else
-      FCompareBEvent(@Self, tsetCompareB);
+procedure AbstractTimerDoCompareBEvent(const Self: TAbstractTimer); assembler;
+label
+  exit, hasevent;
+asm
+         PUSH    R26 {Self}
+         PUSH    R27 {Self}
+         PUSH    R30 {VEvent.Code}
+         PUSH    R31 {VEvent.Code}
+         //  R18 {VEvent.Data}
+         //  R19 {VEvent.Data}
+         //
+         // VEvent := TMethod(Self.FCompareBEvent);
+         MOVW     R26,R24
+         //
+         ADIW    r30,38
+         //
+         LD      R30, X+
+         LD      R31, X+
+         LD      R18, X+
+         LD      R19, X
+         //if VEvent.Code <> nil then
+         CP      R30, R1
+         CPC     R31, R1
+         BREQ    exit
+         //if VEvent.Data = nil then
+         CP      R18, R1
+         CPC     r19, R1
+         BRNE    hasevent
+         //TTimerInterruptProc(VEvent.Code)(@Self, tsetCompareB)
+         LDI     R22, 1
+         //MOV     r23,r1
+         ICALL
+         RJMP    exit
+         //else
+         hasevent:
+         // Self.FCompareAEvent(@Self, tsetCompareB);
+         MOVW    R24, R18
+         MOVW    R22, R26
+         LDI     R20, 1
+         //MOV     R21, R1
+         ICALL
+         //
+         exit:
+         POP     R31
+         POP     R30
+         POP     R26
+         POP     R27
 end;
 
 constructor TAbstractTimer.Init;
@@ -613,14 +685,50 @@ begin
   Result := 8;
 end;
 
-//procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt;
-//begin
-//  Timer0.DoCompareAEvent;
-//end;
+procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt; assembler;
+asm
+         PUSH    R25
+         PUSH    R24
+         PUSH    R23
+         PUSH    R22
+         PUSH    R21
+         PUSH    R20
+         PUSH    R19
+         PUSH    R18
+         LDI     R24,LO8(Timer0)
+         LDI     R25,HI8(Timer0)
+         RCALL   AbstractTimerDoCompareAEvent
+         POP     R18
+         POP     R19
+         POP     R20
+         POP     R21
+         POP     R22
+         POP     R23
+         POP     R24
+         POP     R25
+end;
 
-procedure TIMER0_COMPB_ISR; public Name 'TIMER0_COMPB_ISR'; interrupt;
-begin
-  Timer0.DoCompareBEvent;
+procedure TIMER0_COMPB_ISR; public Name 'TIMER0_COMPB_ISR'; interrupt; assembler;
+asm
+         PUSH    R25
+         PUSH    R24
+         PUSH    R23
+         PUSH    R22
+         PUSH    R21
+         PUSH    R20
+         PUSH    R19
+         PUSH    R18
+         LDI     R24,LO8(Timer0)
+         LDI     R25,HI8(Timer0)
+         RCALL   AbstractTimerDoCompareBEvent
+         POP     R18
+         POP     R19
+         POP     R20
+         POP     R21
+         POP     R22
+         POP     R23
+         POP     R24
+         POP     R25
 end;
 
 procedure TIMER0_OVF_ISR; public Name 'TIMER0_OVF_ISR'; interrupt;
@@ -628,14 +736,50 @@ begin
   Timer0.DoOVFEvents;
 end;
 
-procedure TIMER1_COMPA_ISR; public Name 'TIMER1_COMPA_ISR'; interrupt;
-begin
-  Timer1.DoCompareAEvent;
+procedure TIMER1_COMPA_ISR; public Name 'TIMER1_COMPA_ISR'; interrupt; assembler;
+asm
+         PUSH    R25
+         PUSH    R24
+         PUSH    R23
+         PUSH    R22
+         PUSH    R21
+         PUSH    R20
+         PUSH    R19
+         PUSH    R18
+         LDI     R24,LO8(Timer1)
+         LDI     R25,HI8(Timer1)
+         RCALL   AbstractTimerDoCompareAEvent
+         POP     R18
+         POP     R19
+         POP     R20
+         POP     R21
+         POP     R22
+         POP     R23
+         POP     R24
+         POP     R25
 end;
 
-procedure TIMER1_COMPB_ISR; public Name 'TIMER1_COMPB_ISR'; interrupt;
-begin
-  Timer1.DoCompareBEvent;
+procedure TIMER1_COMPB_ISR; public Name 'TIMER1_COMPB_ISR'; interrupt; assembler;
+asm
+         PUSH    R25
+         PUSH    R24
+         PUSH    R23
+         PUSH    R22
+         PUSH    R21
+         PUSH    R20
+         PUSH    R19
+         PUSH    R18
+         LDI     R24,LO8(Timer1)
+         LDI     R25,HI8(Timer1)
+         RCALL   AbstractTimerDoCompareBEvent
+         POP     R18
+         POP     R19
+         POP     R20
+         POP     R21
+         POP     R22
+         POP     R23
+         POP     R24
+         POP     R25
 end;
 
 procedure TIMER1_OVF_ISR; public Name 'TIMER1_OVF_ISR'; interrupt;
@@ -643,14 +787,50 @@ begin
   Timer1.DoOVFEvents;
 end;
 
-procedure TIMER2_COMPA_ISR; public Name 'TIMER2_COMPA_ISR'; interrupt;
-begin
-  Timer2.DoCompareAEvent;
+procedure TIMER2_COMPA_ISR; public Name 'TIMER2_COMPA_ISR'; interrupt; assembler;
+asm
+         PUSH    R25
+         PUSH    R24
+         PUSH    R23
+         PUSH    R22
+         PUSH    R21
+         PUSH    R20
+         PUSH    R19
+         PUSH    R18
+         LDI     R24,LO8(Timer2)
+         LDI     R25,HI8(Timer2)
+         RCALL   AbstractTimerDoCompareAEvent
+         POP     R18
+         POP     R19
+         POP     R20
+         POP     R21
+         POP     R22
+         POP     R23
+         POP     R24
+         POP     R25     
 end;
 
-procedure TIMER2_COMPB_ISR; public Name 'TIMER2_COMPB_ISR'; interrupt;
-begin
-  Timer2.DoCompareBEvent;
+procedure TIMER2_COMPB_ISR; public Name 'TIMER2_COMPB_ISR'; interrupt;  assembler;
+asm
+         PUSH    R25
+         PUSH    R24
+         PUSH    R23
+         PUSH    R22
+         PUSH    R21
+         PUSH    R20
+         PUSH    R19
+         PUSH    R18
+         LDI     R24,LO8(Timer2)
+         LDI     R25,HI8(Timer2)
+         RCALL   AbstractTimerDoCompareBEvent
+         POP     R18
+         POP     R19
+         POP     R20
+         POP     R21
+         POP     R22
+         POP     R23
+         POP     R24
+         POP     R25
 end;
 
 procedure TIMER2_OVF_ISR; public Name 'TIMER2_OVF_ISR'; interrupt;

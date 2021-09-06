@@ -51,14 +51,13 @@ var
   Servos: TServoIs;
   SortedServos: TSortedServoIs;
   CycleTime: Word = MAX_CYCLE_TIME;
-  OldCounterValue: Byte;
   SortedServoIndex: Byte = 30;
   SortedServoCount: Byte;
   NeedSort: Boolean;
   ServoAllMask: Byte;
   ServoCount: Byte;
   TmpCounter: Byte;
-           
+
 {$IfDef USE_DEBUG_COUNTER}
 var
   ServoBeginCounter: Word;
@@ -131,20 +130,20 @@ begin
   ServoAllMask := VAllMask;
 end;
 
-procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt; assembler;
-//procedure DoTimer0ServoCompareA(const ATimer: PTimer; const AType: TTimerSubscribeEventType);
+//procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt; assembler;
+procedure DoTimer0ServoCompareA(const ATimer: PTimer; const AType: TTimerSubscribeEventType); assembler;
 label
   notneedsort, inwaiting, inwork, exit, inits, nexts;
   //begin
 asm
-         PUSH    R18 {SortedServoIndex}          {1}
-         PUSH    R19                             {1}
-         PUSH    R20                             {1}
-         PUSH    R21                             {1}
-         PUSH    R22                             {1}
-         PUSH    R23                             {1}
-         PUSH    R26  {X} {SortedServos}         {1}
-         PUSH    R27  {X} {SortedServos}         {1}
+         // R18 {SortedServoIndex}          {1}
+         // R19                             {1}
+         // R20                             {1}
+         // R21                             {1}
+         // R22                             {1}
+         // R23                             {1}
+         // R26  {X} {SortedServos}         {1}
+         // R27  {X} {SortedServos}         {1}
 {$IfDef USE_DEBUG_COUNTER}
          PUSH    R28  {Y}                        {1}
          PUSH    R29  {Y}                        {1}
@@ -173,19 +172,19 @@ asm
          //    CycleTime := 0;
          STS     CycleTime,   R1
          STS     CycleTime+1, R1
-         //    R20 := SortedServos[0].Counter - 1
+         //    R20 := SortedServos[0].Counter - 2
          LDI     R26, LO8(SortedServos)
          LDI     R27, HI8(SortedServos)
          ADIW    R26, 1
          LD      R20, X
-         SBCI    R20, 1
+         SBCI    R20, 2
          //    Включаем флаг на PORTB
          //    PORTB := PORTB or ServoAllMask;
          IN      R27, 5
          LDS     R26, ServoAllMask
          OR      R26, R27
          OUT     5, R26
-         //    Timer0_ValueA := Timer0_Counter + SortedServos[SortedServoIndex].Counter;
+         //    Timer0_ValueA := Timer0_Counter + SortedServos[SortedServoIndex].Counter - 2;
          IN      R19, 38
          ADD     R19, R20
          OUT     39,  R19
@@ -210,9 +209,6 @@ asm
          JMP     inwaiting
          //    begin
          inwork:
-         //      OldCounterValue := Timer0.ValueA;
-         IN      R0,39
-         STS     OldCounterValue, R0
          //      Включаем все сервоприводы, для которых вышло время
          //      PORTB := PORTB and SortedServos[SortedServoIndex].NotMask;
          (*LDS     R18, SortedServoIndex*)
@@ -246,7 +242,7 @@ asm
          inwaiting:
          //    Inc(SortedServoIndex);
          LDS     R18, SortedServoIndex
-         INC     R18
+         //INC     R18
          STS     SortedServoIndex, R18
          //    if SortedServoIndex < SortedServoCount then
          CP      R18, R19
@@ -269,14 +265,6 @@ asm
          POP     R29                             {1}
          POP     R28                             {1}
 {$EndIf USE_DEBUG_COUNTER}
-         POP     R27                             {1}
-         POP     R26                             {1}
-         POP     R23                             {1}
-         POP     R22                             {1}
-         POP     R21                             {1}
-         POP     R20                             {1}
-         POP     R19                             {1}
-         POP     R18                             {1}
 end;
 
 { TServoI }
@@ -291,6 +279,7 @@ begin
   if ServoCount = 1 then
   begin
     Timer0_ValueA := 0;
+    Timer0.SetCompareAProc(@DoTimer0ServoCompareA);
     Timer0.CounterModes := Timer0.CounterModes + [tcmCompareA];
   end;
   IResume;
@@ -311,7 +300,10 @@ begin
       Servos[i - 1] := Servos[i];
     Dec(ServoCount);
     if ServoCount = 0 then
+    begin
       Timer0.CounterModes := Timer0.CounterModes - [tcmCompareA];
+      Timer0.ClearCompareAEvent;
+    end;
   end;
   IResume;
 end;
