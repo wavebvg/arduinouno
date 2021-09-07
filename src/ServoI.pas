@@ -47,6 +47,18 @@ type
 
   TSortedServoIs = array[0..MAX_SERVO_COUNT - 1 + 5] of TSortedServoI;
 
+{$IfDef USE_DEBUG_COUNTER}
+var
+  ServoBeginCounter: Word;
+  ServoCounter: array[0..MAX_SERVO_COUNT - 1] of Word;
+{$EndIf USE_DEBUG_COUNTER}
+
+implementation
+
+uses
+  UART,
+  Timers;   
+
 var
   Servos: TServoIs;
   SortedServos: TSortedServoIs;
@@ -58,18 +70,6 @@ var
   ServoCount: Byte;
   TmpCounter: Byte;
 
-{$IfDef USE_DEBUG_COUNTER}
-var
-  ServoBeginCounter: Word;
-  ServoCounter: array[0..MAX_SERVO_COUNT - 1] of Word;
-{$EndIf USE_DEBUG_COUNTER}
-
-implementation
-
-uses
-  UART,
-  Timers;
-
 procedure SortTimers;
 var
   i, j, VAllMask, VMask: Byte;
@@ -77,6 +77,7 @@ var
   VComplete: Boolean;
   VOldCounter, d: Word;
 begin
+  //UARTConsole.WriteLnFormat('Sorted!', []);
   // Сортируем пузырьком
   if ServoCount > 1 then
     for i := 1 to ServoCount - 1 do
@@ -131,23 +132,11 @@ begin
 end;
 
 //procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt; assembler;
-procedure DoTimer0ServoCompareA(const ATimer: PTimer; const AType: TTimerSubscribeEventType); assembler;
+procedure DoTimer0ServoCompareA; assembler;
 label
   notneedsort, inwaiting, inwork, exit, inits, nexts;
   //begin
 asm
-         // R18 {SortedServoIndex}          {1}
-         // R19                             {1}
-         // R20                             {1}
-         // R21                             {1}
-         // R22                             {1}
-         // R23                             {1}
-         // R26  {X} {SortedServos}         {1}
-         // R27  {X} {SortedServos}         {1}
-{$IfDef USE_DEBUG_COUNTER}
-         PUSH    R28  {Y}                        {1}
-         PUSH    R29  {Y}                        {1}
-{$EndIf USE_DEBUG_COUNTER}
          //  if SortedServoIndex >= 30 then
          //  begin
          //    Инициируем счётчики
@@ -242,7 +231,7 @@ asm
          inwaiting:
          //    Inc(SortedServoIndex);
          LDS     R18, SortedServoIndex
-         //INC     R18
+         INC      R18
          STS     SortedServoIndex, R18
          //    if SortedServoIndex < SortedServoCount then
          CP      R18, R19
@@ -261,10 +250,6 @@ asm
          OUT     39,  R21
          //  end;
          exit:
-{$IfDef USE_DEBUG_COUNTER}
-         POP     R29                             {1}
-         POP     R28                             {1}
-{$EndIf USE_DEBUG_COUNTER}
 end;
 
 { TServoI }

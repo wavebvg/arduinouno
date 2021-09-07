@@ -428,11 +428,6 @@ begin
     Result := Result or Byte((1 shl ABytes[i]));
 end;
 
-function IntToStr1(const AValue: Longint): String;
-begin
-  //Str(AValue, Result);
-end;
-
 operator := (const AValue: shortstring): TIntStr; inline;
 begin
   Result.Length := Length(AValue);

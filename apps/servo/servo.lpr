@@ -47,8 +47,8 @@ begin
     end;
     for i := 0 to SortedServoCount - 1 do
     begin
-      UARTConsole.WriteLnFormat('Counter[%d]: {begin: %d, count: %d, diff: %d, tmp: %d}',
-        [i, ServoBeginCounter, ServoCounter[i], SortedServos[i].Counter, TmpCounter]);
+      UARTConsole.WriteLnFormat('Counter[%d]: {begin: %d, count: %d, diff: %d, tmp: %d:%d}',
+        [i, ServoBeginCounter, ServoCounter[i], SortedServos[i].Counter, SortedServoIndex, Ord(NeedSort)]);
     end;
     IResume;
     c := UARTConsole.ReadChar;

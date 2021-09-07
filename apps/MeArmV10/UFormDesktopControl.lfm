@@ -7,7 +7,8 @@ object FormDesktopControl: TFormDesktopControl
   ClientHeight = 240
   ClientWidth = 320
   LCLVersion = '2.3.0.0'
-  object TrackBarServo0: TTrackBar
+  object TrackBarServo1: TTrackBar
+    Tag = 1
     Left = 16
     Height = 38
     Top = 64
@@ -19,8 +20,8 @@ object FormDesktopControl: TFormDesktopControl
     Enabled = False
     TabOrder = 0
   end
-  object TrackBarServo1: TTrackBar
-    Tag = 1
+  object TrackBarServo2: TTrackBar
+    Tag = 2
     Left = 16
     Height = 38
     Top = 104
@@ -31,8 +32,8 @@ object FormDesktopControl: TFormDesktopControl
     Enabled = False
     TabOrder = 1
   end
-  object TrackBarServo2: TTrackBar
-    Tag = 2
+  object TrackBarServo3: TTrackBar
+    Tag = 3
     Left = 16
     Height = 38
     Top = 144
@@ -43,8 +44,8 @@ object FormDesktopControl: TFormDesktopControl
     Enabled = False
     TabOrder = 2
   end
-  object TrackBarServo3: TTrackBar
-    Tag = 3
+  object TrackBarServo4: TTrackBar
+    Tag = 4
     Left = 16
     Height = 38
     Top = 184
@@ -56,13 +57,22 @@ object FormDesktopControl: TFormDesktopControl
     TabOrder = 3
   end
   object ToggleBoxConnect: TToggleBox
-    Left = 48
+    Left = 40
     Height = 25
     Top = 12
     Width = 107
     Caption = 'Подключить'
     OnChange = ToggleBoxConnectChange
     TabOrder = 4
+  end
+  object ButtonRefresh: TButton
+    Left = 168
+    Height = 25
+    Top = 12
+    Width = 107
+    Caption = 'Прочитать'
+    OnClick = ButtonRefreshClick
+    TabOrder = 5
   end
   object Serial: TLazSerial
     Active = False

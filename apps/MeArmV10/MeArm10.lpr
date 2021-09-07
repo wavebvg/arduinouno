@@ -3,67 +3,40 @@ program MeArm10;
 {$mode objfpc}{$H-}{$Z1}
 
 uses
-  UInterrupts,
   ArduinoTools,
-  ServoI,
-  IR,
-  KeyMap,
-  UARTI;
+  UServoCommands,
+  UART,
+  ServoI;
 
 const
-  IR_PIN_PORT: SmallInt = 11;
   SERVO_COUNT = 4;
-  MIN_PIN_PORT: SmallInt = 6;
-  SERVO_ANGE_DEF: array[1..SERVO_COUNT] of Byte = (0, 0, 0, 0);
-  SERVO_ANGE_MIN: array[1..SERVO_COUNT] of Byte = (0, 0, 0, 0);
-  SERVO_ANGE_MAX: array[1..SERVO_COUNT] of Byte = (180, 180, 180, 100);
 
 var
-  VIR: TIRReceiver;
-  VServos: array[1..SERVO_COUNT] of TServoI;
-  VServoNo: SmallInt;    
-  Value: TIRValue;
   i: Byte;
-  VMin, VMax: Byte;
+  VServos: array[1..SERVO_COUNT] of TServoI;
+  VCommand: TServoCommand;
 
-begin     
+begin
   UARTConsole.Init(9600);
-  VIR.Init(IR_PIN_PORT);
-  InterruptsEnable;
   for i := 1 to SERVO_COUNT do
   begin
     VServos[i] := Default(TServoI);
-    VServos[i].Init(MIN_PIN_PORT + i - 1, SERVO_ANGE_DEF[i]);
+    VServos[i].Init(9 + i, 0);
   end;
-  VServoNo := 1;
+  IEnable;
   repeat
-    Value := VIR.Read;
-    UARTConsole.WriteLnString(GetKeyName(Value.Command));
-    VMin := SERVO_ANGE_MIN[VServoNo];
-    VMax := SERVO_ANGE_MAX[VServoNo];
-    case Value.Command of
-      KeyPLUS:
-        if VMax >= VServos[VServoNo].Angle + 10 then
-          VServos[VServoNo].Angle := VServos[VServoNo].Angle + 5;
-      KeyMINUS:
-        if VMin <= VServos[VServoNo].Angle - 10 then
-          VServos[VServoNo].Angle := VServos[VServoNo].Angle - 5;
-      KeyOK:
-      begin
-        for i := 1 to SERVO_COUNT do
+    UARTConsole.ReadBuffer(@VCommand, SizeOf(VCommand));
+    with VCommand do
+      case CommandType of
+        sctRead:
         begin
-          UARTConsole.WriteString(' ');
-          UARTConsole.WriteLnString(IntToStr(VServos[i].Angle));
+          Data.Angle := VServos[Data.ServoIndex].Angle;
+          UARTConsole.WriteBuffer(@Data, SizeOf(Data));
         end;
+        sctWrite:
+          VServos[Data.ServoIndex].Angle := Data.Angle;
+        else
+          ;
       end;
-      KeyA:
-        VServoNo := 1;
-      KeyB:
-        VServoNo := 2;
-      KeyC:
-        VServoNo := 3;
-      KeyD:
-        VServoNo := 4;
-    end;
   until False;
 end.
