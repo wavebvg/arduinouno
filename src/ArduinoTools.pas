@@ -603,7 +603,7 @@ end;
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean); assembler;
 {Total: 75}
 label
-  exit, unset;
+  exit;
 asm                 
          // CALL                                       {4}
          PUSH    R18  {AValue}                         {1}
