@@ -15,7 +15,6 @@ type
   private
   protected
     function GetReadBufferEmpty: Boolean; virtual;
-    procedure NopWait; assembler;
   public
     constructor Init(const ABaudRate: Word);
     procedure WriteBuffer(ABuffer: PChar; ASize: Byte); virtual;
@@ -24,7 +23,7 @@ type
     procedure WriteChar(const AValue: Char);
     procedure WriteString(const AValue: String);
     procedure WriteFormat(const AFormat: String; const AArgs: array of const);
-    procedure WriteLnString(const AValue: String);
+    procedure WriteLnString(const AValue: PChar);
     procedure WriteLnFormat(const AFormat: String; const AArgs: array of const);
     function ReadByte: byte;
     function ReadChar: Char;
@@ -45,13 +44,6 @@ const
 function TUART.GetReadBufferEmpty: Boolean;
 begin
   Result := True;
-end;
-
-procedure TUART.NopWait; assembler;
-asm
-         NOP
-         NOP
-         NOP
 end;
 
 constructor TUART.Init(const ABaudRate: Word);
@@ -192,9 +184,9 @@ begin
     WriteBuffer(@AFormat[1], Length(AFormat));
 end;
 
-procedure TUART.WriteLnString(const AValue: String);
+procedure TUART.WriteLnString(const AValue: PChar);
 begin
-  WriteBuffer(PChar(@AValue[1]), Length(AValue));
+  WriteBuffer(AValue, Length(AValue));
   WriteBuffer(#10#13, 2);
 end;
 
