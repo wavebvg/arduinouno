@@ -4,7 +4,7 @@ unit ServoI;
 
 {$mode objfpc}{$H-}{$Z1}
 {$i TimersMacro.inc}
-{$Define USE_DEBUG_COUNTER}
+{.$Define USE_DEBUG_COUNTER}
 
 interface
 
@@ -45,19 +45,13 @@ type
     Counter: Byte;
   end;
 
-  TSortedServoIs = array[0..MAX_SERVO_COUNT - 1 + 5] of TSortedServoI;
+  TSortedServoIs = array[0..MAX_SERVO_COUNT - 1 + 3] of TSortedServoI;
 
 {$IfDef USE_DEBUG_COUNTER}
 var
   ServoBeginCounter: Word;
   ServoCounter: array[0..MAX_SERVO_COUNT - 1] of Word;
-{$EndIf USE_DEBUG_COUNTER}
-
-implementation
-
-uses
-  UART,
-  Timers;   
+{$EndIf USE_DEBUG_COUNTER}     
 
 var
   Servos: TServoIs;
@@ -68,7 +62,12 @@ var
   NeedSort: Boolean;
   ServoAllMask: Byte;
   ServoCount: Byte;
-  TmpCounter: Byte;
+
+implementation
+
+uses
+  UART,
+  Timers;
 
 procedure SortTimers;
 var

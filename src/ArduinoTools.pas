@@ -276,7 +276,7 @@ procedure IPause;
 procedure IResume;
 procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
 procedure SetTEMPWord(var ADest: Word; const ASrc: Word);
-
+procedure NopWait;
 
 type
 
@@ -417,6 +417,14 @@ type
 begin
   TWord(ADest).High := TWord(ASrc).High;
   TWord(ADest).Low := TWord(ASrc).Low;
+end;
+
+procedure NopWait; assembler;
+asm
+  nop
+  nop
+  nop
+  nop
 end;
 
 function ByteMap(const ABytes: array of Byte): Byte;

@@ -6,6 +6,7 @@ object FormDesktopControl: TFormDesktopControl
   Caption = 'Desktop control'
   ClientHeight = 240
   ClientWidth = 320
+  OnCloseQuery = FormCloseQuery
   LCLVersion = '2.3.0.0'
   object TrackBarServo1: TTrackBar
     Tag = 1
@@ -57,22 +58,31 @@ object FormDesktopControl: TFormDesktopControl
     TabOrder = 3
   end
   object ToggleBoxConnect: TToggleBox
-    Left = 40
+    Left = 16
     Height = 25
     Top = 12
-    Width = 107
+    Width = 88
     Caption = 'Подключить'
     OnChange = ToggleBoxConnectChange
     TabOrder = 4
   end
   object ButtonRefresh: TButton
-    Left = 168
+    Left = 112
     Height = 25
     Top = 12
-    Width = 107
+    Width = 88
     Caption = 'Прочитать'
     OnClick = ButtonRefreshClick
     TabOrder = 5
+  end
+  object ButtonSave: TButton
+    Left = 208
+    Height = 25
+    Top = 12
+    Width = 88
+    Caption = 'Сохранить'
+    OnClick = ButtonSaveClick
+    TabOrder = 6
   end
   object Serial: TLazSerial
     Active = False

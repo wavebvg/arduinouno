@@ -5,7 +5,7 @@ unit UServoCommands;
 interface
 
 type
-  TServoCommandType = (sctRead, sctWrite);
+  TServoCommandType = (sctWrite, sctReadAll, sctSaveAll, sctLoadAll);
 
   TServoData = packed record
     ServoIndex: Byte;

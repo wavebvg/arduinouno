@@ -6,29 +6,66 @@ uses
   ArduinoTools,
   UART,
   Timers,
-  ServoI;
+  ServoI,
+  EEPROM;
+
+const
+  SERVO_COUNT = 4;
+
+type
+  TAngles = array[1..SERVO_COUNT] of Byte;
 
 var
-  Servo0, Servo1, Servo2, Servo3: TServoI;
-  c: Char;
   i: Byte;
+  c: Char;
+  VServos: array[1..SERVO_COUNT] of TServoI;
+  Angles: TAngles;
+  SaveCounter: Word;
+  SaveSkip: Boolean;
 
-begin       
+  procedure CheckChanges;
+  var
+    i: Byte;
+    VAngle: Byte;
+  begin
+    Inc(SaveCounter);
+    if SaveCounter mod 2000 = 0 then
+    begin
+      if SaveSkip then
+        SaveSkip := False
+      else
+        for i := 1 to SERVO_COUNT do
+          if Angles[i] = 1 then
+          begin
+            Angles[i] := 0;
+            VAngle := VServos[i].Angle;
+            ROM.WriteBuffer(i - 1, @VAngle, SizeOf(Byte));
+            UARTConsole.WriteLnFormat('Servo[%d] saved', [i]);
+          end;
+    end;
+  end;
+
+begin
   IDisable;
   UARTConsole.Init(9600);
   //
+  Angles := Default(TAngles);
+  ROM.ReadBuffer(0, @Angles, SizeOf(Angles));
+  for i := 1 to SERVO_COUNT do
+  begin
+    VServos[i] := Default(TServoI);
+    VServos[i].Init(i + 9, Angles[i]);
+  end;
+  Angles := Default(TAngles);
+  //
   Timer0.OutputModes := [];
-  Timer0.CounterModes := [];
+  Timer0.CounterModes := [tcmOverflow];
   Timer0.CLKMode := tclkm64;
+  Timer0.SubscribeOVFProc(@CheckChanges);
   //
   Timer1.OutputModes := [];
   Timer1.CounterModes := [];
   Timer1.CLKMode := tclkm64;
-  //                 
-  Servo0.Init(10, 0);
-  Servo1.Init(11, 0);
-  Servo2.Init(12, 0);
-  Servo3.Init(13, 0);
   //
   UARTConsole.WriteLnString('Start');
   //
@@ -39,32 +76,48 @@ begin
     //;
     //while SortedServoIndex < ServoCount do
     //;
-    IPause;
-    for i := 0 to ServoCount - 1 do
+    //IPause;
+    for i := 1 to SERVO_COUNT do
     begin
-      UARTConsole.WriteLnFormat('Servo[%d]: {angle: %d, value: %d}', [i, Servos[i]^.Angle,
-        Servos[i]^.FCounter]);
+      UARTConsole.WriteLnFormat('Servo[%d]: {angle: %d, value: %d}', [i, VServos[i].Angle,
+        VServos[i].FCounter]);
     end;
-    for i := 0 to SortedServoCount - 1 do
-    begin
-      UARTConsole.WriteLnFormat('Counter[%d]: {begin: %d, count: %d, diff: %d, tmp: %d:%d}',
-        [i, ServoBeginCounter, ServoCounter[i], SortedServos[i].Counter, SortedServoIndex, Ord(NeedSort)]);
-    end;
-    IResume;
+    //for i := 0 to SortedServoCount - 1 do
+    //begin
+    //  UARTConsole.WriteLnFormat('Counter[%d]: {begin: %d, count: %d, diff: %d, tmp: %d:%d}',
+    //    [i, ServoBeginCounter, ServoCounter[i], SortedServos[i].Counter, SortedServoIndex, Ord(NeedSort)]);
+    //end;
+    //IResume;
     c := UARTConsole.ReadChar;
     case c of
       '-':
-        if Servo1.Angle > 0 then
-          Servo1.Angle := Servo1.Angle - 1;
+        if VServos[1].Angle > 0 then
+        begin
+          VServos[1].Angle := VServos[1].Angle - 1;
+          SaveSkip := True;
+          Angles[1] := 1;
+        end;
       '+':
-        if Servo1.Angle < 180 then
-          Servo1.Angle := Servo1.Angle + 1;
+        if VServos[1].Angle < 180 then
+        begin
+          VServos[1].Angle := VServos[1].Angle + 1;
+          SaveSkip := True;
+          Angles[1] := 1;
+        end;
       '9':
-        if Servo2.Angle > 0 then
-          Servo2.Angle := Servo2.Angle - 1;
+        if VServos[2].Angle > 0 then
+        begin
+          VServos[2].Angle := VServos[2].Angle - 1;
+          SaveSkip := True;
+          Angles[2] := 1;
+        end;
       '6':
-        if Servo2.Angle < 180 then
-          Servo2.Angle := Servo2.Angle + 1;
+        if VServos[2].Angle < 180 then
+        begin
+          VServos[2].Angle := VServos[2].Angle + 1;
+          SaveSkip := True;
+          Angles[2] := 1;
+        end;
     end;
   until False;
 end.

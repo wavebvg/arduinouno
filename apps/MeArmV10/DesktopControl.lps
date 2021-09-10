@@ -11,7 +11,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="23"/>
       </Unit>
       <Unit>
         <Filename Value="UFormDesktopControl.pas"/>
@@ -20,24 +20,25 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="85"/>
-        <CursorPos X="45" Y="106"/>
-        <UsageCount Value="21"/>
+        <TopLine Value="136"/>
+        <CursorPos Y="159"/>
+        <UsageCount Value="23"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/UServoCommands.pas"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="16" Y="15"/>
-        <UsageCount Value="11"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="65" Y="8"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
         <UnitName Value="LazSerial"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="319"/>
-        <CursorPos X="16" Y="328"/>
+        <TopLine Value="326"/>
+        <CursorPos X="3" Y="329"/>
         <UsageCount Value="11"/>
       </Unit>
       <Unit>
@@ -48,127 +49,134 @@
         <CursorPos Y="1468"/>
         <UsageCount Value="11"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/fcl-base/src/syncobjs.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="18"/>
+        <CursorPos X="29" Y="35"/>
+        <UsageCount Value="11"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="98" TopLine="69"/>
+        <Caret Line="71" Column="26" TopLine="58"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="99" TopLine="69"/>
+        <Caret Line="78" TopLine="57"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="100" TopLine="54"/>
+        <Caret Line="79" TopLine="57"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="31" Column="31" TopLine="6"/>
+        <Caret Line="76" Column="21" TopLine="57"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="50" Column="14" TopLine="33"/>
+        <Caret Line="78" TopLine="57"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="63" TopLine="50"/>
+        <Caret Line="102" Column="40" TopLine="88"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="81" TopLine="53"/>
+        <Caret Line="146" Column="24" TopLine="114"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="98" TopLine="75"/>
+        <Caret Line="29" Column="38" TopLine="12"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="64" TopLine="47"/>
+        <Caret Line="30" Column="35" TopLine="12"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="73" TopLine="47"/>
+        <Caret Line="31" Column="34" TopLine="12"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="57" TopLine="47"/>
+        <Caret Line="32" Column="32" TopLine="12"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="48" Column="18" TopLine="35"/>
+        <Caret Line="33" Column="42" TopLine="12"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="63" Column="80" TopLine="56"/>
+        <Caret Line="34" Column="40" TopLine="12"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="81" TopLine="56"/>
+        <Caret Line="56" Column="58" TopLine="28"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="83" TopLine="56"/>
+        <Caret Line="77" TopLine="57"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="84" TopLine="56"/>
+        <Caret Line="140" TopLine="135"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="86" TopLine="58"/>
+        <Caret Line="112" Column="50" TopLine="110"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="87" TopLine="59"/>
+        <Caret Line="126" TopLine="110"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="88" TopLine="60"/>
+        <Caret Line="127" TopLine="110"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="89" TopLine="61"/>
+        <Caret Line="80" TopLine="67"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="90" TopLine="59"/>
+        <Caret Line="81" TopLine="67"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="31" Column="31" TopLine="13"/>
+        <Caret Line="80" TopLine="67"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="81" TopLine="69"/>
+        <Caret Line="143" Column="57" TopLine="125"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UServoCommands.pas"/>
+        <Caret Line="8" Column="53"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="98" TopLine="70"/>
+        <Caret Line="145" Column="35" TopLine="137"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="81" TopLine="70"/>
+        <Caret Line="91" Column="36" TopLine="80"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UServoCommands.pas"/>
+        <Caret Line="8" Column="65"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="83" TopLine="70"/>
+        <Caret Line="157" Column="50" TopLine="142"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="84" TopLine="70"/>
+        <Caret Line="139" Column="28" TopLine="126"/>
       </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="57" TopLine="46"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="58" TopLine="46"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="102" Column="32" TopLine="76"/>
+        <Caret Line="35" Column="29" TopLine="19"/>
       </Position>
     </JumpHistory>
     <RunParams>
