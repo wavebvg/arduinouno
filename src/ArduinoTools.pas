@@ -51,10 +51,9 @@ type
   TAVRTimer = (avrtNo, avrt0A, avrt0B, avrt1A, avrt1B, avrt2A, avrt2B);
   TAVRPinMode = (avrmOutput, avrmInput);
 
-{ begin pins_arduino.h }
 const
-  { port_to_mode_PGM }
-  PortToModePGM: array[TAVRPort] of Pbyte = (
+  { PortToMode }
+  PortToMode: array[TAVRPort] of Pbyte = (
     {avrpUndefined} nil,
     {        avrpA} nil,
     {        avrpB} @DDRB,
@@ -70,8 +69,8 @@ const
     {        avrpL} nil
     );
 
-  { port_to_output_PGM }
-  PortToOutputPGM: array[TAVRPort] of Pbyte = (
+  { PortToOutput }
+  PortToOutput: array[TAVRPort] of Pbyte = (
     {avrpUndefined} Pbyte(255),
     {        avrpA} Pbyte(255),
     {        avrpB} @PORTB,
@@ -87,8 +86,8 @@ const
     {        avrpL} Pbyte(255)
     );
 
-  { port_to_input_PGM }
-  PortToInputPGM: array[TAVRPort] of Pbyte = (
+  { PortToInput }
+  PortToInput: array[TAVRPort] of Pbyte = (
     {avrpUndefined} nil,
     {        avrpA} nil,
     {        avrpB} @PINB,
@@ -104,32 +103,8 @@ const
     {        avrpL} nil
     );
 
-  { digital_pin_to_timer_PGM }
-  DigitalPinTimerPGM: array[0..19] of TAVRTimer = (
-    avrtNo, (* 0 - port D *)
-    avrtNo,
-    avrtNo,
-    avrt2B, (* 3 *)
-    avrtNo,
-    avrt0B, (* 5 *)
-    avrt0A, (* 6 *)
-    avrtNo,
-    avrtNo, (* 8 - port B *)
-    avrt1A, (* 9 *)
-    avrt1B, (* 10 *)
-    avrt2A, (* 11 *)
-    avrtNo,
-    avrtNo,
-    avrtNo, (* 14 - port C *)
-    avrtNo,
-    avrtNo,
-    avrtNo,
-    avrtNo,
-    avrtNo
-    );
-
-  { digital_pin_to_port_PGM }
-  DigitalPinToPortPGM: array[0..19] of TAVRPort = (
+  { DigitalPinToPort }
+  DigitalPinToPort: array[0..19] of TAVRPort = (
     avrpD, (* 0 - port D *)
     avrpD,
     avrpD,
@@ -261,8 +236,6 @@ procedure ADCInit;
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
 function DigitalRead(const APin: Byte): Boolean;
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
-function AnalogRead(const APin: Byte): Word;
-procedure AnalogWrite(const APin: Byte; const AValue: Integer);
 procedure SleepMicroSecs(const ATime: Longword);
 procedure Sleep10ms(const ATime: Byte);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
@@ -539,9 +512,9 @@ end;
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
 begin
   if AMode = avrmOutput then
-    sbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortIndex[APin])
+    sbi(PortToMode[DigitalPinToPort[APin]], DigitalPinToPortIndex[APin])
   else
-    cbi(PortToModePGM[DigitalPinToPortPGM[APin]], DigitalPinToPortIndex[APin]);
+    cbi(PortToMode[DigitalPinToPort[APin]], DigitalPinToPortIndex[APin]);
 end;
 
 function DigitalRead(const APin: Byte): Boolean;
@@ -550,8 +523,8 @@ var
   VPort: TAVRPort;
 begin
   VBit := DigitalPinToBitMask[APin];
-  VPort := DigitalPinToPortPGM[APin];
-  Result := PortToInputPGM[VPort]^ and VBit <> 0;
+  VPort := DigitalPinToPort[APin];
+  Result := PortToInput[VPort]^ and VBit <> 0;
 end;
 
 
@@ -615,8 +588,8 @@ label
 asm                 
          // CALL                                       {4}
          PUSH    R18  {AValue}                         {1}
-         PUSH    R26  {X} {DigitalPinToPortPGM} {Addr} {1}
-         PUSH    R27  {X} {DigitalPinToPortPGM} {Addr} {1}
+         PUSH    R26  {X} {DigitalPinToPort} {Addr} {1}
+         PUSH    R27  {X} {DigitalPinToPort} {Addr} {1}
          MOV     R18, R22							                 {1}
          PUSH    R22  {Bit}                            {1}
   // VBit := DigitalPinToPortIndex[APin];
@@ -625,17 +598,17 @@ asm
          ADD     R26, R24                              {1}
          ADC     R27, R1                               {1}
          LD      R22, X                                {2}
-  // VPort := DigitalPinToPortPGM[APin];
-         LDI	   R26, LO8(DigitalPinToPortPGM)         {1}
-         LDI	   R27, HI8(DigitalPinToPortPGM)         {1}
+  // VPort := DigitalPinToPort[APin];
+         LDI	   R26, LO8(DigitalPinToPort)         {1}
+         LDI	   R27, HI8(DigitalPinToPort)         {1}
          ADD     R26, R24                              {1}
          ADC     R27, R1                               {1} 
          PUSH    R24                                   {1}
          LD      R24, X                                {2}   
          LSL     R24                                   {1}
-  // VPortAddr := PortToOutputPGM[VPort];
-         LDI	   R26, LO8(PortToOutputPGM)             {1}
-         LDI     R27, HI8(PortToOutputPGM)             {1}
+  // VPortAddr := PortToOutput[VPort];
+         LDI	   R26, LO8(PortToOutput)             {1}
+         LDI     R27, HI8(PortToOutput)             {1}
          ADD     R26, R24                              {1}
          ADC     R27, R1                               {1}
          LD      R24, X+                               {2}
@@ -670,41 +643,6 @@ const
 begin
   ADMUX := (1 shl REFS) or (Port and $0F);
   ADCSRA := %111 or (1 shl ADEN) or (1 shl ADSC) or (1 shl ADIE);
-end;
-
-procedure AnalogWrite(const APin: Byte; const AValue: Integer);
-var
-  VTimer: TAVRTimer;
-begin
-  PinMode(APin, avrmOutput);
-  if AValue = System.Low(AValue) then
-    DigitalWrite(APin, False)
-  else if AValue = System.High(AValue) then
-    DigitalWrite(APin, True)
-  else
-  begin
-    VTimer := DigitalPinTimerPGM[APin];
-    if VTimer = avrtNo then
-      if AValue < 128 then
-        DigitalWrite(APin, False)
-      else
-        DigitalWrite(APin, True)
-    else
-    begin
-      sbi(TimerCounterControlRegister[VTimer], TimerRegisterOutputMode[VTimer]);
-      TimerOutputCompareRegister[VTimer]^ := AValue;
-    end;
-  end;
-end;
-
-function AnalogRead(const APin: Byte): Word;
-begin
-  ADMUX := (1 shl REFS) or (APin and $0F);   // Specify port
-  sbi(@ADCSRA, ADSC);                        // Start measuring
-  while (ADCSRA and (1 shl ADSC)) <> 0 do    // Wait until measured
-  begin
-  end;
-  Result := ADC;  // Read out the measured value
 end;
 
 // Waiting time = Time * 10 Milliseconds
@@ -854,7 +792,7 @@ begin
   // pulse width measuring loop and achieve finer resolution.  calling
   // digitalRead() instead yields much coarser resolution.
   VBit := DigitalPinToBitMask[APin];
-  VPort := DigitalPinToPortPGM[APin];
+  VPort := DigitalPinToPort[APin];
   if AState then
     VStateMask := VBit
   else
@@ -863,7 +801,7 @@ begin
   // the initial loop; it takes approximately 16 clock cycles per iteration
   VMaxLoops := ATimeOut * ClockCyclesPerMicrosecond div 16;
 
-  VWidth := CountPulse(PortToInputPGM[VPort], VBit, VStateMask, VMaxLoops);
+  VWidth := CountPulse(PortToInput[VPort], VBit, VStateMask, VMaxLoops);
 
   // prevent clockCyclesToMicroseconds to return bogus values if countPulseASM timed out
   if VWidth > 0 then

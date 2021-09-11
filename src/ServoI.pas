@@ -66,7 +66,6 @@ var
 implementation
 
 uses
-  UART,
   Timers;
 
 procedure SortTimers;
@@ -230,7 +229,7 @@ asm
          inwaiting:
          //    Inc(SortedServoIndex);
          LDS     R18, SortedServoIndex
-         INC      R18
+         INC     R18
          STS     SortedServoIndex, R18
          //    if SortedServoIndex < SortedServoCount then
          CP      R18, R19

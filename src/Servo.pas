@@ -8,8 +8,8 @@ uses
   ArduinoTools;
 
 const
-  MIN_PULSE_WIDTH: longint = 450;
-  MAX_PULSE_WIDTH: longint = 2400;
+  MIN_PULSE_WIDTH: Longint = 450;
+  MAX_PULSE_WIDTH: Longint = 2400;
 
 type
   TServoAngle = 0..180;
@@ -20,14 +20,14 @@ type
   private
     FAngle: TServoAngle;
   protected
-    function GetInitComplete: boolean; virtual;
+    function GetInitComplete: Boolean; virtual;
     function GetAngle: TServoAngle; virtual;
     procedure SetAngle(const AValue: TServoAngle); virtual;
   public
     constructor Init(const APin: byte; const AAngle: TServoAngle);
     destructor Deinit; virtual;
 
-    property InitComplete: boolean read GetInitComplete;
+    property InitComplete: Boolean read GetInitComplete;
     property Angle: TServoAngle read GetAngle write SetAngle;
   end;
 
@@ -61,7 +61,7 @@ begin
   Result := FAngle;
 end;
 
-function TCustomServo.GetInitComplete: boolean;
+function TCustomServo.GetInitComplete: Boolean;
 begin
   Result := Pin > 0;
 end;
@@ -84,7 +84,7 @@ end;
 
 procedure TServo.SetAngle(const AValue: TServoAngle);
 var
-  VTime: longint;
+  VTime: Longint;
   i: byte;
 begin
   inherited;

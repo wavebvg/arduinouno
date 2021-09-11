@@ -51,6 +51,11 @@ var
 begin
   UARTConsole.Init(9600);
   //
+  Timer0.OutputModes := [];
+  Timer0.CounterModes := [tcmOverflow];
+  Timer0.CLKMode := tclkm64;
+  Timer0.SubscribeOVFProc(@SaveChanges);
+  //
   Angles := Default(TAngles);
   ROM.ReadBuffer(0, @Angles, SizeOf(Angles));
   for i := 1 to SERVO_COUNT do
@@ -60,11 +65,6 @@ begin
   end;
   Angles := Default(TAngles);
   //
-  Timer0.OutputModes := [];
-  Timer0.CounterModes := [tcmOverflow];
-  Timer0.CLKMode := tclkm64;
-  Timer0.SubscribeOVFProc(@SaveChanges);
-  //       
   for i := 1 to SERVO_COUNT do
     with Command do
     begin

@@ -63,10 +63,6 @@ begin
   Timer0.CLKMode := tclkm64;
   Timer0.SubscribeOVFProc(@CheckChanges);
   //
-  Timer1.OutputModes := [];
-  Timer1.CounterModes := [];
-  Timer1.CLKMode := tclkm64;
-  //
   UARTConsole.WriteLnString('Start');
   //
   IEnable;
