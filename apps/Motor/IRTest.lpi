@@ -10,22 +10,17 @@
         <Runnable Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="servotest"/>
+      <Title Value="IRTest"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
-    <VersionInfo>
-      <UseVersionInfo Value="True"/>
-      <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="1107"/>
-    </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
       <Item Name="Debug">
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/servotest"/>
+            <Filename Value="bin/IRTest"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -34,14 +29,17 @@
           </SearchPaths>
           <Parsing>
             <SyntaxOptions>
-              <IncludeAssertionCode Value="True"/>
               <UseAnsiStrings Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <CodeGeneration>
-            <TargetProcessor Value="avr5"/>
+            <SmartLinkUnit Value="True"/>
+            <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
+            <Optimizations>
+              <OptimizationLevel Value="2"/>
+            </Optimizations>
           </CodeGeneration>
           <Linking>
             <Debugging>
@@ -49,7 +47,7 @@
             </Debugging>
           </Linking>
           <Other>
-            <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al"/>
+            <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al -a -s"/>
             <ExecuteAfter>
               <CompileReasons Compile="False"/>
             </ExecuteAfter>
@@ -60,7 +58,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/servotest"/>
+            <Filename Value="bin/IRTest"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -78,7 +76,9 @@
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
-            <SmallerCode Value="True"/>
+            <Optimizations>
+              <OptimizationLevel Value="2"/>
+            </Optimizations>
           </CodeGeneration>
           <Linking>
             <Debugging>
@@ -104,7 +104,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="servotest.lpr"/>
+        <Filename Value="IRTest.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
@@ -112,23 +112,23 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/Servo.pas"/>
+        <Filename Value="UInterrupts.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/TimedServo.pas"/>
+        <Filename Value="../../src/IRRemote.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/TimedServoISR.pas"/>
+        <Filename Value="../../src/IRRemoteISR.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/TimersMacro.inc"/>
+        <Filename Value="../../src/IR.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/UServoCommands.pas"/>
+        <Filename Value="../../src/KeyMap.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
@@ -136,7 +136,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="bin/servotest"/>
+      <Filename Value="bin/IRTest"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

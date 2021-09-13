@@ -247,9 +247,9 @@ var
   VBit: Byte;
   VPort: TAVRPort;
 begin
-  VBit := DigitalPinToBitMaskPGM[Pin];
-  VPort := DigitalPinToPortPGM[Pin];
-  Result := InternalRead(PortToInputPGM[VPort], VBit);
+  VBit := DigitalPinToBitMask[Pin];
+  VPort := DigitalPinToPort[Pin];
+  Result := InternalRead(PortToInput[VPort], VBit);
   FLastValue := Result;
 end;
 
