@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="gattlibtest.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <CursorPos Y="24"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FormGattLibTest"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="21"/>
+        <CursorPos X="61" Y="40"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="gattlib.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="159"/>
+        <CursorPos X="3" Y="180"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/hash/src/uuid.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="46"/>
+        <CursorPos X="26" Y="58"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/inc/mathh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="99"/>
+        <CursorPos X="14" Y="116"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/unix/aliasctp.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="26"/>
+        <CursorPos X="3" Y="57"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/unix/ctypes.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="18"/>
+        <CursorPos X="32" Y="45"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/inc/objpash.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="126"/>
+        <CursorPos X="29" Y="137"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/inc/systemh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="313"/>
+        <CursorPos X="17" Y="330"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/linux/ptypes.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="104"/>
+        <CursorPos X="5" Y="121"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../tests/bluetooth/libbluetooth.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="55"/>
+        <CursorPos X="25" Y="75"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/inc/dynlibh.inc"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="24"/>
+        <CursorPos X="25" Y="57"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../../../WORK2/builds/gattlib/gattlib/dbus/gattlib_adapter.c"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="167"/>
+        <CursorPos Y="188"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="C++"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="56" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="57" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="58" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="59" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="53" Column="47" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="51" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="52" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="53" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="54" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="55" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="56" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="57" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="49" Column="60" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="51" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="52" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="53" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="54" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="55" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="56" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="57" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="58" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="59" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="61" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="51" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="52" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="53" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="UFormGattLibTest.pas"/>
+        <Caret Line="39" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../../../WORK2/builds/gattlib/gattlib/dbus/gattlib_adapter.c"/>
+        <Caret Line="153" TopLine="131"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../../../WORK2/builds/gattlib/gattlib/dbus/gattlib_adapter.c"/>
+        <Caret Line="155" TopLine="131"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../../../WORK2/builds/gattlib/gattlib/dbus/gattlib_adapter.c"/>
+        <Caret Line="188" TopLine="167"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode="default">
+        <Mode Name="default">
+          <environment>
+            <UserOverrides Count="1">
+              <Variable0 Name="LD_LIBRARY_PATH" Value="$LD_LIBRARY_PATH:/media/fa/FA-FLASH/projects/git/arduinouno/apps/gattlib/bin/x86_64-linux/libgattlib.so"/>
+            </UserOverrides>
+          </environment>
+        </Mode>
+      </Modes>
+    </RunParams>
+    <HistoryLists>
+      <List Name="LaunchingApplication" Type="File" Count="1">
+        <Item1 Value="/usr/bin/xterm -T &apos;Lazarus Run Output&apos; -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+      </List>
+    </HistoryLists>
+  </ProjectSession>
+</CONFIG>

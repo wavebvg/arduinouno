@@ -6,7 +6,7 @@ uses
   ArduinoTools,
   KeyMap,
   IR,
-  UART;
+  UART, PWM;
 
 const
   IR_PIN_PORT = 11;
