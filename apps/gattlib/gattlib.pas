@@ -1,6 +1,10 @@
 unit gattlib;
 
-{$mode ObjFPC}{$H+}
+{$mode objfpc}{$H+}
+
+{$IFDEF FPC}
+{$PACKRECORDS C}
+{$ENDIF}
 
 interface
 
@@ -8,8 +12,20 @@ const
   GattLibName = './libgattlib.so';
   GattLibName1 = 'libgattlib.so';
 
+const
+  MAX_LEN_UUID_STR = 37;
+
 type
-  PPGuid = ^PGuid;
+  ppuuid_t = ^PBLEUUID;
+  PBLEUUID = ^uuid_t;
+
+  uuid_t = packed record
+    Data1: DWord;
+    Data2: DWord;
+    Data3: DWord;
+    Data4: DWord;
+    Data5: DWord;
+  end;
 
 type
   (* GattLib note: BD Address have only been introduced into Bluez v4.100.   *)
@@ -68,7 +84,7 @@ function GATTLIB_CONNECTION_OPTIONS_LEGACY_GET_MTU(const Option: Cardinal): Word
 
 const
   GATTLIB_CONNECTION_OPTIONS_LEGACY_DEFAULT =
-    GATTLIB_CONNECTION_OPTIONS_LEGACY_BDADDR_LE_RANDOM or GATTLIB_CONNECTION_OPTIONS_LEGACY_BDADDR_LE_RANDOM or
+    GATTLIB_CONNECTION_OPTIONS_LEGACY_BDADDR_LE_PUBLIC or GATTLIB_CONNECTION_OPTIONS_LEGACY_BDADDR_LE_RANDOM or
     GATTLIB_CONNECTION_OPTIONS_LEGACY_BT_SEC_LOW;
 
 (**
@@ -107,12 +123,12 @@ type
   pgattlib_advertisement_data_t = ^ gattlib_advertisement_data_t;
 
   gattlib_advertisement_data_t = record
-    uuid: TGuid;         (**< UUID of the GATT Service *)
-    Data: Pbyte;         (**< Data attached to the GATT Service *)
+    uuid: uuid_t;           (**< uuid_t of the GATT Service *)
+    Data: Pbyte;            (**< Data attached to the GATT Service *)
     data_length: SizeUInt;  (**< Length of data attached to the GATT Service *)
   end;
 
-  gattlib_event_handler_t = procedure(const uuid: TGuid; const Data: Pbyte; const data_length: SizeUInt;
+  gattlib_event_handler_t = procedure(const uuid: PBLEUUID; const Data: Pbyte; const data_length: SizeUInt;
     user_data: Pointer); cdecl;
 
   (**
@@ -129,7 +145,7 @@ type
    * @param adapter is the adapter that has found the BLE device
    * @param addr is the MAC address of the BLE device
    * @param name is the name of BLE device if advertised
-   * @param user_data  Data defined when calling `gattlib_register_on_disconnect()`
+   * @param user_data  Data defined when calling `gattlib_adapter_scan_enable()`
    *)
   gattlib_discovered_device_t = procedure(adapter: Pointer; const addr: PChar; const Name: PChar;
     user_data: Pointer); cdecl;
@@ -140,7 +156,7 @@ type
    * @param adapter is the adapter that has found the BLE device
    * @param addr is the MAC address of the BLE device
    * @param name is the name of BLE device if advertised
-   * @param advertisement_data is an array of Service UUID and their respective data
+   * @param advertisement_data is an array of Service uuid_t and their respective data
    * @param advertisement_data_count is the number of elements in the advertisement_data array
    * @param manufacturer_id is the ID of the Manufacturer ID
    * @param manufacturer_data is the data following Manufacturer ID
@@ -196,7 +212,7 @@ type
   * @brief Enable Bluetooth scanning on a given adapter
   *
   * @param adapter is the context of the newly opened adapter
-  * @param uuid_list is a NULL-terminated list of UUIDs to filter. The rule only applies to advertised UUID.
+  * @param uuid_list is a NULL-terminated list of UUIDs to filter. The rule only applies to advertised uuid_t.
   *        Returned devices would match any of the UUIDs of the list.
   * @param rssi_threshold is the imposed RSSI threshold for the returned devices.
   * @param enabled_filters defines the parameters to use for filtering. There are selected by using the macros
@@ -207,7 +223,7 @@ type
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_adapter_scan_enable_with_filter_func = function(adapter: Pointer; uuid_list: PPGuid;
+  gattlib_adapter_scan_enable_with_filter_func = function(adapter: Pointer; uuid_list: ppuuid_t;
     rssi_threshold: SmallInt; enabled_filters: Cardinal; discovered_device_cb: gattlib_discovered_device_t;
     timeout: Integer; user_data: Pointer): Integer; cdecl;
 
@@ -302,7 +318,7 @@ type
   gattlib_primary_service_t = record
     attr_handle_start: Word; (**< First attribute handle of the GATT Primary Service *)
     attr_handle_end: Word;   (**< Last attibute handle of the GATT Primary Service *)
-    uuid: TGuid;              (**< UUID of the Primary Service *)
+    uuid: uuid_t;            (**< uuid_t of the Primary Service *)
   end;
 
  (**
@@ -315,7 +331,7 @@ type
     handle: Word;        (**< Handle of the GATT characteristic *)
     properties: Byte;    (**< Property of the GATT characteristic *)
     value_handle: Word;  (**< Handle for the value of the GATT characteristic *)
-    uuid: TGuid;          (**< UUID of the GATT characteristic *)
+    uuid: uuid_t;        (**< uuid_t of the GATT characteristic *)
   end;
 
  (**
@@ -327,7 +343,7 @@ type
   gattlib_descriptor_t = record
     handle: Word;        (**< Handle of the GATT Descriptor *)
     uuid16: Word;        (**< UUID16 of the GATT Descriptor *)
-    uuid: TGuid;          (**< UUID of the GATT Descriptor *)
+    uuid: uuid_t;        (**< uuid_t of the GATT Descriptor *)
   end;
 
  (**
@@ -387,7 +403,7 @@ type
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
   gattlib_discover_desc_range_func = function(connection: pgatt_connection_t; start: Integer;
-    _end: Integer; descriptors: ppgattlib_descriptor_t; descriptors_count: Integer): Integer; cdecl;
+    _end: Integer; descriptors: ppgattlib_descriptor_t; descriptors_count: PInteger): Integer; cdecl;
 
  (**
   * @brief Function to discover GATT Descriptor
@@ -399,7 +415,7 @@ type
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
   gattlib_discover_desc_func = function(connection: pgatt_connection_t; descriptors: ppgattlib_descriptor_t;
-    descriptors_count: Integer): Integer; cdecl;
+    descriptors_count: PInteger): Integer; cdecl;
 
  (**
   * @brief Function to read GATT characteristic
@@ -407,38 +423,38 @@ type
   * @note buffer is allocated by the function. It is the responsibility of the caller to free the buffer.
   *
   * @param connection Active GATT connection
-  * @param uuid UUID of the GATT characteristic to read
+  * @param uuid_t uuid_t of the GATT characteristic to read
   * @param buffer contains the value to read. It is allocated by the function.
   * @param buffer_len Length of the read data
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_read_char_by_uuid_func = function(connection: pgatt_connection_t; uuid: PGUID;
-    buffer: PPointer; buffer_len: SizeUInt): Integer; cdecl;
+  gattlib_read_char_by_uuid_func = function(connection: pgatt_connection_t; uuid: PBLEUUID;
+    buffer: PPointer; buffer_len: PSizeUInt): Integer; cdecl;
 
  (**
   * @brief Function to asynchronously read GATT characteristic
   *
   * @param connection Active GATT connection
-  * @param uuid UUID of the GATT characteristic to read
+  * @param uuid_t uuid_t of the GATT characteristic to read
   * @param gatt_read_cb is the callback to read when the GATT characteristic is available
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_read_char_by_uuid_async_func = function(connection: pgatt_connection_t; uuid: PGUID;
+  gattlib_read_char_by_uuid_async_func = function(connection: pgatt_connection_t; uuid: PBLEUUID;
     gatt_read_cb: gatt_read_cb_t): Integer; cdecl;
 
  (**
-  * @brief Function to write to the GATT characteristic UUID
+  * @brief Function to write to the GATT characteristic uuid_t
   *
   * @param connection Active GATT connection
-  * @param uuid UUID of the GATT characteristic to read
+  * @param uuid_t uuid_t of the GATT characteristic to read
   * @param buffer contains the values to write to the GATT characteristic
   * @param buffer_len is the length of the buffer to write
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_write_char_by_uuid_func = function(connection: pgatt_connection_t; uuid: PGUID;
+  gattlib_write_char_by_uuid_func = function(connection: pgatt_connection_t; uuid: PBLEUUID;
     const buffer: Pointer; buffer_len: SizeUInt): Integer; cdecl;
 
  (**
@@ -455,17 +471,17 @@ type
     const buffer: Pointer; buffer_len: SizeUInt): Integer; cdecl;
 
  (**
-  * @brief Function to write without response to the GATT characteristic UUID
+  * @brief Function to write without response to the GATT characteristic uuid_t
   *
   * @param connection Active GATT connection
-  * @param uuid UUID of the GATT characteristic to read
+  * @param uuid_t uuid_t of the GATT characteristic to read
   * @param buffer contains the values to write to the GATT characteristic
   * @param buffer_len is the length of the buffer to write
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
   gattlib_write_without_response_char_by_uuid_func = function(connection: pgatt_connection_t;
-    uuid: PGUID; const buffer: Pointer; buffer_len: SizeUInt): Integer; cdecl;
+    uuid: PBLEUUID; const buffer: Pointer; buffer_len: SizeUInt): Integer; cdecl;
 
  (**
   * @brief Create a stream to a GATT characteristic to write data in continue
@@ -473,14 +489,14 @@ type
   * @note: The GATT characteristic must support 'Write-Without-Response'
   *
   * @param connection Active GATT connection
-  * @param uuid UUID of the GATT characteristic to write
+  * @param uuid_t uuid_t of the GATT characteristic to write
   * @param stream is the object that is attached to the GATT characteristic that is used to write data to
   * @param mtu is the MTU of the GATT connection to optimise the stream writting
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
   gattlib_write_char_by_uuid_stream_open_func = function(connection: pgatt_connection_t;
-    uuid: PGUID; stream: ppgatt_stream_t; mtu: PWord): Integer; cdecl;
+    uuid: PBLEUUID; stream: ppgatt_stream_t; mtu: PWord): Integer; cdecl;
 
  (**
   * @brief Write data to the stream previously created with `gattlib_write_char_by_uuid_stream_open()`
@@ -517,24 +533,24 @@ type
     handle: Word; const buffer: Pointer; buffer_len: SizeUInt): Integer; cdecl;
 
  (*
-  * @brief Enable notification on GATT characteristic represented by its UUID
+  * @brief Enable notification on GATT characteristic represented by its uuid_t
   *
   * @param connection Active GATT connection
-  * @param uuid UUID of the characteristic that will trigger the notification
+  * @param uuid_t uuid_t of the characteristic that will trigger the notification
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_notification_start_func = function(connection: pgatt_connection_t; const uuid: PGUID): Integer; cdecl;
+  gattlib_notification_start_func = function(connection: pgatt_connection_t; const uuid: PBLEUUID): Integer; cdecl;
 
  (*
-  * @brief Disable notification on GATT characteristic represented by its UUID
+  * @brief Disable notification on GATT characteristic represented by its uuid_t
   *
   * @param connection Active GATT connection
-  * @param uuid UUID of the characteristic that will trigger the notification
+  * @param uuid_t uuid_t of the characteristic that will trigger the notification
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_notification_stop_func = function(connection: pgatt_connection_t; const uuid: PGUID): Integer; cdecl;
+  gattlib_notification_stop_func = function(connection: pgatt_connection_t; const uuid: PBLEUUID): Integer; cdecl;
 
  (*
   * @brief Register a handle for the GATT notifications
@@ -592,7 +608,7 @@ type
   * @brief Function to retrieve Advertisement Data from a MAC Address
   *
   * @param connection Active GATT connection
-  * @param advertisement_data is an array of Service UUID and their respective data
+  * @param advertisement_data is an array of Service uuid_t and their respective data
   * @param advertisement_data_count is the number of elements in the advertisement_data array
   * @param manufacturer_id is the ID of the Manufacturer ID
   * @param manufacturer_data is the data following Manufacturer ID
@@ -601,15 +617,15 @@ type
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
   gattlib_get_advertisement_data_func = function(connection: pgatt_connection_t;
-    advertisement_data: ppgattlib_advertisement_data_t; advertisement_data_count: SizeUInt;
-    manufacturer_id: PWord; manufacturer_data: PPByte; manufacturer_data_size: SizeUInt): Integer; cdecl;
+    advertisement_data: ppgattlib_advertisement_data_t; advertisement_data_count: PSizeUInt;
+    manufacturer_id: PWord; manufacturer_data: PPByte; manufacturer_data_size: PSizeUInt): Integer; cdecl;
 
  (**
   * @brief Function to retrieve Advertisement Data from a MAC Address
   *
   * @param adapter is the adapter the new device has been seen
   * @param mac_address is the MAC address of the device to get the RSSI
-  * @param advertisement_data is an array of Service UUID and their respective data
+  * @param advertisement_data is an array of Service uuid_t and their respective data
   * @param advertisement_data_count is the number of elements in the advertisement_data array
   * @param manufacturer_id is the ID of the Manufacturer ID
   * @param manufacturer_data is the data following Manufacturer ID
@@ -618,40 +634,40 @@ type
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
   gattlib_get_advertisement_data_from_mac_func = function(adapter: Pointer; const mac_address: PChar;
-    advertisement_data: ppgattlib_advertisement_data_t; advertisement_data_count: SizeUInt;
-    manufacturer_id: PWord; manufacturer_data: PPByte; manufacturer_data_size: SizeUInt): Integer; cdecl;
+    advertisement_data: ppgattlib_advertisement_data_t; advertisement_data_count: PSizeUInt;
+    manufacturer_id: PWord; manufacturer_data: PPByte; manufacturer_data_size: PSizeUInt): Integer; cdecl;
 
  (**
-  * @brief Convert a UUID into a string
+  * @brief Convert a uuid_t into a string
   *
-  * @param uuid is the UUID to convert
+  * @param uuid_t is the uuid_t to convert
   * @param str is the buffer that will contain the string
   * @param size is the size of the buffer
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_uuid_to_string_func = function(const uuid: PGUID; str: PChar; size: SizeUInt): Integer; cdecl;
+  gattlib_uuid_to_string_func = function(const uuid: PBLEUUID; str: PChar; size: SizeUInt): Integer; cdecl;
 
  (**
-  * @brief Convert a string representing a UUID into a UUID structure
+  * @brief Convert a string representing a uuid_t into a uuid_t structure
   *
   * @param str is the buffer containing the string
   * @param size is the size of the buffer
-  * @param uuid is the UUID structure that would receive the UUID
+  * @param uuid_t is the uuid_t structure that would receive the uuid_t
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_string_to_uuid_func = function(str: PChar; size: SizeUInt; uuid: PGUID): Integer; cdecl;
+  gattlib_string_to_uuid_func = function(str: PChar; size: SizeUInt; uuid: PBLEUUID): Integer; cdecl;
 
  (**
   * @brief Compare two UUIDs
   *
-  * @param uuid1 is the one of the UUID to compare with
-  * @param uuid2 is the other UUID to compare with
+  * @param uuid1 is the one of the uuid_t to compare with
+  * @param uuid2 is the other uuid_t to compare with
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_uuid_cmp_func = function(const uuid1: PGUID; const uuid2: PGUID): Integer; cdecl;
+  gattlib_uuid_cmp_func = function(const uuid1: PBLEUUID; const uuid2: PBLEUUID): Integer; cdecl;
 
 
 var
@@ -674,7 +690,6 @@ var
   gattlib_disconnect: gattlib_disconnect_func;
 
   gattlib_register_on_disconnect: gattlib_register_on_disconnect_func;
-
 
   gattlib_discover_primary: gattlib_discover_primary_func;
 
@@ -733,6 +748,8 @@ function LoadLibrary: Boolean;
 procedure UnloadLibrary;
 function LibraryLoaded: Boolean;
 
+procedure Free(P: pointer); cdecl; external 'c' Name 'free';
+
 implementation
 
 var
@@ -742,7 +759,7 @@ function IsAssigned(const AArgs: array of const): Boolean;
 var
   i: Integer;
 begin
-  i := Length(AArgs);
+  i := Length(AArgs) - 1;
   while (i >= 0) and (AArgs[i].VPointer <> nil) do
     Dec(i);
   Result := i = -1;

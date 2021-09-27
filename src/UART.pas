@@ -38,6 +38,7 @@ implementation
 
 const
   UCSZ01 = 2;
+  URSEL0 = 7;
 
 { TUART }
 
@@ -51,7 +52,7 @@ begin
   UBRR0 := F_CPU div (16 * ABaudRate) - 1;
   UCSR0A := 0;
   UCSR0B := (1 shl TXEN0) or (1 shl RXEN0);
-  UCSR0C := (1 shl UCSZ0) or (1 shl UCSZ01);
+  UCSR0C := (1 shl URSEL0) or (1 shl UCSZ0) or (1 shl UCSZ01);
 end;
 
 procedure TUART.WriteBuffer(ABuffer: PChar; ASize: Byte);
@@ -59,7 +60,7 @@ begin
   while ASize > 0 do
   begin
     while UCSR0A and (1 shl UDRE0) = 0 do
-      NopWait;
+    ;
     UDR0 := Byte(ABuffer^);
     Inc(ABuffer);
     Dec(ASize);

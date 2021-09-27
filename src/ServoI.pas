@@ -1,7 +1,8 @@
 unit ServoI;
 
-{$mode objfpc}{$H-}{$Z1}
-{.$Define USE_DEBUG_COUNTER}
+{$mode objfpc}{$H-}{$Z1}   
+{$i TimersMacro.inc}
+{$Define USE_DEBUG_COUNTER}
 
 interface
 

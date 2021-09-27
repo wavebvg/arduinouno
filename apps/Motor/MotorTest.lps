@@ -7,8 +7,8 @@
       <Unit>
         <Filename Value="MotorTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="97"/>
-        <CursorPos X="38" Y="97"/>
+        <IsVisibleTab Value="True"/>
+        <CursorPos X="35" Y="10"/>
         <UsageCount Value="164"/>
         <Loaded Value="True"/>
       </Unit>
@@ -60,6 +60,15 @@
         <TopLine Value="30"/>
         <CursorPos X="15" Y="30"/>
         <UsageCount Value="44"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/PWM.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="50"/>
+        <CursorPos X="47" Y="151"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="KeyMap.pas"/>
@@ -216,16 +225,6 @@
         <UsageCount Value="10"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/PWM.pas"/>
-        <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="134"/>
-        <CursorPos X="47" Y="151"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="../../src/ServoI.pas"/>
         <EditorIndex Value="2"/>
         <TopLine Value="159"/>
@@ -250,7 +249,7 @@
         <UsageCount Value="11"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="../../src/PWM.pas"/>
         <Caret Line="90" Column="14" TopLine="74"/>
@@ -286,10 +285,6 @@
       <Position>
         <Filename Value="../../src/PWM.pas"/>
         <Caret Line="35" Column="16" TopLine="10"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="11" Column="11" TopLine="16"/>
       </Position>
       <Position>
         <Filename Value="../../src/PWM.pas"/>

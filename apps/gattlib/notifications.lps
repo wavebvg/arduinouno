@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="notifications.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="22"/>
+        <CursorPos X="26" Y="41"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="gattlib.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="752"/>
+        <CursorPos X="15" Y="761"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="15">
+      <Position>
+        <Filename Value="notifications.lpr"/>
+        <Caret Line="3" Column="16"/>
+      </Position>
+      <Position>
+        <Filename Value="notifications.lpr"/>
+        <Caret Line="35" Column="7"/>
+      </Position>
+      <Position>
+        <Filename Value="notifications.lpr"/>
+        <Caret Line="3" Column="18"/>
+      </Position>
+      <Position>
+        <Filename Value="notifications.lpr"/>
+        <Caret Line="109" Column="13" TopLine="42"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="765" Column="53" TopLine="756"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="773" TopLine="756"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="777" TopLine="756"/>
+      </Position>
+      <Position>
+        <Filename Value="notifications.lpr"/>
+        <Caret Line="6" Column="15"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="773" TopLine="756"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="777" TopLine="756"/>
+      </Position>
+      <Position>
+        <Filename Value="notifications.lpr"/>
+        <Caret Line="7" Column="11"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="773" TopLine="752"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="777" TopLine="752"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="778" TopLine="752"/>
+      </Position>
+      <Position>
+        <Filename Value="gattlib.pas"/>
+        <Caret Line="779" TopLine="752"/>
+      </Position>
+      <Position>
+        <Filename Value="notifications.lpr"/>
+        <Caret Line="20" Column="57" TopLine="10"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

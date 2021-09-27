@@ -10,14 +10,14 @@
         <Runnable Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="servotest"/>
+      <Title Value="servoempty"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="1117"/>
+      <BuildNr Value="1126"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -25,7 +25,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/servotest"/>
+            <Filename Value="bin/servoempty"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -60,7 +60,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/servotest"/>
+            <Filename Value="bin/servoempty"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -104,7 +104,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="servotest.lpr"/>
+        <Filename Value="servoempty.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
@@ -136,7 +136,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="bin/servotest"/>
+      <Filename Value="bin/servoempty"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

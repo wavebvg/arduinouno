@@ -7,10 +7,9 @@
       <Unit>
         <Filename Value="gattlibtest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <CursorPos Y="24"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="19"/>
+        <UsageCount Value="75"/>
       </Unit>
       <Unit>
         <Filename Value="UFormGattLibTest.pas"/>
@@ -18,216 +17,567 @@
         <ComponentName Value="FormGattLibTest"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="21"/>
-        <CursorPos X="61" Y="40"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="114"/>
+        <CursorPos X="33" Y="125"/>
+        <UsageCount Value="75"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="gattlib.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="159"/>
-        <CursorPos X="3" Y="180"/>
-        <UsageCount Value="24"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="520"/>
+        <CursorPos X="3" Y="86"/>
+        <UsageCount Value="75"/>
+      </Unit>
+      <Unit>
+        <Filename Value="BluetoothLE.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="155"/>
+        <CursorPos X="21" Y="144"/>
+        <UsageCount Value="58"/>
         <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="HandledComponent.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="61"/>
+        <CursorPos Y="77"/>
+        <UsageCount Value="56"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/packages/hash/src/uuid.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="46"/>
-        <CursorPos X="26" Y="58"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="107"/>
+        <CursorPos X="3" Y="58"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/inc/mathh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="99"/>
         <CursorPos X="14" Y="116"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/unix/aliasctp.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
         <CursorPos X="3" Y="57"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/unix/ctypes.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="18"/>
         <CursorPos X="32" Y="45"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/inc/objpash.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="126"/>
-        <CursorPos X="29" Y="137"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="220"/>
+        <CursorPos X="50" Y="233"/>
+        <UsageCount Value="12"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/inc/systemh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="313"/>
         <CursorPos X="17" Y="330"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/linux/ptypes.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="104"/>
         <CursorPos X="5" Y="121"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../tests/bluetooth/libbluetooth.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="55"/>
         <CursorPos X="25" Y="75"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/inc/dynlibh.inc"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="24"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="29"/>
         <CursorPos X="25" Y="57"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../../../WORK2/builds/gattlib/gattlib/dbus/gattlib_adapter.c"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="167"/>
         <CursorPos Y="188"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="C++"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/unix/unixutil.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="19"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/inc/cmem.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="31"/>
+        <CursorPos X="20" Y="40"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/cocoaint/src/foundation/NSUUID.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="42" Y="18"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/unix/sysunixh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="8"/>
+        <CursorPos X="2" Y="29"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/widgetset/wslclclasses.pp"/>
+        <UnitName Value="WSLCLClasses"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="45"/>
+        <CursorPos X="3" Y="61"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/objpas/classes/classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1787"/>
+        <CursorPos X="27" Y="1802"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/controls.pp"/>
+        <UnitName Value="Controls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1719"/>
+        <CursorPos X="74" Y="1743"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/wincontrol.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="3201"/>
+        <CursorPos X="46" Y="3223"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2wscontrols.pp"/>
+        <UnitName Value="Gtk2WSControls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="134"/>
+        <CursorPos X="41" Y="141"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/widgetset/wscontrols.pp"/>
+        <UnitName Value="WSControls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="261"/>
+        <CursorPos X="3" Y="266"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/inc/objpas.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="651"/>
+        <CursorPos X="41" Y="669"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfacebase.pp"/>
+        <UnitName Value="InterfaceBase"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="193"/>
+        <CursorPos X="3" Y="213"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/lclclasses.pp"/>
+        <UnitName Value="LCLClasses"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <CursorPos X="15" Y="13"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/nonwin32/messages.pp"/>
+        <UnitName Value="Messages"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="53"/>
+        <CursorPos X="3" Y="73"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/lmessages.pp"/>
+        <UnitName Value="LMessages"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="704"/>
+        <CursorPos X="27" Y="726"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/winapih.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="222"/>
+        <CursorPos X="10" Y="236"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/intfbasewinapi.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="82" Y="17"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2int.pas"/>
+        <UnitName Value="Gtk2Int"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="384"/>
+        <CursorPos X="111" Y="392"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1960"/>
+        <CursorPos X="29" Y="1967"/>
+        <UsageCount Value="14"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2winapih.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="153"/>
+        <CursorPos X="16" Y="173"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2winapi.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="7137"/>
+        <CursorPos X="108" Y="7146"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2proc.pp"/>
+        <UnitName Value="Gtk2Proc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="293"/>
+        <CursorPos X="92" Y="301"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2proc.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="3769"/>
+        <CursorPos Y="3777"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/lclmessageglue.pas"/>
+        <UnitName Value="LCLMessageGlue"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="99"/>
+        <CursorPos Y="119"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/winapi.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="755"/>
+        <CursorPos Y="770"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/lcltype.pp"/>
+        <UnitName Value="LCLType"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2652"/>
+        <CursorPos X="31" Y="2653"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2msgqueue.pp"/>
+        <UnitName Value="Gtk2MsgQueue"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="48"/>
+        <CursorPos X="16" Y="69"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/3.2.2/src/rtl/objpas/classes/classes.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="392"/>
+        <CursorPos X="36" Y="392"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/control.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2951"/>
+        <CursorPos X="16" Y="2954"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/ide/lazarus.pp"/>
+        <UnitName Value="Lazarus"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="43"/>
+        <CursorPos X="3" Y="57"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/src/lcl/interfaces/qt5/qtwscontrols.pp"/>
+        <UnitName Value="QtWSControls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="212"/>
+        <CursorPos X="23" Y="225"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/qt5/qtwscontrols.pp"/>
+        <UnitName Value="QtWSControls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="236"/>
+        <CursorPos Y="239"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/objpas/classes/classes.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="564"/>
+        <CursorPos X="34" Y="575"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/unix/tthread.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="56"/>
+        <CursorPos X="8" Y="67"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/fpgui/fpguicrosshelpers.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="5" Y="10"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/src/lcl/interfaces/gtk2/gtk2wsforms.pp"/>
+        <UnitName Value="Gtk2WSForms"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="117"/>
+        <CursorPos X="31" Y="250"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/forms.pp"/>
+        <UnitName Value="Forms"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1498"/>
+        <CursorPos X="15" Y="1512"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/application.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1250"/>
+        <CursorPos Y="1264"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/interfacebase.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="40"/>
+        <CursorPos Y="54"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/gtk2/src/glib/gmain.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="32"/>
+        <CursorPos X="3" Y="48"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/buttoncontrol.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="35"/>
+        <CursorPos Y="56"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/buttons.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="149"/>
+        <CursorPos Y="170"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/packages/bluetooth/bluetooth.pas"/>
+        <UnitName Value="Bluetooth"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="3468"/>
+        <CursorPos X="20" Y="3340"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/gtk2/src/gtk+/gdk/gdk2.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="213"/>
+        <CursorPos Y="221"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/gtk2/src/glib/glib2.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="217"/>
+        <CursorPos X="10" Y="359"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/lazarus/share/lazarus/lcl/include/customform.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2157"/>
+        <CursorPos Y="2173"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="56" TopLine="23"/>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="672" TopLine="656"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="57" TopLine="23"/>
+        <Caret Line="124" Column="18" TopLine="113"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="58" TopLine="23"/>
+        <Caret Line="227" TopLine="198"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="1068" TopLine="1052"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="1069" TopLine="1052"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="1070" TopLine="1052"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="1129" TopLine="1113"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="1131" TopLine="1113"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="797" TopLine="781"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="798" TopLine="781"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="799" TopLine="781"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="922" TopLine="906"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="923" TopLine="906"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="925" TopLine="906"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="926" TopLine="906"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="672" TopLine="656"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="673" TopLine="656"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="674" TopLine="656"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="747" TopLine="731"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="749" TopLine="731"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="750" Column="63" TopLine="686"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="755" TopLine="732"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="677" TopLine="661"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="59" TopLine="24"/>
+        <Caret Line="130" TopLine="114"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="676" Column="60" TopLine="661"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="671" Column="33" TopLine="655"/>
+      </Position>
+      <Position>
+        <Filename Value="BluetoothLE.pas"/>
+        <Caret Line="125" Column="73" TopLine="114"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="53" Column="47" TopLine="24"/>
+        <Caret Line="227" TopLine="198"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="51" TopLine="24"/>
+        <Caret Line="130" TopLine="114"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="52" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="53" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="54" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="55" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="56" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="57" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="49" Column="60" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="51" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="52" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="53" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="54" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="55" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="56" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="57" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="58" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="59" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="61" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="51" TopLine="21"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="52" TopLine="21"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="53" TopLine="21"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="39" TopLine="21"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../../../WORK2/builds/gattlib/gattlib/dbus/gattlib_adapter.c"/>
-        <Caret Line="153" TopLine="131"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../../../WORK2/builds/gattlib/gattlib/dbus/gattlib_adapter.c"/>
-        <Caret Line="155" TopLine="131"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../../../WORK2/builds/gattlib/gattlib/dbus/gattlib_adapter.c"/>
-        <Caret Line="188" TopLine="167"/>
+        <Caret Line="125" Column="33" TopLine="114"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -248,4 +598,34 @@
       </List>
     </HistoryLists>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2winapi.inc"/>
+        <Line Value="6843"/>
+      </Item>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2winapi.inc"/>
+        <Line Value="7110"/>
+      </Item>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="../../../../../fpc/lazarus/share/lazarus/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
+        <Line Value="2518"/>
+      </Item>
+    </BreakPoints>
+    <Watches>
+      <Item>
+        <Expression Value="PChar(Adapter)"/>
+      </Item>
+    </Watches>
+  </Debugging>
 </CONFIG>

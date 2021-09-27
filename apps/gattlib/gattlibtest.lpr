@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, UFormGattLibTest, gattlib
+  Forms, UFormGattLibTest, gattlib, BluetoothLE, HandledComponent
   { you can add units after this };
 
 {$R *.res}
