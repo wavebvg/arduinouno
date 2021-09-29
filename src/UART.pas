@@ -13,7 +13,10 @@ type
 
   TUART = object
   private
+    FBLECompatibleCounter: Byte;
+    FBLECompatibleTime: Byte;
   protected
+    procedure DoBLECompatible;
     function GetReadBufferEmpty: Boolean; virtual;
   public
     constructor Init(const ABaudRate: Word);
@@ -29,6 +32,7 @@ type
     function ReadChar: Char;
     //
     property ReadBufferEmpty: Boolean read GetReadBufferEmpty;
+    property BLECompatibleTime: Byte read FBLECompatibleTime write FBLECompatibleTime;
   end;
 
 var
@@ -41,6 +45,16 @@ const
   URSEL0 = 7;
 
 { TUART }
+
+procedure TUART.DoBLECompatible;
+begin
+  Inc(FBLECompatibleCounter);
+  if FBLECompatibleCounter = 20 then
+  begin
+    FBLECompatibleCounter := 0;
+    SleepMicroSecs(FBLECompatibleTime * 1000);
+  end;
+end;
 
 function TUART.GetReadBufferEmpty: Boolean;
 begin
@@ -64,6 +78,8 @@ begin
     UDR0 := Byte(ABuffer^);
     Inc(ABuffer);
     Dec(ASize);
+    if FBLECompatibleTime > 0 then
+      DoBLECompatible;
   end;
 end;
 

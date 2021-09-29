@@ -23,22 +23,26 @@ type
 var
   UARTConsole: TUARTI;
 
-implementation
-
-uses
-  ArduinoTools;
-
 type
   TUARTFlag = (uartfReadFull, uartfReadNotEmpty, uartfWriteFull, uartfWriteNotEmpty);
 
   TUARTFlags = set of TUARTFlag;
 
+const
+  WRITE_DATA_SIZE = 128;
+  READ_DATA_SIZE = 128;
+
 var
-  WriteData: array[0..127] of Char;
-  ReadData: array[0..31] of Char;
+  WriteData: array[0..WRITE_DATA_SIZE - 1] of Char;
+  ReadData: array[0..READ_DATA_SIZE - 1] of Char;
   ReadPos, ReadStart: Byte;
   WritePos, WriteStart: Byte;
   Flags: TUARTFlags;
+
+implementation
+
+uses
+  ArduinoTools;
 
 { TUARTI }
 
@@ -67,7 +71,7 @@ begin
     while not (uartfWriteFull in Flags) and (ASize > 0) do
     begin
       WriteData[WritePos] := AData^;
-      WritePos := (WritePos + 1) and $7F;
+      WritePos := (WritePos + 1) and (WRITE_DATA_SIZE - 1);
       Flags := Flags + [uartfWriteNotEmpty];
       if WritePos = WriteStart then
         Flags := Flags + [uartfWriteFull];
@@ -89,11 +93,11 @@ procedure TUARTI.ReadBuffer(ABuffer: PChar; ASize: Byte);
 begin
   if ASize = 0 then
     Exit;
-  UCSR0B := UCSR0B and 127{not (1 shl RXCIE0)};
+  UCSR0B := UCSR0B and not (1 shl RXCIE0);
   while (uartfReadNotEmpty in Flags) and (ASize > 0) do
   begin
     ABuffer^ := ReadData[ReadStart];
-    ReadStart := (ReadStart + 1) and $1F;
+    ReadStart := (ReadStart + 1) and (READ_DATA_SIZE - 1);
     Flags := Flags - [uartfReadFull];
     if ReadPos = ReadStart then
       Flags := Flags - [uartfReadNotEmpty];
@@ -112,21 +116,21 @@ var
 begin
   Value := Char(UDR0);
   ReadData[ReadPos] := Value;
-  ReadPos := (ReadPos + 1) and $1F;
+  ReadPos := (ReadPos + 1) and (READ_DATA_SIZE - 1);
   Flags := Flags + [uartfReadNotEmpty];
   if ReadPos = ReadStart then
   begin
-    UCSR0B := UCSR0B and 127{not (1 shl RXCIE0)};
+    UCSR0B := UCSR0B and not (1 shl RXCIE0);
     Flags := Flags + [uartfReadFull];
   end;
 end;
 
 procedure USART__UDRE_ISR; public Name 'USART__UDRE_ISR'; interrupt;
 begin
+  if FBLECompatibleTime > 0 then
+    UARTConsole.DoBLEcompatible;
   Char(UDR0) := WriteData[WriteStart];
-  WriteStart := (WriteStart + 1) and $7F;
-  if WriteStart = 128 then
-    WriteStart := 0;
+  WriteStart := (WriteStart + 1) and (WRITE_DATA_SIZE - 1);
   Flags := Flags - [uartfWriteFull];
   if WritePos = WriteStart then
   begin

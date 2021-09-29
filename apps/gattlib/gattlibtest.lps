@@ -9,7 +9,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="19"/>
-        <UsageCount Value="75"/>
+        <UsageCount Value="79"/>
       </Unit>
       <Unit>
         <Filename Value="UFormGattLibTest.pas"/>
@@ -17,28 +17,28 @@
         <ComponentName Value="FormGattLibTest"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="114"/>
-        <CursorPos X="33" Y="125"/>
-        <UsageCount Value="75"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="70"/>
+        <CursorPos X="21" Y="96"/>
+        <UsageCount Value="79"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="gattlib.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="520"/>
-        <CursorPos X="3" Y="86"/>
-        <UsageCount Value="75"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="846"/>
+        <CursorPos X="74" Y="791"/>
+        <UsageCount Value="79"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="BluetoothLE.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="155"/>
-        <CursorPos X="21" Y="144"/>
-        <UsageCount Value="58"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="15"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -47,7 +47,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="61"/>
         <CursorPos Y="77"/>
-        <UsageCount Value="56"/>
+        <UsageCount Value="60"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/packages/hash/src/uuid.pas"/>
@@ -457,127 +457,153 @@
         <CursorPos Y="2173"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="hcilib.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="54"/>
+        <CursorPos X="96" Y="60"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Bluetooth.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="20"/>
+        <CursorPos X="27" Y="45"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/rtl/objpas/objpas.pp"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="3"/>
+        <CursorPos X="44" Y="14"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="672" TopLine="656"/>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="27" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="28" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="29" TopLine="13"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="124" Column="18" TopLine="113"/>
+        <Caret Line="72" Column="72" TopLine="64"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="227" TopLine="198"/>
+        <Caret Line="77" Column="50" TopLine="70"/>
       </Position>
       <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="1068" TopLine="1052"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="1069" TopLine="1052"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="1070" TopLine="1052"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="1129" TopLine="1113"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="1131" TopLine="1113"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="797" TopLine="781"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="798" TopLine="781"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="799" TopLine="781"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="922" TopLine="906"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="923" TopLine="906"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="925" TopLine="906"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="926" TopLine="906"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="672" TopLine="656"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="673" TopLine="656"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="674" TopLine="656"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="747" TopLine="731"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="749" TopLine="731"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="750" Column="63" TopLine="686"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="755" TopLine="732"/>
-      </Position>
-      <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="677" TopLine="661"/>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="29" Column="69" TopLine="10"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="130" TopLine="114"/>
+        <Caret Line="84" TopLine="70"/>
       </Position>
       <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="676" Column="60" TopLine="661"/>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="22" Column="50" TopLine="10"/>
       </Position>
       <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="671" Column="33" TopLine="655"/>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="24" TopLine="10"/>
       </Position>
       <Position>
-        <Filename Value="BluetoothLE.pas"/>
-        <Caret Line="125" Column="73" TopLine="114"/>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="26" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="27" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="28" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="37" TopLine="10"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="227" TopLine="198"/>
+        <Caret Line="95" TopLine="70"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="36" Column="60" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="32" Column="42" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="42" Column="21" TopLine="15"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="27" Column="37" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="35" Column="28" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="31" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="33" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="34" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="35" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="29" Column="35" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="25" Column="10" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="hcilib.pas"/>
+        <Caret Line="70" Column="33" TopLine="54"/>
+      </Position>
+      <Position>
+        <Filename Value="hcilib.pas"/>
+        <Caret Line="60" Column="97" TopLine="54"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="38" Column="20" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="Bluetooth.pas"/>
+        <Caret Line="25" Column="81" TopLine="20"/>
       </Position>
       <Position>
         <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="130" TopLine="114"/>
-      </Position>
-      <Position>
-        <Filename Value="UFormGattLibTest.pas"/>
-        <Caret Line="125" Column="33" TopLine="114"/>
+        <Caret Line="91" Column="28" TopLine="70"/>
       </Position>
     </JumpHistory>
     <RunParams>

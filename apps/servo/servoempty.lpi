@@ -17,7 +17,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="1126"/>
+      <BuildNr Value="1159"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>

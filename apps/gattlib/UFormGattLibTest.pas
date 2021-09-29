@@ -59,7 +59,7 @@ var
 implementation
 
 uses
-  gattlib,
+  Bluetooth,
   LCLIntf,
   HandledComponent;
 
@@ -69,6 +69,9 @@ uses
 { TFormGattLibTest }
 
 constructor TFormGattLibTest.Create(TheOwner: TComponent);
+var
+  VDevices: TStringDynArray;
+  i: Integer;
 begin
   inherited Create(TheOwner);
   FAdapter := TBLEAdapter.Create(Self);
@@ -108,7 +111,7 @@ begin
   Memo1.Clear;
   FPoint := Memo1.CaretPos;
   VData := 'T';
-  FService.Attach;
+  FService.Active := True;
   FService.WriteData(VData[1], 1, True);
 end;
 
