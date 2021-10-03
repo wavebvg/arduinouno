@@ -214,30 +214,23 @@ var
   i: SmallInt;
   NeedInit: Boolean;
 begin
-  NeedInit := PWMCount = 0;
   i := PWMCount - 1;
   while (i >= 0) and (PWMPins[i].Pin <> APin) do
     Dec(i);
-  case AValue of
-    0:
-    begin
-      if i >= 0 then
-        PWMPortDelete(i);
-      DigitalWrite(APin, False);
-    end;
-    255:
-    begin
-      if i >= 0 then
-        PWMPortDelete(i);
-      DigitalWrite(APin, True);
-    end;
+  if AValue in [0, 255] then
+  begin
+    NeedInit := False;
+    if i >= 0 then
+      PWMPortDelete(i);
+    DigitalWrite(APin, AValue = 255);
+  end
+  else
+  begin
+    NeedInit := PWMCount = 0;
+    if i >= 0 then
+      PWMPortChange(i, AValue)
     else
-    begin
-      if i >= 0 then
-        PWMPortChange(i, AValue)
-      else
-        PWMPortAdd(APin, AValue);
-    end;
+      PWMPortAdd(APin, AValue);
   end;       
   PWMChanged := True;
   if NeedInit then
