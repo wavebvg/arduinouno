@@ -7,8 +7,9 @@
       <Unit>
         <Filename Value="servotest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="40"/>
-        <CursorPos X="42" Y="49"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="10"/>
+        <CursorPos X="30" Y="19"/>
         <UsageCount Value="115"/>
         <Loaded Value="True"/>
       </Unit>
@@ -102,7 +103,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/UART.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="53"/>
         <CursorPos X="25" Y="63"/>

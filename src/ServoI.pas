@@ -50,7 +50,7 @@ type
 {$IfDef USE_DEBUG_COUNTER}
 var
   ServoBeginCounter: Word;
-  ServoCounter: array[0..MAX_SERVO_COUNT - 1] of Word;
+  ServoCounter: array[0..MAX_SERVO_COUNT - 1 + 3] of Word;
 {$EndIf USE_DEBUG_COUNTER}     
 
 var
@@ -121,8 +121,8 @@ begin
       SortedServos[j].NotMaskD := $FF;
       if d > 255 then
       begin
-        SortedServos[j].Counter := 128;
-        Inc(VOldCounter, 128);
+        SortedServos[j].Counter := 224;
+        Inc(VOldCounter, 224);
       end
       else
       begin

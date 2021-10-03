@@ -1,5 +1,6 @@
-simulavr -d atmega328 -g
+/media/WORK2/builds/simulavr/build/app/simulavr -d atmega328 -g
 avr-gdb -ex "target remote localhost:1212" -ex "load" -ex "layout split" /media/fa/FA-FLASH/projects/git/arduinouno/apps/uart/bin/UARTTest.elf
+avr-gdb -ex "target remote localhost:1212" -ex "load" -ex "layout split" /media/fa/FA-FLASH/projects/git/arduinouno/apps/Motor/bin/MotorTest.elf
 target remote localhost:1212
 load
 info registers
@@ -27,6 +28,7 @@ avr-gdb -ex 'target remote :1234' TimersTest.elf
 
 
 qemu-system-avr -machine uno -bios /media/fa/FA-FLASH/projects/git/arduinouno/apps/servo/bin/servo.elf -nographic -serial mon:stdio
+qemu-system-avr -machine uno -bios /media/fa/FA-FLASH/projects/git/arduinouno/apps/Motor/bin/MotorTest.elf -nographic -serial mon:stdio
 
 
 qemu-system-avr -machine uno -bios /media/fa/FA-FLASH/projects/git/arduinouno/apps/uart/bin/UARTTest.elf -nographic -serial mon:stdio

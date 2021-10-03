@@ -28,7 +28,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/TimedServo.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
@@ -37,7 +36,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/TimedServoISR.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
@@ -121,8 +119,8 @@
         <Filename Value="../../src/UARTI.pas"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="108"/>
-        <CursorPos X="77" Y="122"/>
+        <TopLine Value="107"/>
+        <CursorPos X="58" Y="121"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>

@@ -141,7 +141,7 @@ type
     procedure Open;
     procedure Close;
     function GetAdvertisementData(const AMAC: String): IBLEAdvertisementData;
-    function GetRSSI(const AMAC: String): Word;
+    function GetRSSI(const AMAC: String): SmallInt;
   published
     property Device: String read FDevice write SetDevice;
     property Active: Boolean read GetActive write SetActive;
@@ -170,7 +170,7 @@ type
     function GetDiscoverDescriptors: TBLEDescriptors;
     function GetDiscoverPrimary: TBLEPrimaryServices;
 {$IFDEF IsResolve_75}
-    function GetRSSI: Word;
+    function GetRSSI: SmallInt;
 {$ENDIF}
     procedure SetActive(AValue: Boolean);
     procedure SetAdapter(AValue: TBLEAdapter);
@@ -198,7 +198,7 @@ type
     property DiscoverDescriptors: TBLEDescriptors read GetDiscoverDescriptors;
     property AdvertisementData: IBLEAdvertisementData read GetAdvertisementData;
 {$IFDEF IsResolve_75}
-    property RSSI: Word read GetRSSI;
+    property RSSI: SmallInt read GetRSSI;
 {$ENDIF}
   published
     property Adapter: TBLEAdapter read FAdapter write SetAdapter;
@@ -778,7 +778,7 @@ begin
     manufacturer_id, manufacturer_data, manufacturer_data_size);
 end;
 
-function TBLEAdapter.GetRSSI(const AMAC: String): Word;
+function TBLEAdapter.GetRSSI(const AMAC: String): SmallInt;
 begin
   CheckLoadGattLib;
   CheckResult(gattlib_get_rssi_from_mac(FAdapterHandle, Pansichar(AMAC), @Result), 'gattlib_get_rssi_from_mac');
@@ -970,7 +970,7 @@ begin
 end;
 
 {$IFDEF IsResolve_75}
-function TBLEConnection.GetRSSI: Word;
+function TBLEConnection.GetRSSI: SmallInt;
 begin
   CheckLoadGattLib;
   CheckResult(gattlib_get_rssi(FConnectionHandle, @Result), 'gattlib_get_rssi');

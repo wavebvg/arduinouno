@@ -9,7 +9,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   Messages,
   Types,
-  LMessages;
+  LMessages, ExtCtrls, Menus, ActnList, ComCtrls;
 
 const
   BLE_SCAN_TIMEOUT = 5;
@@ -19,14 +19,23 @@ type
   { TFormGattLibTest }
 
   TFormGattLibTest = class(TForm)
-    ButtonConnect: TButton;
-    ButtonDiscover: TButton;
-    ButtonOpenService: TButton;
-    ButtonSend: TButton;
-    ButtonAdv: TButton;
-    ButtonDisconnect: TButton;
-    ButtonScan: TButton;
-    Memo1: TMemo;
+    ActionAppExit: TAction;
+    ActionList: TActionList;
+    ButtonRefreshDevices: TButton;
+    ComboBoxAdapters: TComboBox;
+    LabelAdapters: TLabel;
+    ListBoxBLEEnvironment: TListBox;
+    MainMenu: TMainMenu;
+    MenuItemExit: TMenuItem;
+    MenuItemFile: TMenuItem;
+    PageControl: TPageControl;
+    PanelDevice: TPanel;
+    PanelBody: TPanel;
+    TabSheetBLEScan: TTabSheet;
+    TabSheetAdapterInfo: TTabSheet;
+    TimerRSSIUpdate: TTimer;
+    ToggleBoxScanActive: TToggleBox;
+    procedure ActionAppExitExecute(Sender: TObject);
     procedure ButtonConnectClick(Sender: TObject);
     procedure ButtonDisconnectClick(Sender: TObject);
     procedure ButtonDiscoverClick(Sender: TObject);
@@ -34,23 +43,32 @@ type
     procedure ButtonScanClick(Sender: TObject);
     procedure ButtonSendClick(Sender: TObject);
     procedure ButtonAdvClick(Sender: TObject);
+    procedure ComboBoxAdaptersChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure Memo1Change(Sender: TObject);
     procedure Memo1DblClick(Sender: TObject);
+    procedure MenuItemExitClick(Sender: TObject);
+    procedure TimerRSSIUpdateTimer(Sender: TObject);
+    procedure ToggleBoxScanActiveChange(Sender: TObject);
   private
     FAdapter: TBLEAdapter;
     FConnection: TBLEConnection;
     FService: TBLEService;
     FPoint: TPoint;
+    FAdapters: TStringDynArray;
+    FBLEEnv: TStrings;
     //FService1: TBLEService;
     procedure AdapterDeviceDiscovered(Sender: TObject; const AMAC, AName: String;
       const AData: IBLEAdvertisementData);
     procedure ConnectionAfterDisconnect(Sender: TObject);
+    function GetCurrentAdapter: Pansichar;
     procedure ServiceNotificationData(Sender: TObject; const AData: TByteDynArray);
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+    //
+    property CurrentAdapter: Pansichar read GetCurrentAdapter;
   end;
 
 var
@@ -70,14 +88,28 @@ uses
 
 constructor TFormGattLibTest.Create(TheOwner: TComponent);
 var
-  VDevices: TStringDynArray;
   i: Integer;
 begin
   inherited Create(TheOwner);
+  FBLEEnv := TStringList.Create;
+
   FAdapter := TBLEAdapter.Create(Self);
   FAdapter.ScanTimeout := BLE_SCAN_TIMEOUT;
-  FAdapter.Device := '';
   FAdapter.OnDeviceDiscovered := @AdapterDeviceDiscovered;
+
+
+  FAdapters := GetDevices;
+  ComboBoxAdapters.Items.BeginUpdate;
+  try
+    ComboBoxAdapters.Items.Clear;
+    ComboBoxAdapters.Items.Add('Default');
+    for i := 0 to Length(FAdapters) - 1 do
+      ComboBoxAdapters.Items.Add(FAdapters[i]);
+  finally
+    ComboBoxAdapters.Items.EndUpdate;
+  end;
+  FAdapter.Device := CurrentAdapter;
+
   FConnection := TBLEConnection.Create(Self);
   FConnection.Adapter := FAdapter;
   FConnection.MAC := '50:51:A9:8E:22:EF';
@@ -95,6 +127,7 @@ end;
 
 destructor TFormGattLibTest.Destroy;
 begin
+  FBLEEnv.Free;
   inherited Destroy;
 end;
 
@@ -108,11 +141,11 @@ procedure TFormGattLibTest.ButtonSendClick(Sender: TObject);
 var
   VData: String;
 begin
-  Memo1.Clear;
-  FPoint := Memo1.CaretPos;
-  VData := 'T';
-  FService.Active := True;
-  FService.WriteData(VData[1], 1, True);
+  //Memo1.Clear;
+  //FPoint := Memo1.CaretPos;
+  //VData := 'T';
+  //FService.Active := True;
+  //FService.WriteData(VData[1], 1, True);
 end;
 
 procedure TFormGattLibTest.ButtonAdvClick(Sender: TObject);
@@ -128,6 +161,14 @@ begin
   WriteLn('RSSI ', FAdapter.GetRSSI('CC:B1:1A:26:95:AD'));
 end;
 
+procedure TFormGattLibTest.ComboBoxAdaptersChange(Sender: TObject);
+begin
+  if FAdapter.Device = CurrentAdapter then
+    Exit;
+  FAdapter.Close;
+  FAdapter.Device := CurrentAdapter;
+end;
+
 procedure TFormGattLibTest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   FAdapter.Active := False;
@@ -135,7 +176,7 @@ end;
 
 procedure TFormGattLibTest.FormShow(Sender: TObject);
 begin
-  FPoint := Memo1.CaretPos;
+  //FPoint := Memo1.CaretPos;
 end;
 
 procedure TFormGattLibTest.Memo1Change(Sender: TObject);
@@ -145,24 +186,63 @@ end;
 
 procedure TFormGattLibTest.Memo1DblClick(Sender: TObject);
 begin
-  Memo1.Clear;
-  FPoint := Memo1.CaretPos;
+  //Memo1.Clear;
+  //FPoint := Memo1.CaretPos;
+end;
+
+procedure TFormGattLibTest.MenuItemExitClick(Sender: TObject);
+begin
+
+end;
+
+procedure TFormGattLibTest.TimerRSSIUpdateTimer(Sender: TObject);
+begin
+
+end;
+
+procedure TFormGattLibTest.ToggleBoxScanActiveChange(Sender: TObject);
+begin
+  if FAdapter.ScanEnabled = ToggleBoxScanActive.Checked then
+    Exit;
+  if ToggleBoxScanActive.Checked then
+  begin
+    FBLEEnv.Clear;
+    ListBoxBLEEnvironment.Clear;
+    FAdapter.Active := True;
+  end;
+  TimerRSSIUpdate.Enabled := ToggleBoxScanActive.Checked;
+  FAdapter.ScanEnabled := ToggleBoxScanActive.Checked;
 end;
 
 procedure TFormGattLibTest.AdapterDeviceDiscovered(Sender: TObject; const AMAC, AName: String;
   const AData: IBLEAdvertisementData);
+var
+  VFullName: String;
+  VRSSI: SmallInt;
 begin
-  Write(AMAC);
+  FBLEEnv.Add(AMAC);
+  VFullName := AMAC;
+  VRSSI := FAdapter.GetRSSI(AMAC);
+  if VRSSI <> 0 then
+    VFullName := VFullName + Format(' (%.2ddBm)', [VRSSI]);
   if AName <> '' then
-    Write(' - ', AName);
-  WriteLn;
+    VFullName := VFullName + ' - ' + AName;
+  ListBoxBLEEnvironment.AddItem(VFullName, nil);
 end;
 
 procedure TFormGattLibTest.ConnectionAfterDisconnect(Sender: TObject);
 begin
   WriteLn('ConnectionAfterDisconnect');
-  Memo1.Append('Disconnected!');
-  FPoint := Memo1.CaretPos;
+  //Memo1.Append('Disconnected!');
+  //FPoint := Memo1.CaretPos;
+end;
+
+function TFormGattLibTest.GetCurrentAdapter: Pansichar;
+begin
+  if ComboBoxAdapters.ItemIndex > 0 then
+    Result := Pansichar(ComboBoxAdapters.Items[ComboBoxAdapters.ItemIndex])
+  else
+    Result := nil;
 end;
 
 procedure TFormGattLibTest.ServiceNotificationData(Sender: TObject; const AData: TByteDynArray);
@@ -174,28 +254,33 @@ begin
   //for i := 0 to Length(AData) - 1 do
   //  VText := VText + Format(' %.2x', [AData[i]]);
   //Memo1.Append(VText);
-  VText := Memo1.Lines[FPoint.Y];
-  for i := 0 to Length(AData) - 1 do
-  begin
-    if AData[i] = 13 then
-      Continue;
-    if AData[i] = 10 then
-    begin
-      Memo1.Lines[FPoint.Y] := VText;
-      Inc(FPoint.Y);
-      VText := '';
-    end
-    else
-    begin
-      VText := VText + Char(AData[i]);
-    end;
-  end;
-  Memo1.Lines[FPoint.Y] := VText;
+  //VText := Memo1.Lines[FPoint.Y];
+  //for i := 0 to Length(AData) - 1 do
+  //begin
+  //  if AData[i] = 13 then
+  //    Continue;
+  //  if AData[i] = 10 then
+  //  begin
+  //    Memo1.Lines[FPoint.Y] := VText;
+  //    Inc(FPoint.Y);
+  //    VText := '';
+  //  end
+  //  else
+  //  begin
+  //    VText := VText + Char(AData[i]);
+  //  end;
+  //end;
+  //Memo1.Lines[FPoint.Y] := VText;
 end;
 
 procedure TFormGattLibTest.ButtonConnectClick(Sender: TObject);
 begin
   FConnection.Active := True;
+end;
+
+procedure TFormGattLibTest.ActionAppExitExecute(Sender: TObject);
+begin
+  Application.Terminate;
 end;
 
 procedure TFormGattLibTest.ButtonDisconnectClick(Sender: TObject);

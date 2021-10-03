@@ -116,14 +116,6 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/TimedServo.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/TimedServoISR.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="../../src/TimersMacro.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit>

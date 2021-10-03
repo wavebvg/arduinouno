@@ -601,7 +601,7 @@ type
   *
   * @return GATTLIB_SUCCESS on success or GATTLIB_* error code
   *)
-  gattlib_get_rssi_from_mac_func = function(adapter: Pointer; const mac_address: PChar; rssi: PWord): Integer;
+  gattlib_get_rssi_from_mac_func = function(adapter: Pointer; const mac_address: PChar; rssi: PSmallInt): Integer;
     cdecl;
 
  (**
