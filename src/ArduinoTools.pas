@@ -3,7 +3,33 @@ unit ArduinoTools;
 {$mode objfpc}{$H-}{$Z1}
 {.$DEFINE DIV1024}
 
-interface
+interface      
+
+{$IFDEF PCTEST}
+var
+    DDRB, DDRC, DDRD,PORTB, PORTC, PORTD , PINB, PINC,PIND, UCSR0A, UCSR0B, UCSR0C, UDR0: Byte;
+
+var
+  ASSR, TCNT2, TCNT0, OCR0A, OCR0B, TCCR0B, OCR2A, OCR2B: Byte;
+  TIMSK0, TCCR0A, TIMSK1, TCCR1A, TIMSK2, TCCR2B, TCCR2A: Cardinal;
+  TCNT1, TCCR1B, OCR1A, OCR1B, UBRR0: Word;
+
+
+const
+  WGM02 = 0;
+  ICNC1 = 0;
+  AS2 = 0;
+  EXCLK = 0;
+  OCR2BUB = 0;
+  TCR2BUB = 0;
+  OCR2AUB = 0;
+  TCN2UB = 0;
+  TXEN0 = 0;
+  RXEN0 = 0;
+  UCSZ0 = 0;
+  UDRE0 = 0;
+  RXC0 = 0;
+{$ENDIF}
 
 const
   F_CPU = 16000000;      // Arduino clock frequency, default 16MHz.
@@ -150,46 +176,6 @@ const
     1 shl 5
     );
 
-  TimerCounterControlRegister: array[TAVRTimer] of Pbyte = (
-    {avrtNo}nil,
-    {avrt0A} @TCCR0A,
-    {avrt0B} @TCCR0A,
-    {avrt1A} @TCCR1A,
-    {avrt1B} @TCCR1A,
-    {avrt2A} @TCCR2A,
-    {avrt2B} @TCCR2A
-    );
-
-  TimerClockControlRegister: array[TAVRTimer] of Pbyte = (
-    {avrtNo}nil,
-    {avrt0A} @TCCR0B,
-    {avrt0B} @TCCR0B,
-    {avrt1A} @TCCR1B,
-    {avrt1B} @TCCR1B,
-    {avrt2A} @TCCR2B,
-    {avrt2B} @TCCR2B
-    );
-
-  TimerOutputCompareRegister: array[TAVRTimer] of Pbyte = (
-    {avrtNo}nil,
-    {avrt0A} @OCR0A,
-    {avrt0B} @OCR0B,
-    {avrt1A} @OCR1A,
-    {avrt1B} @OCR1B,
-    {avrt2A} @OCR2A,
-    {avrt2B} @OCR2B
-    );
-
-  TimerRegisterOutputMode: array[TAVRTimer] of Byte = (
-    {avrtNo} 0,
-    {avrt0A} COM0A,
-    {avrt0B} COM0B,
-    {avrt1A} COM1A,
-    {avrt1B} COM1B,
-    {avrt2A} COM2A,
-    {avrt2B} COM2B
-    );
-
   DigitalPinToPortIndex: array[0..19] of Byte = (
     0, (* 0 - port D *)
     1,
@@ -212,17 +198,7 @@ const
     4,
     5
     );
-//
-//TimerOutputCompareRegister_PGM: array[TAVRTimer] of PByte = (
-//  {avrtNo}nil,
-//  {avrt0A}@OCR0A,
-//  {avrt0B}@OCR0A,
-//  {avrt1A}@OCR1A,
-//  {avrt1B}@OCR1B,
-//  {avrt2A}@OCR2A,
-//  {avrt2B}@OCR2B
-//  );
-//
+
 type
   TIntStr = packed record 
     Str: array[1..11] of Char;
@@ -237,7 +213,6 @@ procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
 function DigitalRead(const APin: Byte): Boolean;
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
 procedure SleepMicroSecs(const ATime: Longword);
-procedure Sleep10ms(const ATime: Byte);
 function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(const AValue: Longint): TIntStr;
 function IntToHex(AValue: LongInt; const ADigits: Byte = 8): TIntStr; overload;
@@ -312,8 +287,12 @@ const
   LOWINTSTR: PChar = '-2147483648';
 
 procedure IEnable; assembler;
-asm
+asm           
+{$IFDEF PCTEST}
+         STI
+{$ELSE}
          SEI
+{$ENDIF}
 end;
 
 procedure IDisable; assembler;
@@ -322,17 +301,22 @@ asm
 end;
 
 function HasIEnabled: Boolean; assembler;
-asm
+asm        
+{$IFDEF PCTEST}
+{$ELSE}
   LDS   R24, 95 {SREG}
   ANDI	R24, 128
   CPSE  R24, R1
   LDI   R24, 1
+{$ENDIF}
 end;
 
 procedure IPause; assembler;
 label
   goend;
 asm
+{$IFDEF PCTEST}
+{$ELSE}
 	PUSH	R18     {VIPauseIndex}
 
   LDS	  R18, VIPauseIndex
@@ -352,13 +336,16 @@ asm
   INC	  R18
   STS	  VIPauseIndex, R18
 
-  POP   R18
+  POP   R18    
+{$ENDIF}
 end;
 
 procedure IResume; assembler;
 label
   goend;
-asm
+asm     
+{$IFDEF PCTEST}
+{$ELSE}
 	PUSH	R18 {VIPauseIndex}
   LDS	R18, VIPauseIndex 
   DEC	R18
@@ -371,7 +358,8 @@ asm
   POP R24
   goend:
   STS	VIPauseIndex,R18
-  POP R18
+  POP R18    
+{$ENDIF}
 end;
 
 procedure SetPByteReg(var ADest: Pbyte; const ASrc: Pbyte);
@@ -527,7 +515,13 @@ begin
   Result := PortToInput[VPort]^ and VBit <> 0;
 end;
 
+{$IFDEF PCTEST}           
+procedure sbi(const AAddr: Pbyte{R24;R25}; const ABit: Byte{R22;R23});
+begin
+  AAddr^ := AAddr^ or FAST_BIT_TABLE[ABit];
+end;
 
+{$ELSE}
 procedure sbi(const AAddr: Pbyte{R24;R25}; const ABit: Byte{R22;R23});  assembler;
 {Total: 28}
 asm
@@ -551,10 +545,17 @@ asm
          POP     R26                               {1}
          POP     R19                               {1}
          POP     R18                               {1}
-         // RET                                    {4}
+         // RET                                    {4} 
 end;
-
-procedure cbi(const AAddr: Pbyte{R24;R25}; const ABit: Byte{R22;R23}); assembler;  
+{$ENDIF}
+        
+{$IFDEF PCTEST}
+procedure cbi(const AAddr: Pbyte{R24;R25}; const ABit: Byte{R22;R23});
+begin
+  AAddr^ := AAddr^ and not FAST_BIT_TABLE[ABit];
+end;
+{$ELSE}   
+procedure cbi(const AAddr: Pbyte{R24;R25}; const ABit: Byte{R22;R23}); assembler;
 {Total: 29}
 asm
          // CALL                                   {4}
@@ -578,9 +579,17 @@ asm
          POP     R26                               {1}
          POP     R19                               {1}
          POP     R18                               {1}
-         // RET                                    {4}
+         // RET                                    {4}   
+end;
+{$ENDIF}
+                    
+{$IFDEF PCTEST}        
+procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
+begin
+
 end;
 
+{$ELSE}
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean); assembler;
 {Total: 75}
 label
@@ -630,49 +639,26 @@ asm
          POP     R26                                   {1}
          POP     R18                                   {1}  
          // RET                                        {4}
-end;
-
-function pgm_read_byte(const AFlash: Word): Byte;
-begin
-  Result := AFlash and $00FF;
-end;
+end;   
+{$ENDIF}
 
 procedure ADCInit;
 const
   Port = 0;
 begin
+{$IFDEF PCTEST}
+{$ELSE}
   ADMUX := (1 shl REFS) or (Port and $0F);
-  ADCSRA := %111 or (1 shl ADEN) or (1 shl ADSC) or (1 shl ADIE);
+  ADCSRA := %111 or (1 shl ADEN) or (1 shl ADSC) or (1 shl ADIE);   
+{$ENDIF}
 end;
 
-// Waiting time = Time * 10 Milliseconds
-procedure Sleep10ms(const ATime: Byte);
-const
-  Faktor = 10 * ClockCyclesPerMicrosecond;
-label                 // Labels, here for the loop, has to be declared explicitly
-  outer, inner1, inner2;
-var
-  tmpByte: byte;
-  // In Inline assembler local variables are accesed by the instructions LDD and STD, global variables are accessed by LDS and STS.
+          
+{$IFDEF PCTEST}          
+procedure SleepMicroSecs(const ATime: Longword);
 begin
-  asm                              // asm states inline assembly block until the next END statement
-           LDD     r20, ATime      // Variables can be accessed, here a local variable
-           outer:
-           LDI     r21, Faktor    // 1 cycle
-           inner1:                // 1000*Faktor = 160000/16 = 10000 cycles/1MHz
-           LDI     r22,250        // 1 cycle
-           inner2:                // 4*250 = 1000 cycles
-           NOP                    // 1 cycle
-           DEC     r22            // 1 cycle
-           BRNE    inner2         // 2 cycles
-           DEC     r21            // 1 cycle
-           BRNE    inner1         // 2 cycles
-           DEC     r20
-           BRNE    outer
-  end; // Used registers to be published to compiler
-end;  // procedure
-
-
+end;
+{$ELSE}
 procedure SleepMicroSecs(const ATime: Longword); assembler;
 label
   loop, compl;
@@ -750,6 +736,7 @@ asm
          compl:
          // RET                        // 4
 end;
+{$ENDIF}
 
 function CountPulse(const APort: Pbyte; const ABit, AStateMask: Byte; AMaxLoops: Word): Cardinal;
 begin

@@ -172,12 +172,18 @@ var
 
 function CalcWordTime(const AOldTime: PWord): Word;
 
-
 implementation
 
 uses
   ArduinoTools;
+         
+{$IFDEF PCTEST}    
+function CalcWordTime(const AOldTime{R24;R25}: PWord): Word;
+begin
 
+end;
+
+{$ELSE}
 function CalcWordTime(const AOldTime{R24;R25}: PWord): Word; assembler;
          // {Total: 29}
 asm
@@ -202,7 +208,8 @@ asm
          POP     R19                              {1}
          POP     R18                              {1}
          // RET                                   {4}
-end;
+end;   
+{$ENDIF}
 
 { TAbstractTimer }
 
@@ -220,7 +227,14 @@ begin
       TTimerInterruptEvent(VSubscriber)();
   end;
 end;
+              
+{$IFDEF PCTEST}                
+procedure AbstractTimerDoCompareEvent(const Self: TMethod);
+begin
 
+end;
+
+{$ELSE}
 procedure AbstractTimerDoCompareEvent(const Self: TMethod); assembler;
 label
   exit;
@@ -264,7 +278,8 @@ asm
          POP     R20
          POP     R19
          POP     R18
-end;
+end;    
+{$ENDIF}
 
 constructor TAbstractTimer.Init;
 begin
@@ -638,6 +653,7 @@ begin
   Result := 8;
 end;
 
+{$IFNDEF PCTEST}
 procedure TIMER0_COMPA_ISR; public Name 'TIMER0_COMPA_ISR'; interrupt; assembler;
 asm
          PUSH    R24
@@ -722,6 +738,7 @@ procedure TIMER2_OVF_ISR; public Name 'TIMER2_OVF_ISR'; interrupt;
 begin
   Timer2.DoOVFEvents;
 end;
+{$ENDIF}
 
 initialization
   Timer0.Init;

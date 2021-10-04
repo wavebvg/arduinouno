@@ -22,7 +22,9 @@ begin
   Timer1.CounterModes := [];
   Timer1.CLKMode := tclkm64;
   //
-  AnalogWrite(9, 250);
+  AnalogWrite(9, 250);          
+  UARTConsole.WriteLnFormat('PWMChanged: %d', [Ord(PWMChanged)]);
+  UARTConsole.WriteLnFormat('PWMCount: %d', [PWMCount]);
   for i := 0 to PWMCount - 1 do
     UARTConsole.WriteLnFormat('  PWM[%d]: %d', [PWMPins[i].Pin, PWMPins[i].Counter]);
   //
@@ -32,7 +34,7 @@ begin
   repeat
     IPause;
     UARTConsole.WriteLnFormat('PWMChanged: %d', [Ord(PWMChanged)]);
-    UARTConsole.WriteLnFormat('PWMCount: %d', [PWMCount]);
+    UARTConsole.WriteLnFormat('PWMCount: %d (cicles: %d)', [PWMCount, PWMCicles]);
     if PWMCount > 0 then
       for i := 0 to PWMCount - 1 do
         UARTConsole.WriteLnFormat('  PWM[%d]: %d', [PWMPins[i].Pin, PWMPins[i].Counter]);

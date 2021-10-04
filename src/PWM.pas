@@ -13,6 +13,7 @@ const
   CICLE_FULL_TIME = 4080;
   CICLE_STEP_TIME = CICLE_FULL_TIME div 255;
   CICLE_STEP_COUNT = CICLE_STEP_TIME div 4;
+  CICLE_FULL_COUNT = CICLE_FULL_TIME div 4;
 
 procedure AnalogWrite(const APin: Byte; const AValue: Byte);
 procedure AnalogRead(const APin: Byte; const AValue: Byte);
@@ -20,7 +21,7 @@ procedure AnalogRead(const APin: Byte; const AValue: Byte);
 type
   TPWMPin = packed record
     Pin: Byte;
-    Counter: Byte;
+    Counter: Word;
   end;
 
   TSortedPWMPin = packed record
@@ -41,10 +42,15 @@ var
   PWMChanged: Boolean;
   SortedPWMs: TSortedPWMPins;
   PWMAllMaskB, PWMAllMaskC, PWMAllMaskD: Byte;
+  PWMCicles: LongInt;
 
 var
   PWMBeginCounter: Word;
   PWMCounter: array[0..MAX_PWM_PIN_COUNT - 1 + 5] of Word;
+
+{$IFDEF PCTEST}
+procedure DoTimer0ServoCompareB;
+{$ENDIF}
 
 implementation
 
@@ -64,6 +70,7 @@ begin
   //UARTConsole.WriteLnFormat('Sorted!', []);
   // Сортируем пузырьком
   if PWMCount > 1 then
+  begin
     for i := 1 to PWMCount - 1 do
     begin
       VComplete := True;
@@ -78,6 +85,7 @@ begin
       if VComplete then
         Break;
     end;
+  end;
   // Загружаем сортированные значения в буфер с масками
   j := 255;
   VAllMaskB := 0;
@@ -104,10 +112,16 @@ begin
       SortedPWMs[j].NotMaskB := $FF;
       SortedPWMs[j].NotMaskC := $FF;
       SortedPWMs[j].NotMaskD := $FF;
+      if d > 285 then
+      begin
+        SortedPWMs[j].Counter := 255;
+        Inc(VOldCounter, 255);
+      end
+      else
       if d > 255 then
       begin
-        SortedPWMs[j].Counter := 224;
-        Inc(VOldCounter, 224);
+        SortedPWMs[j].Counter := 128;
+        Inc(VOldCounter, 128);
       end
       else
       begin
@@ -137,17 +151,23 @@ begin
       Inc(i);
     end;
   end;
-  while VOldCounter < CICLE_FULL_TIME do
+  while VOldCounter < CICLE_FULL_COUNT do
   begin
     Inc(j);
     SortedPWMs[j].NotMaskB := $FF;
     SortedPWMs[j].NotMaskC := $FF;
     SortedPWMs[j].NotMaskD := $FF;
-    d := CICLE_FULL_TIME - VOldCounter;
+    d := CICLE_FULL_COUNT - VOldCounter;
+    if d > 285 then
+    begin
+      SortedPWMs[j].Counter := 255;
+      Inc(VOldCounter, 255);
+    end
+    else
     if d > 255 then
     begin
-      SortedPWMs[j].Counter := 224;
-      Inc(VOldCounter, 224);
+      SortedPWMs[j].Counter := 128;
+      Inc(VOldCounter, 128);
     end
     else
     begin
@@ -155,7 +175,7 @@ begin
       SortedPWMs[j].Counter := d;
     end;
   end;
-  SortedPWMIndex := j + 1;
+  SortedPWMCount := j + 1;
   PWMAllMaskB := VAllMaskB;
   PWMAllMaskC := VAllMaskC;
   PWMAllMaskD := VAllMaskD;
@@ -174,6 +194,7 @@ begin
     PORTD := PORTD or PWMAllMaskD;
     PWMBeginCounter := Timer1_Counter;
     Timer0_ValueB := Timer0_Counter + SortedPWMs[0].Counter;
+    Inc(PWMCicles);
   end
   else
   begin
@@ -181,6 +202,7 @@ begin
     PORTB := PORTB and SortedPWMs[SortedPWMIndex].NotMaskB;
     PORTC := PORTC and SortedPWMs[SortedPWMIndex].NotMaskC;
     PORTD := PORTD and SortedPWMs[SortedPWMIndex].NotMaskD;
+    PWMCounter[SortedPWMIndex] := Timer1_Counter - PWMBeginCounter;
     Inc(SortedPWMIndex);
     Timer0_ValueB := Timer0_ValueB + SortedPWMs[SortedPWMIndex].Counter;
   end;
@@ -199,13 +221,13 @@ end;
 
 procedure PWMPortChange(const AIndex: Byte; const AValue: Byte);
 begin
-  PWMPins[AIndex].Counter := CICLE_STEP_COUNT * AValue;
+  PWMPins[AIndex].Counter := Word(AValue) * CICLE_STEP_COUNT;
 end;
 
 procedure PWMPortAdd(const APin: Byte; const AValue: Byte);
 begin
   PWMPins[PWMCount].Pin := APin;
-  PWMPins[PWMCount].Counter :=  CICLE_STEP_COUNT * AValue;
+  PWMPins[PWMCount].Counter := Word(AValue) * CICLE_STEP_COUNT;
   Inc(PWMCount);
 end;
 
@@ -231,7 +253,7 @@ begin
       PWMPortChange(i, AValue)
     else
       PWMPortAdd(APin, AValue);
-  end;       
+  end;
   PWMChanged := True;
   if NeedInit then
   begin
