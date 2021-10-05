@@ -82,7 +82,7 @@ begin
     for i := 1 to ServoCount - 1 do
     begin
       VComplete := True;
-      for j := i to ServoCount - 1 do
+      for j := 1 to ServoCount - i do
         if Servos[j - 1]^.FCounter > Servos[j]^.FCounter then
         begin
           VBuffer := Servos[j - 1];
@@ -177,11 +177,11 @@ asm
          LDS     R19, NeedSort
          CP      R19, R1
          BREQ    notneedsort
-         //    begin
-         //      SortTimers;
-         CALL    SortTimers
+         //    begin     
          //      NeedSort := False;
          STS     NeedSort, R1
+         //      SortTimers;
+         CALL    SortTimers
          //    end;
          notneedsort:
          //    SortedServoIndex := 0;
@@ -189,7 +189,7 @@ asm
          //    CycleTime := 0;
          STS     CycleTime,   R1
          STS     CycleTime+1, R1
-         //    R20 := SortedServos[0].Counter - 1
+         //    R20 := SortedServos[0].Counter - 2
          LDI     R26, LO8(SortedServos)
          LDI     R27, HI8(SortedServos)
          ADIW    R26, 3
@@ -219,7 +219,7 @@ asm
          LDS     R26, ServoAllMaskD
          OR      R26, R27
          OUT     11, R26
-         //    Timer0_ValueA := Timer0_Counter + SortedServos[0].Counter - 2;
+         //    Timer0_ValueA := Timer0_Counter + SortedServos[0].Counter;
          IN      R19, 38
          ADD     R19, R20
          OUT     39,  R19
