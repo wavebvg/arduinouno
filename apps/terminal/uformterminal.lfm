@@ -1,27 +1,27 @@
 object FormTerminal: TFormTerminal
-  Left = 421
-  Height = 392
-  Top = 308
-  Width = 543
+  Left = 388
+  Height = 483
+  Top = 275
+  Width = 863
   Caption = 'TTY terminal'
-  ClientHeight = 392
-  ClientWidth = 543
+  ClientHeight = 483
+  ClientWidth = 863
   OnCloseQuery = FormCloseQuery
   LCLVersion = '2.3.0.0'
   object PanelButton: TPanel
-    Left = 448
-    Height = 392
+    Left = 761
+    Height = 483
     Top = 0
-    Width = 95
+    Width = 102
     Align = alRight
-    ClientHeight = 392
-    ClientWidth = 95
+    ClientHeight = 483
+    ClientWidth = 102
     TabOrder = 0
     object ToggleBoxConnect: TToggleBox
       Left = 8
       Height = 25
       Top = 8
-      Width = 78
+      Width = 86
       Caption = 'Connect'
       OnChange = ToggleBoxConnectChange
       TabOrder = 0
@@ -29,43 +29,84 @@ object FormTerminal: TFormTerminal
     object ButtonPreferences: TButton
       Left = 8
       Height = 25
-      Top = 32
-      Width = 78
+      Top = 40
+      Width = 86
       Action = ActionPreferences
       TabOrder = 1
     end
     object ButtonClear: TButton
       Left = 8
       Height = 25
-      Top = 352
-      Width = 75
+      Top = 104
+      Width = 86
       Action = ActionClear
       TabOrder = 2
     end
     object ButtonFlash: TButton
-      Left = 8
+      Left = 9
       Height = 25
-      Top = 56
-      Width = 78
+      Top = 72
+      Width = 86
       Action = ActionStartFlash
       TabOrder = 3
+    end
+    object CheckBoxTextMode: TCheckBox
+      Left = 8
+      Height = 23
+      Top = 400
+      Width = 79
+      Align = alCustom
+      Anchors = [akLeft, akBottom]
+      Caption = 'Send text'
+      OnChange = CheckBoxTextModeChange
+      TabOrder = 4
+    end
+    object ComboBoxNewLineType: TComboBox
+      Left = 8
+      Height = 25
+      Top = 424
+      Width = 85
+      Anchors = [akLeft, akBottom]
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'NONE'
+        'NL'
+        'CR'
+        'NL+CR'
+      )
+      OnChange = ComboBoxNewLineTypeChange
+      Style = csDropDownList
+      TabOrder = 5
+      Text = 'NONE'
+    end
+    object CheckBoxTextAutoClear: TCheckBox
+      Left = 8
+      Height = 23
+      Top = 452
+      Width = 83
+      Align = alCustom
+      Anchors = [akLeft, akBottom]
+      Caption = 'Auto clear'
+      OnChange = CheckBoxTextModeChange
+      TabOrder = 6
     end
   end
   object PanelBody: TPanel
     Left = 0
-    Height = 392
+    Height = 483
     Top = 0
-    Width = 448
+    Width = 761
     Align = alClient
-    ClientHeight = 392
-    ClientWidth = 448
+    ClientHeight = 483
+    ClientWidth = 761
     TabOrder = 1
     object MemoTTY: TMemo
       AnchorSideRight.Side = asrBottom
       Left = 8
-      Height = 352
+      Height = 443
       Top = 8
-      Width = 432
+      Width = 745
       Anchors = [akTop, akLeft, akRight, akBottom]
       Color = clInfoBk
       Font.Color = clInfoText
@@ -81,17 +122,26 @@ object FormTerminal: TFormTerminal
     object EditLastKeys: TEdit
       AnchorSideRight.Side = asrBottom
       Left = 8
-      Height = 23
-      Top = 364
-      Width = 432
+      Height = 27
+      Top = 451
+      Width = 672
       Anchors = [akLeft, akRight, akBottom]
       Color = clInfoBk
-      Font.Color = clInfoText
+      Font.Color = clWindowText
       Font.Name = 'Ubuntu Mono'
+      HideSelection = False
       OnKeyPress = MemoTTYKeyPress
       ParentFont = False
-      ReadOnly = True
       TabOrder = 1
+    end
+    object ButtonSend: TButton
+      Left = 680
+      Height = 25
+      Top = 452
+      Width = 75
+      Action = ActionSend
+      Anchors = [akRight, akBottom]
+      TabOrder = 2
     end
   end
   object Serial: TLazSerial
@@ -133,6 +183,11 @@ object FormTerminal: TFormTerminal
       Caption = 'Stop flash'
       OnExecute = ActionStopFlashExecute
       OnUpdate = ActionStopFlashUpdate
+    end
+    object ActionSend: TAction
+      Caption = 'Send'
+      OnExecute = ActionSendExecute
+      OnUpdate = ActionSendUpdate
     end
   end
   object ProcessAVRDude: TProcessUTF8

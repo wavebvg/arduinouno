@@ -29,20 +29,26 @@ const
   MAX_KEY_PRESSED_DISLAY = 8;
 
 type
+  TNewLineType = (nltNone, nltNL, ntlCR, ntlNLCR);
   TPressedKeys = array[1..MAX_KEY_PRESSED_DISLAY] of Char;
 
   { TFormTerminal }
 
   TFormTerminal = class(TForm)
+    ActionSend: TAction;
     ActionStopFlash: TAction;
     ActionStartFlash: TAction;
     ActionClear: TAction;
     ActionConnect: TAction;
     ActionPreferences: TAction;
     ActionList: TActionList;
+    ButtonSend: TButton;
     ButtonClear: TButton;
     ButtonPreferences: TButton;
     ButtonFlash: TButton;
+    CheckBoxTextMode: TCheckBox;
+    CheckBoxTextAutoClear: TCheckBox;
+    ComboBoxNewLineType: TComboBox;
     EditLastKeys: TEdit;
     MemoTTY: TMemo;
     PanelBody: TPanel;
@@ -54,11 +60,15 @@ type
     procedure ActionClearExecute(Sender: TObject);
     procedure ActionConnectExecute(Sender: TObject);
     procedure ActionConnectUpdate(Sender: TObject);
+    procedure ActionSendExecute(Sender: TObject);
+    procedure ActionSendUpdate(Sender: TObject);
     procedure ActionStartFlashExecute(Sender: TObject);
     procedure ActionStartFlashUpdate(Sender: TObject);
     procedure ActionPreferencesExecute(Sender: TObject);
     procedure ActionStopFlashExecute(Sender: TObject);
     procedure ActionStopFlashUpdate(Sender: TObject);
+    procedure CheckBoxTextModeChange(Sender: TObject);
+    procedure ComboBoxNewLineTypeChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure MemoTTYKeyPress(Sender: TObject; var Key: Char);
     procedure SerialRxData(Sender: TObject);
@@ -85,6 +95,8 @@ type
     FInShowTime: Boolean;
     FInFlashing: Boolean;
     FFlashingIsKilled: Boolean;
+    FInLoading: Boolean;
+    FNeedSave: Boolean;
     procedure CheckTTYExist;
     procedure DisplayTerminal(const AText: String; const ANewLine: Boolean = False);
     procedure DisplayText(const AText: String);
@@ -93,6 +105,12 @@ type
     procedure LoadConfig;
     procedure SaveConfig;
   private
+    function GetNewLineType: TNewLineType;
+    function GetTextAutoClear: Boolean;
+    function GetTextMode: Boolean;
+    procedure SetNewLineType(AValue: TNewLineType);
+    procedure SetTextAutoClear(AValue: Boolean);
+    procedure SetTextMode(AValue: Boolean);
     procedure TMReadTimeout(var AMsg: TLMessage); message TM_READTIMEOUT;
     procedure TMWriteTimeout(var AMsg: TLMessage); message TM_WRITETIMEOUT;
   protected
@@ -108,6 +126,9 @@ type
     property BinPath: String read FBinPath write FBinPath;
     property AvrdudePath: String read FAvrdudePath write FAvrdudePath;
     property ShowTime: Boolean read FShowTime write FShowTime;
+    property NewLineType: TNewLineType read GetNewLineType write SetNewLineType;
+    property TextMode: Boolean read GetTextMode write SetTextMode;
+    property TextAutoClear: Boolean read GetTextAutoClear write SetTextAutoClear;
   end;
 
 var
@@ -124,6 +145,7 @@ uses
   process;
 
 {$R *.lfm}
+
 { TFormTerminal }
 
 constructor TFormTerminal.Create(TheOwner: TComponent);
@@ -169,6 +191,31 @@ procedure TFormTerminal.ActionConnectUpdate(Sender: TObject);
 begin
   TCustomAction(Sender).Enabled := not FInFlashing and FTTYExist;
   ToggleBoxConnect.Enabled := TCustomAction(Sender).Enabled;
+end;
+
+procedure TFormTerminal.ActionSendExecute(Sender: TObject);
+var
+  VText: String;
+begin
+  VText := EditLastKeys.Text;
+  case NewLineType of
+    nltNL:
+      VText := VText + #13;
+    ntlCR:
+      VText := VText + #10;
+    ntlNLCR:
+      VText := VText + #13#10;
+  end;
+  Serial.WriteData(VText);
+  if TextAutoClear then
+    EditLastKeys.Text := '';
+end;
+
+procedure TFormTerminal.ActionSendUpdate(Sender: TObject);
+begin
+  TCustomAction(Sender).Enabled := Serial.Active and TextMode;
+  ComboBoxNewLineType.Enabled := TextMode;
+  EditLastKeys.ReadOnly := not TCustomAction(Sender).Enabled;
 end;
 
 procedure TFormTerminal.ActionStartFlashExecute(Sender: TObject);
@@ -273,6 +320,28 @@ begin
   TCustomAction(Sender).Enabled := FInFlashing and FTTYExist;
 end;
 
+procedure TFormTerminal.CheckBoxTextModeChange(Sender: TObject);
+begin
+  EditLastKeys.ReadOnly := not CheckBoxTextMode.Checked;
+  if CheckBoxTextMode.Checked then
+  begin
+    EditLastKeys.Color := clWindow;
+    EditLastKeys.Font.Color := clWindowText;
+    EditLastKeys.Text := '';
+  end
+  else
+  begin
+    EditLastKeys.Color := clInfoBk;
+    EditLastKeys.Font.Color := clInfoText;
+  end;
+  SaveConfig;
+end;
+
+procedure TFormTerminal.ComboBoxNewLineTypeChange(Sender: TObject);
+begin
+  SaveConfig;
+end;
+
 procedure TFormTerminal.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   if ProcessAVRDude.Active then
@@ -286,15 +355,24 @@ end;
 
 procedure TFormTerminal.MemoTTYKeyPress(Sender: TObject; var Key: Char);
 begin
-  if FTotalPressedKeys < MAX_KEY_PRESSED_DISLAY then
-    Inc(FTotalPressedKeys);
-  if FCurrentPressedKeysIndex >= MAX_KEY_PRESSED_DISLAY then
-    FCurrentPressedKeysIndex := 1
-  else
-    Inc(FCurrentPressedKeysIndex);
-  FPressedKeys[FCurrentPressedKeysIndex] := Key;
-  Serial.WriteData(Key);
-  DisplayPressedKeys;
+  if Serial.Active then
+    if TextMode then
+    begin
+      if Key = #13 then
+        ActionSend.Execute;
+    end
+    else
+    begin
+      if FTotalPressedKeys < MAX_KEY_PRESSED_DISLAY then
+        Inc(FTotalPressedKeys);
+      if FCurrentPressedKeysIndex >= MAX_KEY_PRESSED_DISLAY then
+        FCurrentPressedKeysIndex := 1
+      else
+        Inc(FCurrentPressedKeysIndex);
+      FPressedKeys[FCurrentPressedKeysIndex] := Key;
+      Serial.WriteData(Key);
+      DisplayPressedKeys;
+    end;
 end;
 
 procedure TFormTerminal.SerialRxData(Sender: TObject);
@@ -446,7 +524,6 @@ begin
       NewLine;
       CarriageReturn;
     end;
-    WriteLn(Length(AText));
     for i := 1 to Length(AText) do
     begin
       c := AText[i];
@@ -492,20 +569,51 @@ end;
 
 procedure TFormTerminal.LoadConfig;
 begin
-  Device := FIniFile.ReadString('MAIN', 'device', '');
-  ConfigPath := FIniFile.ReadString('MAIN', 'config_path', '');
-  BinPath := FIniFile.ReadString('MAIN', 'bin_path', '');
-  AvrdudePath := FIniFile.ReadString('MAIN', 'avrdude_path', '');
-  ShowTime := FIniFile.ReadBool('MAIN', 'show_time', False);
+  FInLoading := True;
+  try
+    Device := FIniFile.ReadString('MAIN', 'device', '');
+    ConfigPath := FIniFile.ReadString('MAIN', 'config_path', '');
+    BinPath := FIniFile.ReadString('MAIN', 'bin_path', '');
+    AvrdudePath := FIniFile.ReadString('MAIN', 'avrdude_path', '');
+    ShowTime := FIniFile.ReadBool('MAIN', 'show_time', False);
+    TextMode := FIniFile.ReadBool('MAIN', 'text_mode', False);
+    TextAutoClear := FIniFile.ReadBool('MAIN', 'text_autoclear', True);
+    NewLineType := TNewLineType(FIniFile.ReadInteger('MAIN', 'new_line', 0));
+    if FNeedSave then
+    begin
+      SaveConfig;
+      FNeedSave := False;
+    end;
+  finally
+    FInLoading := False;
+  end;
 end;
 
 procedure TFormTerminal.SaveConfig;
 begin
+  if FInLoading then
+  begin
+    FNeedSave := True;
+    Exit;
+  end;
+  FIniFile.WriteInteger('MAIN', 'new_line', Ord(NewLineType));
   FIniFile.WriteString('MAIN', 'device', Device);
   FIniFile.WriteString('MAIN', 'config_path', ConfigPath);
   FIniFile.WriteString('MAIN', 'bin_path', BinPath);
   FIniFile.WriteString('MAIN', 'avrdude_path', AvrdudePath);
   FIniFile.WriteBool('MAIN', 'show_time', ShowTime);
+  FIniFile.WriteBool('MAIN', 'text_mode', TextMode);
+  FIniFile.WriteBool('MAIN', 'text_autoclear', TextAutoClear);
+end;
+
+function TFormTerminal.GetNewLineType: TNewLineType;
+begin
+  Result := TNewLineType(ComboBoxNewLineType.ItemIndex);
+end;
+
+function TFormTerminal.GetTextAutoClear: Boolean;
+begin
+  Result := CheckBoxTextAutoClear.Checked;
 end;
 
 procedure TFormTerminal.TMReadTimeout(var AMsg: TLMessage);
@@ -515,6 +623,27 @@ begin
     DisplayText('Read timeout');
     TTYClose;
   end;
+end;
+
+function TFormTerminal.GetTextMode: Boolean;
+begin
+  Result := CheckBoxTextMode.Checked;
+end;
+
+procedure TFormTerminal.SetNewLineType(AValue: TNewLineType);
+begin
+  ComboBoxNewLineType.ItemIndex := Ord(AValue);
+end;
+
+procedure TFormTerminal.SetTextAutoClear(AValue: Boolean);
+begin
+  CheckBoxTextAutoClear.Checked := AValue;
+end;
+
+procedure TFormTerminal.SetTextMode(AValue: Boolean);
+begin
+  CheckBoxTextMode.Checked := AValue;
+  CheckBoxTextModeChange(CheckBoxTextMode);
 end;
 
 procedure TFormTerminal.TMWriteTimeout(var AMsg: TLMessage);
