@@ -185,7 +185,7 @@ end;
 
 {$ELSE}
 function CalcWordTime(const AOldTime{R24;R25}: PWord): Word; assembler;
-         // {Total: 29}
+// {Total: 29}
 asm
          // CALL                                  {4}
          PUSH    R18  {OldTime}                   {1}
@@ -238,17 +238,9 @@ end;
 procedure AbstractTimerDoCompareEvent(const Self: TMethod); assembler;
 label
   exit;
-asm                      
-         PUSH    R18
-         PUSH    R19
-         PUSH    R20
-         PUSH    R21
-         PUSH    R22
-         PUSH    R23
+asm
          PUSH    R26
          PUSH    R27
-         PUSH    R28
-         PUSH    R29
          PUSH    R30
          PUSH    R31
          // VEvent := TMethod(Self.FCompareAEvent);
@@ -263,21 +255,29 @@ asm
          CPC     R31, R1
          BREQ    exit
          //TTimerInterruptProc(VEvent.Code)()
-         ICALL
-         //
-         exit:  
-         POP     R31
-         POP     R30
+         PUSH    R18
+         PUSH    R19
+         PUSH    R20
+         PUSH    R21
+         PUSH    R22
+         PUSH    R23   
+         PUSH    R28
+         PUSH    R29
+         ICALL      
          POP     R29
          POP     R28
-         POP     R27
-         POP     R26
          POP     R23
          POP     R22
          POP     R21
          POP     R20
          POP     R19
          POP     R18
+         //
+         exit:  
+         POP     R31
+         POP     R30
+         POP     R27
+         POP     R26
 end;    
 {$ENDIF}
 
