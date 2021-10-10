@@ -7,18 +7,20 @@
       <Unit>
         <Filename Value="MotorTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="21"/>
-        <CursorPos X="44" Y="45"/>
-        <UsageCount Value="170"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="12"/>
+        <CursorPos X="16" Y="35"/>
+        <UsageCount Value="171"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="483"/>
-        <CursorPos X="13" Y="477"/>
-        <UsageCount Value="123"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="648"/>
+        <CursorPos X="26" Y="690"/>
+        <UsageCount Value="124"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IR.pas"/>
@@ -26,7 +28,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="13"/>
         <CursorPos X="17" Y="68"/>
-        <UsageCount Value="50"/>
+        <UsageCount Value="51"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/KeyMap.pas"/>
@@ -34,16 +36,15 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="30"/>
         <CursorPos X="15" Y="30"/>
-        <UsageCount Value="50"/>
+        <UsageCount Value="51"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/PWM.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="299"/>
-        <CursorPos X="10" Y="324"/>
-        <UsageCount Value="28"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="305"/>
+        <CursorPos X="23" Y="15"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -217,131 +218,38 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/UART.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="148"/>
         <CursorPos X="55" Y="201"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ServoI.pas"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="264"/>
-        <CursorPos X="38" Y="291"/>
-        <UsageCount Value="14"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="182"/>
+        <CursorPos X="40" Y="197"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/Timers.pas"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="379"/>
-        <CursorPos X="24" Y="569"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="658"/>
+        <CursorPos X="29" Y="670"/>
         <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
         <UnitName Value="ATmega328P"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="57"/>
-        <CursorPos X="3" Y="75"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+        <CursorPos X="60" Y="63"/>
+        <UsageCount Value="13"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="245" Column="14" TopLine="226"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="257" Column="22" TopLine="220"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="242" Column="25" TopLine="209"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="25" Column="11" TopLine="4"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="17" Column="11"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="212" Column="33" TopLine="212"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="27" Column="51" TopLine="4"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="17" Column="11"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="8" Column="12" TopLine="4"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="34" Column="46" TopLine="6"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="26" Column="3" TopLine="6"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="45" Column="25" TopLine="6"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="23" Column="30" TopLine="2"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="26" Column="19" TopLine="11"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="140" Column="20" TopLine="105"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ServoI.pas"/>
-        <Caret Line="53" Column="15" TopLine="43"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="34" Column="66"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="211" Column="4" TopLine="199"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="219" Column="26" TopLine="203"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="236" Column="64" TopLine="207"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="245" Column="76" TopLine="218"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="44" Column="51" TopLine="26"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/Timers.pas"/>
-        <Caret Line="569" Column="24" TopLine="379"/>
-      </Position>
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="../../src/PWM.pas"/>
         <Caret Line="260" Column="26" TopLine="243"/>
@@ -365,6 +273,102 @@
       <Position>
         <Filename Value="../../src/PWM.pas"/>
         <Caret Line="310" Column="25" TopLine="282"/>
+      </Position>
+      <Position>
+        <Filename Value="MotorTest.lpr"/>
+        <Caret Line="45" Column="44"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="214" Column="19" TopLine="192"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="212" Column="10" TopLine="196"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="261" Column="38" TopLine="253"/>
+      </Position>
+      <Position>
+        <Filename Value="MotorTest.lpr"/>
+        <Caret Line="53" Column="67" TopLine="31"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="324" Column="32" TopLine="311"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="215" Column="19" TopLine="204"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="16" Column="18" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="18" Column="19" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="153" Column="39" TopLine="144"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="159" Column="26" TopLine="144"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="15" Column="19" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="16" Column="57" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="17" Column="51" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="18" Column="44" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="345" Column="61" TopLine="329"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="351" Column="63" TopLine="329"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="14" Column="18" TopLine="2"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="87" Column="11" TopLine="87"/>
+      </Position>
+      <Position>
+        <Filename Value="MotorTest.lpr"/>
+        <Caret Line="35" Column="16" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="169" Column="3" TopLine="664"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="293" Column="34" TopLine="281"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/Timers.pas"/>
+        <Caret Line="670" Column="73" TopLine="658"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/PWM.pas"/>
+        <Caret Line="216" Column="22" TopLine="207"/>
       </Position>
     </JumpHistory>
     <RunParams>

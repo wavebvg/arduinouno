@@ -8,7 +8,8 @@
         <Filename Value="servo.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="8" Y="9"/>
+        <TopLine Value="43"/>
+        <CursorPos X="16" Y="51"/>
         <UsageCount Value="110"/>
         <Loaded Value="True"/>
       </Unit>

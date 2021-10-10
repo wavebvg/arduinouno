@@ -505,16 +505,6 @@ begin
     cbi(PortToMode[DigitalPinToPort[APin]], DigitalPinToPortIndex[APin]);
 end;
 
-function DigitalRead(const APin: Byte): Boolean;
-var
-  VBit: Byte;
-  VPort: TAVRPort;
-begin
-  VBit := DigitalPinToBitMask[APin];
-  VPort := DigitalPinToPort[APin];
-  Result := PortToInput[VPort]^ and VBit <> 0;
-end;
-
 {$IFDEF PCTEST}           
 procedure sbi(const AAddr: Pbyte{R24;R25}; const ABit: Byte{R22;R23});
 begin
@@ -581,6 +571,59 @@ asm
          POP     R18                               {1}
          // RET                                    {4}   
 end;
+{$ENDIF}  
+
+{$IFDEF PCTEST}
+function DigitalRead(const APin: Byte): Boolean;
+//var
+//  VBitMask: Byte;
+//  VPort: TAVRPort;
+begin
+  //VBitMask := DigitalPinToBitMask[APin];
+  //VPort := DigitalPinToPort[APin];
+  //Result := PortToInput[VPort]^ and VBitMask <> 0;
+end;
+
+{$ELSE}
+function DigitalRead(const APin: Byte): Boolean; assembler;
+{Total: 42}
+asm
+  // CALL                                              {4}
+         PUSH    R18  {VBitMask}                       {1}
+         PUSH    R26  {X}                              {1}
+         PUSH    R27  {X}                              {1}
+         PUSH    R28  {Y}                              {1}
+         PUSH    R29  {Y}                              {1}
+  // VBitMask := DigitalPinToBitMask[APin];
+         LDI	   R26, LO8(DigitalPinToBitMask)         {1}
+         LDI	   R27, HI8(DigitalPinToBitMask)         {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R18, X                                {2}
+  // VPort := DigitalPinToPort[APin];
+         LDI	   R26, LO8(DigitalPinToPort)            {1}
+         LDI	   R27, HI8(DigitalPinToPort)            {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R24, X                                {2}
+         LSL     R24                                   {1}
+  // Result := PortToInput[VPort]^ and VBitMask <> 0;
+         LDI	   R26, LO8(PortToInput)                 {1}
+         LDI     R27, HI8(PortToInput)                 {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R28, X+                               {2}
+         LD      R29, X                                {2}
+         LD      R24, Y                                {2}
+         AND     R24, R18                              {1}
+         //
+         POP     R29                                   {1}
+         POP     R28                                   {1}
+         POP     R27                                   {1}
+         POP     R26                                   {1}
+         POP     R18                                   {1}
+         // RET                                        {4}
+end;
 {$ENDIF}
                     
 {$IFDEF PCTEST}        
@@ -590,11 +633,65 @@ begin
 end;
 
 {$ELSE}
-procedure DigitalWrite(const APin: Byte; const AValue: Boolean); assembler;
+procedure DigitalWrite(const APin{R24}: Byte; const AValue{R22}: Boolean); assembler;
+{Total: 41}
+label
+  exit, vtrue, vfalse;
+asm
+  // CALL                                              {4}
+         PUSH    R18  {VBitMask}                       {1}
+         PUSH    R26  {X}                              {1}
+         PUSH    R27  {X}                              {1}
+         PUSH    R28  {Y}                              {1}
+         PUSH    R29  {Y}                              {1}
+         //  VBitMask := DigitalPinToBitMask[APin];
+         LDI	   R26, LO8(DigitalPinToBitMask)         {1}
+         LDI	   R27, HI8(DigitalPinToBitMask)         {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R18, X                                {2}  {VBitMask => R18}
+         //  VPort := DigitalPinToPort[APin];
+         LDI	   R26, LO8(DigitalPinToPort)            {1}
+         LDI	   R27, HI8(DigitalPinToPort)            {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R24, X                                {2}
+         LSL     R24                                   {1}  {VPort => R24}
+         //  VPortValue := PortToOutput[VPort]^;
+         LDI	   R26, LO8(PortToOutput)                {1}
+         LDI     R27, HI8(PortToOutput)                {1}
+         ADD     R26, R24                              {1}
+         ADC     R27, R1                               {1}
+         LD      R28, X+                               {2}
+         LD      R29, X                                {2}  {VPortAddr => R28,R29} 
+         LD      R24, Y                                {2}  {VPortAddr^ => R24}
+         //  if AValue then
+         SBRS    r22, 0                                {1|2}
+         JMP     vfalse                                {4}
+         //  VPortAddr^ := VPortAddr^ or VBitMask;
+         OR      R24, R18                              {1}
+         JMP     exit                                  {4}
+         //  else           
+         vfalse:
+         //    VPortAddr^ := VPortAddr^ and not VBitMask;
+         COM     R18                                   {1}  
+         AND     R24, R18                              {1}
+         //
+         exit:         
+         ST      Y, R24                                {2}
+         //
+         POP     R29                                   {1}
+         POP     R28                                   {1}
+         POP     R27                                   {1}
+         POP     R26                                   {1}
+         POP     R18                                   {1}
+         // RET                                        {4}
+end;
+procedure DigitalWriteOld(const APin: Byte; const AValue: Boolean); assembler;
 {Total: 75}
 label
   exit;
-asm                 
+asm
          // CALL                                       {4}
          PUSH    R18  {AValue}                         {1}
          PUSH    R26  {X} {DigitalPinToPort} {Addr} {1}
@@ -611,9 +708,9 @@ asm
          LDI	   R26, LO8(DigitalPinToPort)         {1}
          LDI	   R27, HI8(DigitalPinToPort)         {1}
          ADD     R26, R24                              {1}
-         ADC     R27, R1                               {1} 
+         ADC     R27, R1                               {1}
          PUSH    R24                                   {1}
-         LD      R24, X                                {2}   
+         LD      R24, X                                {2}
          LSL     R24                                   {1}
   // VPortAddr := PortToOutput[VPort];
          LDI	   R26, LO8(PortToOutput)             {1}
@@ -624,7 +721,7 @@ asm
          LD      R25, X                                {2}
   //if AValue then
          SBRC    r18, 0                                {1|2}
-    //  sbi(VPort, VMask);   
+    //  sbi(VPort, VMask);
          RCALL   sbi                                   {3+28}
          NOP                                           {1}
   //if not AValue then
@@ -637,9 +734,9 @@ asm
          POP     R22                                   {1}
          POP     R27                                   {1}
          POP     R26                                   {1}
-         POP     R18                                   {1}  
+         POP     R18                                   {1}
          // RET                                        {4}
-end;   
+end;
 {$ENDIF}
 
 procedure ADCInit;
