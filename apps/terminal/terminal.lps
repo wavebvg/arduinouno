@@ -7,8 +7,8 @@
       <Unit>
         <Filename Value="terminal.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="28" Y="8"/>
-        <UsageCount Value="56"/>
+        <CursorPos X="68" Y="17"/>
+        <UsageCount Value="58"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -20,9 +20,9 @@
         <UnitName Value="UFormTerminal"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="347"/>
-        <CursorPos X="27" Y="362"/>
-        <UsageCount Value="56"/>
+        <TopLine Value="330"/>
+        <CursorPos X="47" Y="341"/>
+        <UsageCount Value="58"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -34,9 +34,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UFormDialogPreferences"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="10"/>
-        <CursorPos X="52" Y="23"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="109"/>
+        <CursorPos X="44" Y="129"/>
+        <UsageCount Value="51"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -263,8 +263,8 @@
       <Unit>
         <Filename Value="../../../../../fpc/default/src/packages/fcl-process/src/processbody.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="166"/>
-        <CursorPos X="10" Y="185"/>
+        <TopLine Value="101"/>
+        <CursorPos X="15" Y="113"/>
         <UsageCount Value="10"/>
       </Unit>
       <Unit>
@@ -274,127 +274,134 @@
         <CursorPos X="48" Y="25"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../../../fpc/default/src/packages/fcl-process/src/unix/process.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="328"/>
+        <CursorPos X="31" Y="339"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="97" Column="15" TopLine="89"/>
+        <Caret Line="243" Column="35" TopLine="234"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="41" Column="46" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="42" Column="46" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="64" Column="62" TopLine="39"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="108" Column="37" TopLine="88"/>
+        <Caret Line="238" Column="15" TopLine="235"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="583" Column="23" TopLine="556"/>
+        <Caret Line="300" Column="45" TopLine="289"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="568" TopLine="556"/>
+        <Caret Line="130" Column="62" TopLine="117"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="64" Column="22" TopLine="59"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="33" Column="21" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="38" Column="18" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="51" Column="14" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="64" Column="62" TopLine="43"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="124" Column="19" TopLine="103"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="323" Column="119" TopLine="319"/>
+        <Caret Line="588" Column="28" TopLine="571"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="345" Column="31" TopLine="318"/>
+        <Caret Line="106" Column="15" TopLine="95"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="202" Column="25" TopLine="200"/>
+        <Caret Line="250" Column="65" TopLine="240"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="359" Column="61" TopLine="349"/>
+        <Caret Line="253" Column="76" TopLine="240"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="117" Column="106" TopLine="96"/>
+      </Position>
+      <Position>
+        <Filename Value="uformdialogpreferences.pas"/>
+        <Caret Line="116" Column="106" TopLine="95"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="205" Column="30" TopLine="184"/>
+        <Caret Line="250" Column="64" TopLine="246"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="131" Column="81" TopLine="116"/>
+        <Caret Line="251" Column="64" TopLine="294"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="631" Column="44" TopLine="610"/>
+        <Caret Line="124" Column="25" TopLine="119"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="130" Column="22" TopLine="125"/>
+        <Caret Line="331" Column="41" TopLine="328"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="49" Column="21" TopLine="32"/>
+        <Caret Line="333" Column="9" TopLine="324"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="70" Column="31" TopLine="43"/>
+        <Caret Line="107" Column="20" TopLine="97"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="110" Column="25" TopLine="83"/>
+        <Caret Line="590" Column="13" TopLine="580"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="113" Column="26" TopLine="86"/>
+        <Caret Line="134" Column="14" TopLine="122"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="130" Column="66" TopLine="103"/>
+        <Caret Line="94" Column="27" TopLine="82"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="214" Column="62" TopLine="210"/>
+        <Caret Line="132" Column="58" TopLine="119"/>
       </Position>
       <Position>
         <Filename Value="uformterminal.pas"/>
-        <Caret Line="215" Column="42" TopLine="209"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="321" Column="41" TopLine="305"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="323" Column="48" TopLine="305"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="324" Column="22" TopLine="305"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="356" Column="18" TopLine="340"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="572" Column="13" TopLine="544"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="591" Column="65" TopLine="575"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="212" Column="136" TopLine="190"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="235" Column="48" TopLine="225"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="384" Column="14" TopLine="356"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="520" Column="28" TopLine="479"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="380" Column="31" TopLine="370"/>
+        <Caret Line="587" Column="10" TopLine="461"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -29,11 +29,12 @@ type
     ButtonBinPath: TButton;
     ButtonAvrdude: TButton;
     ButtonPanel: TButtonPanel;
-    CheckBoxShowTime: TCheckBox;
+    ComboBoxBaudRate: TComboBox;
     ComboBoxTTY: TComboBox;
     EditConfigPath: TEdit;
     EditBinPath: TEdit;
     EditAvrdude: TEdit;
+    LabelBaudRate: TLabel;
     LabelConfigPath: TLabel;
     LabelBinPath: TLabel;
     LabelAvrdude: TLabel;
@@ -46,6 +47,7 @@ type
     procedure ButtonConfigPathClick(Sender: TObject);
   private
     FAvrdudePath: String;
+    FBaudRate: Integer;
     FBinPath: String;
     FConfigPath: String;
     FDevice: String;
@@ -58,6 +60,7 @@ type
     property AvrdudePath: String read FAvrdudePath write FAvrdudePath;
     property BinPath: String read FBinPath write FBinPath;
     property ShowTime: Boolean read FShowTime write FShowTime;
+    property BaudRate: Integer read FBaudRate write FBaudRate;
   end;
 
 var
@@ -116,7 +119,7 @@ begin
   EditConfigPath.Text := ConfigPath;
   EditBinPath.Text := BinPath;
   EditAvrdude.Text := AvrdudePath;
-  CheckBoxShowTime.Checked := ShowTime;
+  ComboBoxBaudRate.Caption := IntToStr(BaudRate);
   Result := inherited ShowModal;
   if Result = mrOk then
   begin
@@ -124,7 +127,7 @@ begin
     ConfigPath := EditConfigPath.Text;
     BinPath := EditBinPath.Text;
     AvrdudePath := EditAvrdude.Text;
-    ShowTime := CheckBoxShowTime.Checked;
+    BaudRate := StrToIntDef(ComboBoxBaudRate.Caption, 115200);
   end;
 end;
 

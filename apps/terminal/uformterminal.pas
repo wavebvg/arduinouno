@@ -46,6 +46,7 @@ type
     ButtonClear: TButton;
     ButtonPreferences: TButton;
     ButtonFlash: TButton;
+    CheckBoxShowTime: TCheckBox;
     CheckBoxTextMode: TCheckBox;
     CheckBoxTextAutoClear: TCheckBox;
     ComboBoxNewLineType: TComboBox;
@@ -67,6 +68,7 @@ type
     procedure ActionPreferencesExecute(Sender: TObject);
     procedure ActionStopFlashExecute(Sender: TObject);
     procedure ActionStopFlashUpdate(Sender: TObject);
+    procedure CheckBoxShowTimeChange(Sender: TObject);
     procedure CheckBoxTextModeChange(Sender: TObject);
     procedure ComboBoxNewLineTypeChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -90,7 +92,6 @@ type
     FCurrentPressedKeysIndex: Integer;
     FPressedKeys: TPressedKeys;
     FTTYExist: Boolean;
-    FShowTime: Boolean;
     FStartTime: TDateTime;
     FInShowTime: Boolean;
     FInFlashing: Boolean;
@@ -105,10 +106,13 @@ type
     procedure LoadConfig;
     procedure SaveConfig;
   private
+    FBaudRate: Integer;
     function GetNewLineType: TNewLineType;
+    function GetShowTime: Boolean;
     function GetTextAutoClear: Boolean;
     function GetTextMode: Boolean;
     procedure SetNewLineType(AValue: TNewLineType);
+    procedure SetShowTime(AValue: Boolean);
     procedure SetTextAutoClear(AValue: Boolean);
     procedure SetTextMode(AValue: Boolean);
     procedure TMReadTimeout(var AMsg: TLMessage); message TM_READTIMEOUT;
@@ -125,7 +129,8 @@ type
     property ConfigPath: String read FConfigPath write FConfigPath;
     property BinPath: String read FBinPath write FBinPath;
     property AvrdudePath: String read FAvrdudePath write FAvrdudePath;
-    property ShowTime: Boolean read FShowTime write FShowTime;
+    property ShowTime: Boolean read GetShowTime write SetShowTime;
+    property BaudRate: Integer read FBaudRate write FBaudRate;
     property NewLineType: TNewLineType read GetNewLineType write SetNewLineType;
     property TextMode: Boolean read GetTextMode write SetTextMode;
     property TextAutoClear: Boolean read GetTextAutoClear write SetTextAutoClear;
@@ -213,9 +218,9 @@ end;
 
 procedure TFormTerminal.ActionSendUpdate(Sender: TObject);
 begin
-  TCustomAction(Sender).Enabled := Serial.Active and TextMode;
+  TCustomAction(Sender).Enabled := Serial.Active and TextMode and (EditLastKeys.Text <> '');
   ComboBoxNewLineType.Enabled := TextMode;
-  EditLastKeys.ReadOnly := not TCustomAction(Sender).Enabled;
+  EditLastKeys.ReadOnly := not (Serial.Active and TextMode);
 end;
 
 procedure TFormTerminal.ActionStartFlashExecute(Sender: TObject);
@@ -245,7 +250,7 @@ begin
     ProcessAVRDude.Parameters.Add('-q');
     ProcessAVRDude.Parameters.Add('-patmega328p');
     ProcessAVRDude.Parameters.Add('-carduino');
-    ProcessAVRDude.Parameters.Add('-b115200');
+    ProcessAVRDude.Parameters.Add(Format('-b%d', [BaudRate]));
     ProcessAVRDude.Parameters.Add('-D');
     ProcessAVRDude.Parameters.Add(Format('-P%s', [Device]));
     ProcessAVRDude.Parameters.Add(Format('-Uflash:w:%s:i', [VHEXPath]));
@@ -296,6 +301,7 @@ begin
   FormDialogPreferences.BinPath := BinPath;
   FormDialogPreferences.AvrdudePath := AvrdudePath;
   FormDialogPreferences.ShowTime := ShowTime;
+  FormDialogPreferences.BaudRate := BaudRate;
   if FormDialogPreferences.ShowModal = mrOk then
   begin
     Device := FormDialogPreferences.Device;
@@ -303,6 +309,7 @@ begin
     BinPath := FormDialogPreferences.BinPath;
     AvrdudePath := FormDialogPreferences.AvrdudePath;
     ShowTime := FormDialogPreferences.ShowTime;
+    BaudRate := FormDialogPreferences.BaudRate;
     SaveConfig;
   end;
 end;
@@ -318,6 +325,11 @@ end;
 procedure TFormTerminal.ActionStopFlashUpdate(Sender: TObject);
 begin
   TCustomAction(Sender).Enabled := FInFlashing and FTTYExist;
+end;
+
+procedure TFormTerminal.CheckBoxShowTimeChange(Sender: TObject);
+begin
+  SaveConfig;
 end;
 
 procedure TFormTerminal.CheckBoxTextModeChange(Sender: TObject);
@@ -578,6 +590,7 @@ begin
     ShowTime := FIniFile.ReadBool('MAIN', 'show_time', False);
     TextMode := FIniFile.ReadBool('MAIN', 'text_mode', False);
     TextAutoClear := FIniFile.ReadBool('MAIN', 'text_autoclear', True);
+    BaudRate := FIniFile.ReadInteger('MAIN', 'avrdude_baudrate', 115200);
     NewLineType := TNewLineType(FIniFile.ReadInteger('MAIN', 'new_line', 0));
     if FNeedSave then
     begin
@@ -597,6 +610,7 @@ begin
     Exit;
   end;
   FIniFile.WriteInteger('MAIN', 'new_line', Ord(NewLineType));
+  FIniFile.WriteInteger('MAIN', 'avrdude_baudrate', BaudRate);
   FIniFile.WriteString('MAIN', 'device', Device);
   FIniFile.WriteString('MAIN', 'config_path', ConfigPath);
   FIniFile.WriteString('MAIN', 'bin_path', BinPath);
@@ -609,6 +623,11 @@ end;
 function TFormTerminal.GetNewLineType: TNewLineType;
 begin
   Result := TNewLineType(ComboBoxNewLineType.ItemIndex);
+end;
+
+function TFormTerminal.GetShowTime: Boolean;
+begin
+  Result := CheckBoxShowTime.Checked;
 end;
 
 function TFormTerminal.GetTextAutoClear: Boolean;
@@ -633,6 +652,11 @@ end;
 procedure TFormTerminal.SetNewLineType(AValue: TNewLineType);
 begin
   ComboBoxNewLineType.ItemIndex := Ord(AValue);
+end;
+
+procedure TFormTerminal.SetShowTime(AValue: Boolean);
+begin
+  CheckBoxShowTime.Checked := AValue;
 end;
 
 procedure TFormTerminal.SetTextAutoClear(AValue: Boolean);

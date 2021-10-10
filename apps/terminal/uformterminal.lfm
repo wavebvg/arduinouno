@@ -1,7 +1,7 @@
 object FormTerminal: TFormTerminal
-  Left = 388
+  Left = 121
   Height = 483
-  Top = 275
+  Top = 126
   Width = 863
   Caption = 'TTY terminal'
   ClientHeight = 483
@@ -52,9 +52,9 @@ object FormTerminal: TFormTerminal
     end
     object CheckBoxTextMode: TCheckBox
       Left = 8
-      Height = 23
-      Top = 400
-      Width = 79
+      Height = 21
+      Top = 402
+      Width = 80
       Align = alCustom
       Anchors = [akLeft, akBottom]
       Caption = 'Send text'
@@ -63,8 +63,8 @@ object FormTerminal: TFormTerminal
     end
     object ComboBoxNewLineType: TComboBox
       Left = 8
-      Height = 25
-      Top = 424
+      Height = 24
+      Top = 425
       Width = 85
       Anchors = [akLeft, akBottom]
       ItemHeight = 0
@@ -82,14 +82,25 @@ object FormTerminal: TFormTerminal
     end
     object CheckBoxTextAutoClear: TCheckBox
       Left = 8
-      Height = 23
-      Top = 452
-      Width = 83
+      Height = 21
+      Top = 454
+      Width = 85
       Align = alCustom
       Anchors = [akLeft, akBottom]
       Caption = 'Auto clear'
       OnChange = CheckBoxTextModeChange
       TabOrder = 6
+    end
+    object CheckBoxShowTime: TCheckBox
+      Left = 8
+      Height = 21
+      Top = 376
+      Width = 85
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Top = 5
+      Caption = 'Show time'
+      OnChange = CheckBoxShowTimeChange
+      TabOrder = 7
     end
   end
   object PanelBody: TPanel
@@ -122,8 +133,8 @@ object FormTerminal: TFormTerminal
     object EditLastKeys: TEdit
       AnchorSideRight.Side = asrBottom
       Left = 8
-      Height = 27
-      Top = 451
+      Height = 23
+      Top = 455
       Width = 672
       Anchors = [akLeft, akRight, akBottom]
       Color = clInfoBk
@@ -135,12 +146,15 @@ object FormTerminal: TFormTerminal
       TabOrder = 1
     end
     object ButtonSend: TButton
+      AnchorSideLeft.Control = EditLastKeys
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = EditLastKeys
+      AnchorSideTop.Side = asrCenter
       Left = 680
       Height = 25
-      Top = 452
+      Top = 454
       Width = 75
       Action = ActionSend
-      Anchors = [akRight, akBottom]
       TabOrder = 2
     end
   end
