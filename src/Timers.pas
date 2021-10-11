@@ -58,7 +58,7 @@ type
     procedure SetCompareBEvent(const AEvent: TTimerInterruptEvent);
     procedure SetCompareBProc(const AProc: TTimerInterruptProc);
     procedure ClearCompareBEvent;
-    property CounterModes: TTimerCounterModes read GetCounterModes write SetCounterModes;
+    property CounterModes: TTimerCounterModes read GetCounterModes;
     property OutputModes: TTimerOutputModes read GetOutputModes write SetOutputModes;
     property CTCMode: Boolean read GetCTCMode write SetCTCMode;
   end;
@@ -235,7 +235,7 @@ begin
 end;
 
 {$ELSE}
-procedure AbstractTimerDoCompareEvent(const Self: TMethod); assembler;
+procedure AbstractTimerDoCompareEvent(const VMethod: TMethod); assembler;
 label
   exit;
 asm
@@ -243,13 +243,10 @@ asm
          PUSH    R27
          PUSH    R30
          PUSH    R31
-         // VEvent := TMethod(Self.FCompareAEvent);
+         //         
          MOVW    R26, R24
-         //
          LD      R30, X+
          LD      R31, X+
-         LD      R24, X+
-         LD      R25, X
          //if VEvent.Code <> nil then
          CP      R30, R1
          CPC     R31, R1
@@ -262,7 +259,9 @@ asm
          PUSH    R22
          PUSH    R23   
          PUSH    R28
-         PUSH    R29
+         PUSH    R29  
+         LD      R24, X+
+         LD      R25, X
          ICALL      
          POP     R29
          POP     R28
@@ -309,7 +308,9 @@ begin
   begin
     FSubscriberOVFs[FSubscriberOFIndex] := TMethod(AEvent);
     Result := FSubscriberOFIndex;
-    Inc(FSubscriberOFIndex);
+    Inc(FSubscriberOFIndex);       
+    if FSubscriberOFIndex = 1 then
+      SetCounterModes(CounterModes + [tcmOverflow]);
   end;
 end;
 
@@ -333,6 +334,8 @@ begin
     begin
       Move(FSubscriberOVFs[i + 1], FSubscriberOVFs[i], (FSubscriberOFIndex - i - 1));
       Dec(FSubscriberOFIndex);
+      if FSubscriberOFIndex = 0 then
+        SetCounterModes(CounterModes - [tcmOverflow]);
       Exit;
     end;
 end;
@@ -348,40 +351,56 @@ end;
 
 procedure TAbstractTimer.SetCompareAEvent(const AEvent: TTimerInterruptEvent);
 begin
-  asm
-           NOP
-  end;
-  FCompareAEvent := AEvent;
+  if (AEvent <> nil) and (TMethod(AEvent).Code <> nil) then
+  begin
+    FCompareAEvent := AEvent;
+    SetCounterModes(CounterModes + [tcmCompareA]);
+  end else
+    ClearCompareAEvent;
 end;
 
 procedure TAbstractTimer.SetCompareAProc(const AProc: TTimerInterruptProc);
 begin
-  TMethod(FCompareAEvent).Code := AProc;
-  TMethod(FCompareAEvent).Data := nil;
+  if AProc <> nil then
+  begin
+    TMethod(FCompareAEvent).Code := AProc;
+    TMethod(FCompareAEvent).Data := nil;
+    SetCounterModes(CounterModes + [tcmCompareA]);
+  end else
+    ClearCompareAEvent;
 end;
 
 procedure TAbstractTimer.ClearCompareAEvent;
 begin
-  FCompareAEvent := Default(TTimerInterruptEvent);
+  FCompareAEvent := Default(TTimerInterruptEvent); 
+  SetCounterModes(CounterModes - [tcmCompareA]);
 end;
 
 procedure TAbstractTimer.SetCompareBEvent(const AEvent: TTimerInterruptEvent);
 begin
-  asm
-           NOP
-  end;
-  FCompareBEvent := AEvent;
+  if (AEvent <> nil) and (TMethod(AEvent).Code <> nil) then
+  begin
+    FCompareBEvent := AEvent;
+    SetCounterModes(CounterModes + [tcmCompareB]);
+  end else
+    ClearCompareBEvent;
 end;
 
 procedure TAbstractTimer.SetCompareBProc(const AProc: TTimerInterruptProc);
-begin
-  TMethod(FCompareBEvent).Code := AProc;
-  TMethod(FCompareBEvent).Data := nil;
+begin                      
+  if AProc <> nil then
+  begin
+    TMethod(FCompareBEvent).Code := AProc;
+    TMethod(FCompareBEvent).Data := nil;
+    SetCounterModes(CounterModes + [tcmCompareB]);
+  end else
+    ClearCompareBEvent;
 end;
 
 procedure TAbstractTimer.ClearCompareBEvent;
 begin
-  FCompareBEvent := Default(TTimerInterruptEvent);
+  FCompareBEvent := Default(TTimerInterruptEvent);  
+  SetCounterModes(CounterModes - [tcmCompareB]);
 end;
 
 { TTimer0 }

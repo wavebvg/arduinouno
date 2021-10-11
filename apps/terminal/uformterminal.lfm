@@ -54,7 +54,7 @@ object FormTerminal: TFormTerminal
       Left = 8
       Height = 21
       Top = 402
-      Width = 80
+      Width = 75
       Align = alCustom
       Anchors = [akLeft, akBottom]
       Caption = 'Send text'
@@ -63,8 +63,8 @@ object FormTerminal: TFormTerminal
     end
     object ComboBoxNewLineType: TComboBox
       Left = 8
-      Height = 24
-      Top = 425
+      Height = 25
+      Top = 424
       Width = 85
       Anchors = [akLeft, akBottom]
       ItemHeight = 0
@@ -84,7 +84,7 @@ object FormTerminal: TFormTerminal
       Left = 8
       Height = 21
       Top = 454
-      Width = 85
+      Width = 80
       Align = alCustom
       Anchors = [akLeft, akBottom]
       Caption = 'Auto clear'
@@ -95,7 +95,7 @@ object FormTerminal: TFormTerminal
       Left = 8
       Height = 21
       Top = 376
-      Width = 85
+      Width = 81
       Anchors = [akLeft, akBottom]
       BorderSpacing.Top = 5
       Caption = 'Show time'

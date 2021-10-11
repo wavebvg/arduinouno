@@ -240,18 +240,18 @@ asm
          LSL     R18
 {$IfDef USE_DEBUG_COUNTER}
          //      ServoCounter[SortedServoIndex] := Timer1_Counter - ServoBeginCounter;
-         LDS     R20, ServoBeginCounter
-         LDS     R21, ServoBeginCounter + 1
-         LDI     R28, LO8(ServoCounter)
-         LDI     R29, HI8(ServoCounter)
-         ADD     R28, R18
-         ADC     R29, R1
-         LDS     R22, 132
-         LDS     R23, 133
-         SUB     R22, R20
-         SBC     R23, R21
-         ST      Y+,  R22
-         ST      Y,   R23
+         LDS     R20, ServoBeginCounter        {3}
+         LDS     R21, ServoBeginCounter + 1    {3}
+         LDI     R28, LO8(ServoCounter)        {1}
+         LDI     R29, HI8(ServoCounter)        {1}
+         ADD     R28, R18                      {1}
+         ADC     R29, R1                       {1}
+         LDS     R22, 132                      {3}
+         LDS     R23, 133                      {3}
+         SUB     R22, R20                      {1}
+         SBC     R23, R21                      {1}
+         ST      Y+,  R22                      {2}
+         ST      Y,   R23                      {2}
 {$EndIf USE_DEBUG_COUNTER}
          //      Включаем все сервоприводы, для которых вышло время
          //      PORTB := PORTB and SortedServos[SortedServoIndex].NotMaskB;

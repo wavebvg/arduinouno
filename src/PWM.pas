@@ -12,11 +12,10 @@ uses
 const
   MAX_PWM_PIN_COUNT = 8;
   MAX_VALUE = 255;
-  CICLE_STEP_COUNT = 4;
+  CICLE_STEP_COUNT = 2;
   CICLE_FULL_COUNT = MAX_VALUE * CICLE_STEP_COUNT;
 
 procedure AnalogWrite(const APin: Byte; const AValue: Byte);
-procedure AnalogRead(const APin: Byte; const AValue: Byte);
 
 type
   TPWMPin = packed record
@@ -24,11 +23,12 @@ type
     Counter: Word;
   end;
 
-  TSortedPWMPin = packed record
+  PSortedPWMPin = ^TSortedPWMPin;
+  TSortedPWMPin = packed record 
+    Counter: Byte;
     NotMaskB: Byte;
     NotMaskC: Byte;
     NotMaskD: Byte;
-    Counter: Byte;
   end;
 
   TSortedPWMPins = array[0..MAX_PWM_PIN_COUNT - 1 + 5] of TSortedPWMPin;
@@ -36,17 +36,19 @@ type
 
 var
   PWMCount: Byte;
+  PWMPins: TPWMPins;
+  PWMChanged: Boolean;       
+  PWMAllMaskB, PWMAllMaskC, PWMAllMaskD: Byte;
+  SortedPWMs: TSortedPWMPins;
   SortedPWMCount: Byte;
   SortedPWMIndex: Byte;
-  PWMPins: TPWMPins;
-  PWMChanged: Boolean;
-  SortedPWMs: TSortedPWMPins;
-  PWMAllMaskB, PWMAllMaskC, PWMAllMaskD: Byte;
+  CurrentSortedPWM: PByte;
 
+{$IfDef USE_DEBUG_COUNTER}
 var
   PWMBeginCounter: Word;
   PWMCounter: array[0..MAX_PWM_PIN_COUNT - 1 + 5] of Word;
-  DebugCounter: array[0..MAX_PWM_PIN_COUNT - 1 + 5] of Byte;
+{$EndIf USE_DEBUG_COUNTER}
 
 {$IFDEF PCTEST}
 procedure DoTimer0ServoCompareB;
@@ -65,7 +67,6 @@ var
   VComplete: Boolean;
   VOldCounter, d: Word;
 begin
-  //UARTConsole.WriteLnFormat('Sorted!', []);
   // Сортируем пузырьком
   if PWMCount > 1 then
     for i := 1 to PWMCount - 1 do
@@ -170,8 +171,10 @@ begin
       Inc(VOldCounter, d);
       SortedPWMs[j].Counter := d;
     end;
-  end;
-  SortedPWMCount := j + 1;
+  end;    
+  Inc(j); 
+  SortedPWMs[j].Counter := 0;
+  SortedPWMCount := j;
   PWMAllMaskB := VAllMaskB;
   PWMAllMaskC := VAllMaskC;
   PWMAllMaskD := VAllMaskD;
@@ -180,36 +183,157 @@ end;
 {$IFDEF PCTEST}
 procedure DoTimer0ServoCompareB; {assembler;}
 begin
-  if SortedPWMIndex = SortedPWMCount then
-  begin
+  if CurrentSortedPWM^ = 0 then
+  begin               
+    Inc(CicleNo);
     // Restart cicle
     if PWMChanged then
     begin
       PWMChanged := False;
       SortPWMs;
     end;
+    CurrentSortedPWM := @SortedPWMs;
+{$IfDef USE_DEBUG_COUNTER}
     SortedPWMIndex := 0;
+    PWMBeginCounter := Timer1_Counter;
+{$EndIf USE_DEBUG_COUNTER}
     PORTB := PORTB or PWMAllMaskB;
     PORTC := PORTC or PWMAllMaskC;
     PORTD := PORTD or PWMAllMaskD;
-    PWMBeginCounter := Timer1_Counter;
-    Timer0_ValueB := Timer0_Counter + SortedPWMs[0].Counter - 2;
-    Inc(PWMCicles);
+    Timer0_ValueB := Timer0_Counter + CurrentSortedPWM^ - 2;
   end
   else
   begin
-    // Next step of cicle    
-    PORTB := PORTB and SortedPWMs[SortedPWMIndex].NotMaskB;
-    PORTC := PORTC and SortedPWMs[SortedPWMIndex].NotMaskC;
-    PORTD := PORTD and SortedPWMs[SortedPWMIndex].NotMaskD;
+    // Next step of cicle
+    Inc(CurrentSortedPWM);
+{$IfDef USE_DEBUG_COUNTER}
     PWMCounter[SortedPWMIndex] := Timer1_Counter - PWMBeginCounter;
     Inc(SortedPWMIndex);
-    Timer0_ValueB := Timer0_ValueB + SortedPWMs[SortedPWMIndex].Counter;
+{$EndIf USE_DEBUG_COUNTER}
+    PORTB := PORTB and CurrentSortedPWM^;
+    Inc(CurrentSortedPWM);
+    PORTC := PORTC and CurrentSortedPWM^;
+    Inc(CurrentSortedPWM);
+    PORTD := PORTD and CurrentSortedPWM^;
+    Inc(CurrentSortedPWM);
+    Timer0_ValueB := Timer0_ValueB + CurrentSortedPWM^;
   end;
 end;
 
 {$ELSE}
 procedure DoTimer0ServoCompareB; assembler;
+label
+  inits, nexts, exit, nochanged;
+asm
+         //if CurrentSortedPWM^ = 0 then
+         LDS     R26, CurrentSortedPWM
+         LDS     R27, CurrentSortedPWM + 1
+         LD      R19, X
+         CP      R19, R1
+         BREQ    inits
+         RJMP    nexts
+         inits:
+         //begin
+         //  if PWMChanged then
+         LDS     R19, PWMChanged
+         CP      R19, R1
+         BREQ    nochanged
+         //  begin
+         //    PWMChanged := False;
+         STS     PWMChanged, R1
+         //    SortPWMs;
+         CALL    SortPWMs
+         //  end;
+         nochanged:
+         //  CurrentSortedPWM := @SortedPWMs;
+         LDI     R26, LO8(SortedPWMs)
+         LDI     R27, HI8(SortedPWMs)
+         STS     CurrentSortedPWM, R26
+         STS     CurrentSortedPWM + 1, R27
+{$IfDef USE_DEBUG_COUNTER}
+         //    Запоминаем текущее значение счетчика для отладки
+         //    PWMBeginCounter := Timer1_Counter;
+         LDS     R20, 132
+         LDS     R21, 133
+         STS     PWMBeginCounter, R20
+         STS     PWMBeginCounter + 1, R21
+{$EndIf USE_DEBUG_COUNTER}
+         //  PORTB := PORTB or PWMAllMaskB;
+         IN      R18, 5
+         LDS     R19, PWMAllMaskB
+         OR      R18, R19
+         OUT     5, R18
+         //  PORTC := PORTC or PWMAllMaskC;
+         IN      R18, 8
+         LDS     R19, PWMAllMaskC
+         OR      R18, R19
+         OUT     8, R18
+         //  PORTD := PORTD or PWMAllMaskD;
+         IN      R18, 11
+         LDS     R19, PWMAllMaskD
+         OR      R18, R19
+         OUT     11, R18
+         //  Timer0_ValueB := Timer0_Counter + SortedPWMs[0].Counter - 2;
+         LD      R18, X
+         SBCI    R18, 2
+         IN      R19, 38
+         ADD     R19, R18
+         OUT     40,  R19
+         //end
+         RJMP    exit
+         nexts:
+         //else
+         //begin
+         //Inc(CurrentSortedPWM);
+         ADIW    R26, 1
+{$IfDef USE_DEBUG_COUNTER}
+         //      ServoCounter[SortedServoIndex] := Timer1_Counter - PWMBeginCounter;   
+         LDS     R18, SortedPWMIndex           {3}
+         LDS     R20, PWMBeginCounter          {3}
+         LDS     R21, PWMBeginCounter + 1      {3}
+         LDI     R28, LO8(PWMCounter)          {1}
+         LDI     R29, HI8(PWMCounter)          {1}
+         ADD     R28, R18                      {1}
+         ADC     R29, R1                       {1}
+         ADD     R28, R18                      {1}
+         ADC     R29, R1                       {1}
+         LDS     R22, 132                      {3}
+         LDS     R23, 133                      {3}
+         SUB     R22, R20                      {1}
+         SBC     R23, R21                      {1}
+         ST      Y+,  R22                      {2}
+         ST      Y,   R23                      {2}  
+         INC     R18                           {1}
+         STS     SortedPWMIndex, R18           {3}
+{$EndIf USE_DEBUG_COUNTER}
+         //  PORTB := PORTB and SortedPWMs[SortedPWMIndex].NotMaskB; {PORTB := PORTB and CurrentSortedPWM^; Inc(CurrentSortedPWM);}
+         LD      R19, X+
+         IN      R20, 5
+         AND     R20, R19
+         OUT     5,   R20
+         //  PORTC := PORTC and SortedPWMs[SortedPWMIndex].NotMaskC; {PORTC := PORTC and CurrentSortedPWM^; Inc(CurrentSortedPWM);}
+         LD      R19, X+
+         IN      R20, 8
+         AND     R20, R19
+         OUT     8,   R20
+         //  PORTD := PORTD and SortedPWMs[SortedPWMIndex].NotMaskD; {PORTD := PORTD and CurrentSortedPWM^; Inc(CurrentSortedPWM);}
+         LD      R19, X+
+         IN      R20, 11
+         AND     R20, R19
+         OUT     11,   R20
+         //  Timer0_ValueB := Timer0_ValueB + SortedPWMs[SortedPWMIndex].Counter; {Timer0_ValueB := Timer0_ValueB + CurrentSortedPWM^;}
+         LD      R19, X
+         IN      R20, 40
+         ADD     R20, R19
+         OUT     40,  R20
+         STS     CurrentSortedPWM, R26
+         STS     CurrentSortedPWM + 1, R27
+         //end;
+         exit:
+         NOP
+end;
+
+procedure DoTimer0ServoCompareBOld; assembler;
 label
   inits, nexts, exit, nochanged;
 asm
@@ -261,7 +385,7 @@ asm
          //LDI     R27, HI8(SortedPWMs)
          //ADIW    R26, 3
          //LD      R18, X
-         LDS     R18, SortedPWMs + 3
+         LDS     R18, SortedPWMs
          SBCI    R18, 2
          IN      R19, 38
          ADD     R19, R18
@@ -275,8 +399,8 @@ asm
          MOV     R19, R18
          LSL     R19
          LSL     R19
-         LDI     R26, LO8(SortedPWMs)
-         LDI     R27, HI8(SortedPWMs)
+         LDI     R26, LO8(SortedPWMs + 1)
+         LDI     R27, HI8(SortedPWMs + 1)
          ADD     R26, R19
          ADC     R27, R1
          LD      R19, X+
@@ -314,7 +438,6 @@ asm
          INC     R18
          STS     SortedPWMIndex, R18
          //  Timer0_ValueB := Timer0_ValueB + SortedPWMs[SortedPWMIndex].Counter;
-         ADIW    R26, 4
          LD      R19, X
          IN      R20, 40
          ADD     R20, R19
@@ -377,19 +500,16 @@ begin
   begin
     Timer0_ValueB := Timer0_Counter + 5;
     Timer0.SetCompareBProc(@DoTimer0ServoCompareB);
-    Timer0.CounterModes := Timer0.CounterModes + [tcmCompareB];
   end
   else
   if PWMCount = 0 then
   begin
-    Timer0.CounterModes := Timer0.CounterModes - [tcmCompareB];
     Timer0.ClearCompareBEvent;
   end;
 end;
 
-procedure AnalogRead(const APin: Byte; const AValue: Byte);
-begin
-
-end;
+initialization
+    FillByte(SortedPWMs, SizeOf(SortedPWMs), 0);
+    CurrentSortedPWM := @SortedPWMs[Length(SortedPWMs) - 1];
 
 end.

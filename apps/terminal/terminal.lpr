@@ -19,6 +19,7 @@ uses
 
 begin
   RequireDerivedFormResource:=True;
+  Application.Title:='TTY terminal';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TFormTerminal, FormTerminal);

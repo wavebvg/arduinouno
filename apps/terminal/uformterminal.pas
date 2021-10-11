@@ -15,7 +15,8 @@ uses
   StdCtrls,
   ExtCtrls,
   LMessages,
-  ActnList, UTF8Process,
+  ActnList,
+  UTF8Process,
   IniFiles,
   LazSynaSer;
 
@@ -111,12 +112,14 @@ type
     function GetShowTime: Boolean;
     function GetTextAutoClear: Boolean;
     function GetTextMode: Boolean;
+    procedure SetBinPath(AValue: String);
     procedure SetNewLineType(AValue: TNewLineType);
     procedure SetShowTime(AValue: Boolean);
     procedure SetTextAutoClear(AValue: Boolean);
     procedure SetTextMode(AValue: Boolean);
     procedure TMReadTimeout(var AMsg: TLMessage); message TM_READTIMEOUT;
     procedure TMWriteTimeout(var AMsg: TLMessage); message TM_WRITETIMEOUT;
+    procedure UpdateCaption;
   protected
     property SerialCanRead: Boolean read GetSerialCanRead;
     procedure TTYOpen;
@@ -127,7 +130,7 @@ type
 
     property Device: String read FDevice write SetDevice;
     property ConfigPath: String read FConfigPath write FConfigPath;
-    property BinPath: String read FBinPath write FBinPath;
+    property BinPath: String read FBinPath write SetBinPath;
     property AvrdudePath: String read FAvrdudePath write FAvrdudePath;
     property ShowTime: Boolean read GetShowTime write SetShowTime;
     property BaudRate: Integer read FBaudRate write FBaudRate;
@@ -592,6 +595,7 @@ begin
     TextAutoClear := FIniFile.ReadBool('MAIN', 'text_autoclear', True);
     BaudRate := FIniFile.ReadInteger('MAIN', 'avrdude_baudrate', 115200);
     NewLineType := TNewLineType(FIniFile.ReadInteger('MAIN', 'new_line', 0));
+    UpdateCaption;
     if FNeedSave then
     begin
       SaveConfig;
@@ -649,6 +653,13 @@ begin
   Result := CheckBoxTextMode.Checked;
 end;
 
+procedure TFormTerminal.SetBinPath(AValue: String);
+begin
+  if FBinPath = AValue then Exit;
+  FBinPath := AValue;
+  UpdateCaption;
+end;
+
 procedure TFormTerminal.SetNewLineType(AValue: TNewLineType);
 begin
   ComboBoxNewLineType.ItemIndex := Ord(AValue);
@@ -676,6 +687,20 @@ begin
   begin
     DisplayText('Write timeout');
     TTYClose;
+  end;
+end;
+
+procedure TFormTerminal.UpdateCaption;
+var
+  VCurrentBinFileName: String;
+begin
+  if BinPath = '' then
+    Caption := Application.Title
+  else
+  begin
+    VCurrentBinFileName := ExtractFileName(BinPath);
+    VCurrentBinFileName := ChangeFileExt(VCurrentBinFileName, '');
+    Caption := Format('<%s> - %s', [VCurrentBinFileName, Application.Title]);
   end;
 end;
 

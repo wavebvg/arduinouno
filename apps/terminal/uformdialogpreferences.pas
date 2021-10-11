@@ -76,7 +76,8 @@ uses
 { TFormDialogPreferences }
 
 procedure TFormDialogPreferences.ButtonConfigPathClick(Sender: TObject);
-begin
+begin                
+  OpenDialog.FileName := EditConfigPath.Text;
   if OpenDialog.Execute then
     EditConfigPath.Text := OpenDialog.FileName;
 end;
@@ -89,7 +90,8 @@ begin
 end;
 
 procedure TFormDialogPreferences.ButtonAvrdudeClick(Sender: TObject);
-begin
+begin                      
+  OpenDialog.FileName := EditAvrdude.Text;
   if OpenDialog.Execute then
     EditAvrdude.Text := OpenDialog.FileName;
 end;

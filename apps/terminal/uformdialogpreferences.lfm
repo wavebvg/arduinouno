@@ -21,8 +21,8 @@ object FormDialogPreferences: TFormDialogPreferences
     TabOrder = 0
     object ButtonPanel: TButtonPanel
       Left = 7
-      Height = 34
-      Top = 276
+      Height = 35
+      Top = 275
       Width = 351
       OKButton.Name = 'OKButton'
       OKButton.DefaultCaption = True
@@ -37,7 +37,7 @@ object FormDialogPreferences: TFormDialogPreferences
     end
     object ComboBoxTTY: TComboBox
       Left = 72
-      Height = 27
+      Height = 29
       Top = 8
       Width = 280
       Anchors = [akTop, akLeft, akRight]
@@ -49,10 +49,10 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = ComboBoxTTY
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = ComboBoxTTY
-      Left = 48
-      Height = 16
-      Top = 13
-      Width = 24
+      Left = 51
+      Height = 17
+      Top = 14
+      Width = 21
       Anchors = [akTop, akRight]
       Caption = 'TTY'
     end
@@ -62,8 +62,8 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = ButtonConfigPath
       Left = 72
-      Height = 25
-      Top = 70
+      Height = 26
+      Top = 73
       Width = 248
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 5
@@ -77,7 +77,7 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideRight.Side = asrBottom
       Left = 320
       Height = 25
-      Top = 70
+      Top = 74
       Width = 32
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 5
@@ -89,10 +89,10 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = EditConfigPath
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = EditConfigPath
-      Left = 31
-      Height = 16
-      Top = 74
-      Width = 41
+      Left = 36
+      Height = 17
+      Top = 78
+      Width = 36
       Anchors = [akTop, akRight]
       Caption = 'Config'
     end
@@ -100,10 +100,10 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = EditBinPath
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = EditBinPath
-      Left = 52
-      Height = 16
-      Top = 104
-      Width = 20
+      Left = 54
+      Height = 17
+      Top = 109
+      Width = 18
       Anchors = [akTop, akRight]
       Caption = 'Bin'
     end
@@ -113,8 +113,8 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = ButtonBinPath
       Left = 72
-      Height = 25
-      Top = 100
+      Height = 26
+      Top = 104
       Width = 248
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 5
@@ -130,7 +130,7 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideRight.Side = asrBottom
       Left = 320
       Height = 25
-      Top = 100
+      Top = 105
       Width = 32
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 5
@@ -142,10 +142,10 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = EditAvrdude
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = EditAvrdude
-      Left = 22
-      Height = 16
-      Top = 44
-      Width = 50
+      Left = 26
+      Height = 17
+      Top = 47
+      Width = 46
       Anchors = [akTop, akRight]
       Caption = 'avrdude'
     end
@@ -155,8 +155,8 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = ButtonAvrdude
       Left = 72
-      Height = 25
-      Top = 40
+      Height = 26
+      Top = 42
       Width = 248
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 5
@@ -170,7 +170,7 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideRight.Side = asrBottom
       Left = 320
       Height = 25
-      Top = 40
+      Top = 42
       Width = 32
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 5
@@ -185,8 +185,8 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideRight.Control = ComboBoxTTY
       AnchorSideRight.Side = asrBottom
       Left = 72
-      Height = 24
-      Top = 130
+      Height = 25
+      Top = 135
       Width = 280
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 5
@@ -208,10 +208,10 @@ object FormDialogPreferences: TFormDialogPreferences
       AnchorSideTop.Control = ComboBoxBaudRate
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = ComboBoxBaudRate
-      Left = 13
-      Height = 16
-      Top = 134
-      Width = 59
+      Left = 18
+      Height = 17
+      Top = 139
+      Width = 54
       Anchors = [akTop, akRight]
       Caption = 'BaudRate'
     end
