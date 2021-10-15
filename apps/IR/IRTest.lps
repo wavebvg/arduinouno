@@ -7,17 +7,18 @@
       <Unit>
         <Filename Value="IRTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="30" Y="22"/>
-        <UsageCount Value="166"/>
+        <TopLine Value="5"/>
+        <CursorPos X="28" Y="9"/>
+        <UsageCount Value="170"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="828"/>
         <CursorPos X="20" Y="838"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="123"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -27,7 +28,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="102"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemote.pas"/>
@@ -35,7 +36,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="16" Y="16"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="102"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemoteISR.pas"/>
@@ -43,26 +44,26 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="52"/>
         <CursorPos X="21" Y="55"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="102"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IRReceiver.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="199"/>
-        <CursorPos X="37" Y="162"/>
-        <UsageCount Value="46"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="89"/>
+        <CursorPos X="31" Y="87"/>
+        <UsageCount Value="50"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/KeyMap.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="55"/>
+        <CursorPos X="26" Y="79"/>
+        <UsageCount Value="50"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="KeyMap.pas"/>
@@ -206,139 +207,41 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/UARTI.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="56"/>
-        <CursorPos X="20" Y="60"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="116"/>
+        <CursorPos X="35" Y="130"/>
         <UsageCount Value="13"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/UART.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="7"/>
-        <CursorPos X="21" Y="27"/>
-        <UsageCount Value="10"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="24"/>
+        <CursorPos X="26" Y="31"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/IR.pas"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="197"/>
-        <CursorPos X="16" Y="13"/>
-        <UsageCount Value="12"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="99"/>
+        <CursorPos X="33" Y="69"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/Timers.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="420"/>
         <CursorPos X="38" Y="440"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="81" Column="14" TopLine="67"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="69" Column="11" TopLine="57"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="109" Column="39" TopLine="90"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="73" Column="24" TopLine="70"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="115" Column="32" TopLine="96"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="73" Column="3" TopLine="53"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="101" Column="36" TopLine="97"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="111" Column="49" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="110" Column="17" TopLine="91"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="171" Column="21" TopLine="150"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="115" Column="33" TopLine="101"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="118" Column="27" TopLine="95"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="110" Column="27" TopLine="98"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="73" Column="32" TopLine="65"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="82" Column="32" TopLine="72"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="109" Column="26" TopLine="91"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="69" Column="10" TopLine="62"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="106" Column="31" TopLine="82"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="103" Column="18" TopLine="75"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="100" Column="38" TopLine="71"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="69" Column="10" TopLine="69"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="100" Column="35" TopLine="87"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="154" Column="26" TopLine="58"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="48" Column="3" TopLine="29"/>
-      </Position>
-      <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="216" Column="15" TopLine="203"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="849" Column="24" TopLine="853"/>
       </Position>
       <Position>
         <Filename Value="../../src/IRReceiver.pas"/>
@@ -355,6 +258,106 @@
       <Position>
         <Filename Value="../../src/IRReceiver.pas"/>
         <Caret Line="72" Column="3" TopLine="52"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="9" Column="9" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/KeyMap.pas"/>
+        <Caret Line="30" Column="10" TopLine="17"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="23" Column="34" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="76" Column="7" TopLine="54"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="81" Column="15" TopLine="59"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="83" Column="7" TopLine="61"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="84" Column="7" TopLine="62"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="85" Column="7" TopLine="63"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="86" Column="7" TopLine="64"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="87" Column="7" TopLine="65"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IR.pas"/>
+        <Caret Line="205" Column="13" TopLine="183"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/KeyMap.pas"/>
+        <Caret Line="78" Column="27" TopLine="55"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="172" Column="23" TopLine="159"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="60" Column="8" TopLine="56"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="171" Column="12" TopLine="166"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="81" Column="3" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="174" Column="25" TopLine="170"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="75" Column="3" TopLine="61"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="10" Column="8" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UARTI.pas"/>
+        <Caret Line="130" Column="12" TopLine="115"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="17" Column="23" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UARTI.pas"/>
+        <Caret Line="130" Column="35" TopLine="116"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="237" Column="61" TopLine="212"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="177" Column="40" TopLine="165"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="195" Column="42" TopLine="176"/>
       </Position>
     </JumpHistory>
     <RunParams>

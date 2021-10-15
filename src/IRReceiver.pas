@@ -9,28 +9,22 @@ uses
   ArduinoTools;
 
 const
-  IR_MAX_DATA_TIME = 9000;
-  IR_DELTA_TIME = 100;
+  IR_DELTA_TIME = 16 * 150;
+  IR_META_DATA_TIME = 9000;
   //
-  IR_META_DATA_TIME = IR_MAX_DATA_TIME;
   IR_META_DATA_TIME_MIN = IR_META_DATA_TIME - IR_DELTA_TIME;
   IR_META_DATA_TIME_MAX = IR_META_DATA_TIME + IR_DELTA_TIME;
-  IR_PREAMBULE_SPACE_TIME = IR_MAX_DATA_TIME div 2;
-  IR_PREAMBULE_SPACE_TIME_MIN = IR_PREAMBULE_SPACE_TIME - IR_DELTA_TIME;
-  IR_PREAMBULE_SPACE_TIME_MAX = IR_PREAMBULE_SPACE_TIME + IR_DELTA_TIME;
-  IR_REPEAT_SPACE_TIME = IR_MAX_DATA_TIME div 4;
-  IR_REPEAT_SPACE_TIME_MIN = IR_REPEAT_SPACE_TIME - IR_DELTA_TIME;
-  IR_REPEAT_SPACE_TIME_MAX = IR_REPEAT_SPACE_TIME + IR_DELTA_TIME;
+  IR_PREAMBULE_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 2;
+  IR_PREAMBULE_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 2;
+  IR_REPEAT_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 4;
+  IR_REPEAT_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 4;
   //
-  IR_VALUE_DATA_TIME = IR_MAX_DATA_TIME div 16;
-  IR_VALUE_DATA_TIME_MIN = IR_VALUE_DATA_TIME - IR_DELTA_TIME;
-  IR_VALUE_DATA_TIME_MAX = IR_VALUE_DATA_TIME + IR_DELTA_TIME;
-  IR_SPACE0_DATA_TIME = IR_MAX_DATA_TIME div 16;
-  IR_SPACE0_DATA_TIME_MIN = IR_SPACE0_DATA_TIME - IR_DELTA_TIME;
-  IR_SPACE0_DATA_TIME_MAX = IR_SPACE0_DATA_TIME + IR_DELTA_TIME;
-  IR_SPACE1_DATA_TIME = IR_MAX_DATA_TIME * 3 div 16;
-  IR_SPACE1_DATA_TIME_MIN = IR_SPACE1_DATA_TIME - IR_DELTA_TIME;
-  IR_SPACE1_DATA_TIME_MAX = IR_SPACE1_DATA_TIME + IR_DELTA_TIME;
+  IR_VALUE_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;
+  IR_VALUE_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;
+  IR_SPACE0_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;
+  IR_SPACE0_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;
+  IR_SPACE1_DATA_TIME_MIN = IR_META_DATA_TIME_MIN * 3 div 16;
+  IR_SPACE1_DATA_TIME_MAX = IR_META_DATA_TIME_MAX * 3 div 16;
 //
 
 type
@@ -57,6 +51,7 @@ type
 implementation
 
 uses
+  UART,
   Timers;
 
 { TIRReceiver }
@@ -78,14 +73,18 @@ var
   VTime: Word;
   VDataTime: Word;
   VEvent: TIREvent;
+  n: Longint;
 
   procedure Reset; inline;
   begin
+    n := 0;
     VValue := 0;
+    VValueIndex := 0;
     VInSpace := False;
     VTime := 0;
     VDataTime := 0;
-    VStage := irsUndefined;
+    VStage := irsUndefined;        
+    Result := Default(TIRValue);
     VLastCounter := Timer0_Counter;
   end;
 
@@ -145,14 +144,16 @@ begin
   repeat
     if VStage = irsInvalid then
     begin
+      UARTConsole.WriteLnFormat('Date time %d, space time %d, event %d (%d)', [VDataTime, VTime, Ord(VEvent), n]);
       Reset;
       SleepMicroSecs(108000);
     end;
-    VCounter := Timer0_Counter;
     VInSignal := DigitalRead(Pin);
+    VCounter := Timer0_Counter;
     VLastCounter := VCounter - VLastCounter;
     VTime := VTime + VLastCounter + VLastCounter + VLastCounter + VLastCounter;
     VLastCounter := VCounter;
+    Inc(n);
     if VInSignal then
     begin
       if VInSpace then
@@ -160,6 +161,7 @@ begin
         VInSpace := False;
         VDataTime := VTime;
         VTime := 0;
+        n := 0;
       end;
     end
     else
@@ -171,7 +173,11 @@ begin
           VEvent := CalcEvent;
           case VEvent of
             ireUndefined:
+            begin
               VStage := irsInvalid;
+              UARTConsole.WriteLnString('Invalid by event');
+              Continue;
+            end;
             irePreamble:
               if VStage = irsUndefined then
               begin
@@ -180,10 +186,18 @@ begin
                 VValue := 0;
               end
               else
+              begin
                 VStage := irsInvalid;
+                UARTConsole.WriteLnString('Invalid by preamble');
+                Continue;
+              end;
             ireData0, ireData1:
               if VStage = irsUndefined then
-                VStage := irsInvalid
+              begin
+                VStage := irsInvalid;
+                UARTConsole.WriteLnString('Invalid by data');
+                Continue;
+              end
               else
               begin
                 if VEvent = ireData1 then
@@ -192,6 +206,7 @@ begin
                   cbi(@VValue, VValueIndex);
                 if VValueIndex = 7 then
                 begin
+                  VValueIndex := 0;
                   case VStage of
                     irsAddress:
                       Result.Address := VValue;
@@ -199,6 +214,7 @@ begin
                       if Result.Address xor VValue <> $FF then
                       begin
                         VStage := irsInvalid;
+                        UARTConsole.WriteLnFormat('Invalid by address XOR %d %d', [Result.Address, VValue]);
                         Continue;
                       end;
                     irsCommand:
@@ -207,6 +223,7 @@ begin
                       if Result.Command xor VValue <> $FF then
                       begin
                         VStage := irsInvalid;
+                        UARTConsole.WriteLnString('Invalid by command XOR');
                         Continue;
                       end;
                   end;
@@ -222,12 +239,17 @@ begin
                 Exit;
               end
               else
+              begin
                 VStage := irsInvalid;
+                UARTConsole.WriteLnString('Invalid by repeat');
+                Continue;
+              end;
           end;
           VDataTime := 0;
         end;
         VInSpace := True;
         VTime := 0;
+        n := 0;
       end;
     end;
   until VStage = irsComplete;

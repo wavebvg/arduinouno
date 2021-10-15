@@ -202,7 +202,7 @@ begin
   repeat
     if ircfInvalid in VContext.Flags then
     begin
-      UARTPrint(LastData, LastSpace);
+      //UARTPrint(LastData, LastSpace);
       SleepMicroSecs(IR_INVALID_TIMEOUT);
       Reset;
     end

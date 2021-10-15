@@ -31,6 +31,9 @@ function GetKeyName(const AKey: Byte): String;
 
 implementation
 
+uses
+ArduinoTools;
+
 type
   TKeyMap = packed record
     Name: String[5];
@@ -72,7 +75,8 @@ begin
       Result := Keys[i].Name;
       Exit;
     end;
-  Result := '';
+  Result := IntToStr(AKey);
+  Result := '#' + Result;
 end;
 
 end.

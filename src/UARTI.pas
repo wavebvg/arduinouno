@@ -127,7 +127,7 @@ end;
 
 procedure USART__UDRE_ISR; public Name 'USART__UDRE_ISR'; interrupt;
 begin
-  if FBLECompatibleTime > 0 then
+  if UARTConsole.BLECompatibleTime > 0 then
     UARTConsole.DoBLEcompatible;
   Char(UDR0) := WriteData[WriteStart];
   WriteStart := (WriteStart + 1) and (WRITE_DATA_SIZE - 1);
