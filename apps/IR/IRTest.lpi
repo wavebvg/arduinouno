@@ -76,9 +76,6 @@
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
-            <Optimizations>
-              <OptimizationLevel Value="2"/>
-            </Optimizations>
           </CodeGeneration>
           <Linking>
             <Debugging>

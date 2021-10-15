@@ -1,6 +1,7 @@
 unit IRReceiver;
 
 {$mode objfpc}{$H-}{$Z1}
+{$i TimersMacro.inc}
 
 interface
 
@@ -9,16 +10,28 @@ uses
 
 const
   IR_MAX_DATA_TIME = 9000;
+  IR_DELTA_TIME = 100;
   //
   IR_META_DATA_TIME = IR_MAX_DATA_TIME;
+  IR_META_DATA_TIME_MIN = IR_META_DATA_TIME - IR_DELTA_TIME;
+  IR_META_DATA_TIME_MAX = IR_META_DATA_TIME + IR_DELTA_TIME;
   IR_PREAMBULE_SPACE_TIME = IR_MAX_DATA_TIME div 2;
+  IR_PREAMBULE_SPACE_TIME_MIN = IR_PREAMBULE_SPACE_TIME - IR_DELTA_TIME;
+  IR_PREAMBULE_SPACE_TIME_MAX = IR_PREAMBULE_SPACE_TIME + IR_DELTA_TIME;
   IR_REPEAT_SPACE_TIME = IR_MAX_DATA_TIME div 4;
+  IR_REPEAT_SPACE_TIME_MIN = IR_REPEAT_SPACE_TIME - IR_DELTA_TIME;
+  IR_REPEAT_SPACE_TIME_MAX = IR_REPEAT_SPACE_TIME + IR_DELTA_TIME;
   //
   IR_VALUE_DATA_TIME = IR_MAX_DATA_TIME div 16;
+  IR_VALUE_DATA_TIME_MIN = IR_VALUE_DATA_TIME - IR_DELTA_TIME;
+  IR_VALUE_DATA_TIME_MAX = IR_VALUE_DATA_TIME + IR_DELTA_TIME;
   IR_SPACE0_DATA_TIME = IR_MAX_DATA_TIME div 16;
+  IR_SPACE0_DATA_TIME_MIN = IR_SPACE0_DATA_TIME - IR_DELTA_TIME;
+  IR_SPACE0_DATA_TIME_MAX = IR_SPACE0_DATA_TIME + IR_DELTA_TIME;
   IR_SPACE1_DATA_TIME = IR_MAX_DATA_TIME * 3 div 16;
-  //
-  IR_DELTA_TIME = 100;
+  IR_SPACE1_DATA_TIME_MIN = IR_SPACE1_DATA_TIME - IR_DELTA_TIME;
+  IR_SPACE1_DATA_TIME_MAX = IR_SPACE1_DATA_TIME + IR_DELTA_TIME;
+//
 
 type
   TIRStage = (irsUndefined, irsAddress, irsAddressInvert, irsCommand, irsCommandInvert, irsComplete, irsInvalid);
@@ -44,8 +57,7 @@ type
 implementation
 
 uses
-  Timers,
-  UART;
+  Timers;
 
 { TIRReceiver }
 
@@ -62,61 +74,62 @@ var
   VStage: TIRStage;
   VValue: Byte;
   VValueIndex: Byte;
-  VLastCounter: Byte;
+  VLastCounter, VCounter: Byte;
   VTime: Word;
   VDataTime: Word;
   VEvent: TIREvent;
 
-  procedure Reset;
+  procedure Reset; inline;
   begin
     VValue := 0;
     VInSpace := False;
     VTime := 0;
+    VDataTime := 0;
     VStage := irsUndefined;
-    VLastCounter := Timer0.Counter;
+    VLastCounter := Timer0_Counter;
   end;
 
   function CalcEvent: TIREvent; inline;
   begin
-    if VDataTime < IR_VALUE_DATA_TIME - IR_DELTA_TIME then
+    if VDataTime < IR_VALUE_DATA_TIME_MIN then
     begin
       Result := ireUndefined;
     end
     else
-    if VDataTime < IR_VALUE_DATA_TIME + IR_DELTA_TIME then
+    if VDataTime < IR_VALUE_DATA_TIME_MAX then
     begin
-      if VTime < IR_SPACE0_DATA_TIME - IR_DELTA_TIME then
+      if VTime < IR_SPACE0_DATA_TIME_MIN then
         Result := ireUndefined
       else
-      if VTime < IR_SPACE0_DATA_TIME + IR_DELTA_TIME then
+      if VTime < IR_SPACE0_DATA_TIME_MAX then
         Result := ireData0
       else
-      if VTime < IR_SPACE1_DATA_TIME - IR_DELTA_TIME then
+      if VTime < IR_SPACE1_DATA_TIME_MIN then
         Result := ireUndefined
       else
-      if VTime < IR_SPACE1_DATA_TIME + IR_DELTA_TIME then
+      if VTime < IR_SPACE1_DATA_TIME_MAX then
         Result := ireData1
       else
         Result := ireUndefined;
     end
     else
-    if VDataTime < IR_META_DATA_TIME - IR_DELTA_TIME then
+    if VDataTime < IR_META_DATA_TIME_MIN then
     begin
       Result := ireUndefined;
     end
     else
-    if VDataTime < IR_META_DATA_TIME + IR_DELTA_TIME then
+    if VDataTime < IR_META_DATA_TIME_MAX then
     begin
-      if VTime < IR_REPEAT_SPACE_TIME - IR_DELTA_TIME then
+      if VTime < IR_REPEAT_SPACE_TIME_MIN then
         Result := ireUndefined
       else
-      if VTime < IR_REPEAT_SPACE_TIME + IR_DELTA_TIME then
+      if VTime < IR_REPEAT_SPACE_TIME_MAX then
         Result := ireRepeat
       else
-      if VTime < IR_PREAMBULE_SPACE_TIME - IR_DELTA_TIME then
+      if VTime < IR_PREAMBULE_SPACE_TIME_MIN then
         Result := ireUndefined
       else
-      if VTime < IR_PREAMBULE_SPACE_TIME + IR_DELTA_TIME then
+      if VTime < IR_PREAMBULE_SPACE_TIME_MAX then
         Result := irePreamble
       else
         Result := ireUndefined;
@@ -135,8 +148,11 @@ begin
       Reset;
       SleepMicroSecs(108000);
     end;
+    VCounter := Timer0_Counter;
     VInSignal := DigitalRead(Pin);
-    VTime := (Timer0.Counter - VLastCounter) + VTime;
+    VLastCounter := VCounter - VLastCounter;
+    VTime := VTime + VLastCounter + VLastCounter + VLastCounter + VLastCounter;
+    VLastCounter := VCounter;
     if VInSignal then
     begin
       if VInSpace then
