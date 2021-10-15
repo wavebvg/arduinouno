@@ -124,7 +124,7 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/IR.pas"/>
+        <Filename Value="../../src/IRReceiver.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>

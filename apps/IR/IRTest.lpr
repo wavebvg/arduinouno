@@ -4,9 +4,9 @@ program IRTest;
 
 uses
   ArduinoTools,
-  UInterrupts,
   KeyMap,
-  IR,
+  IRReceiver,
+  Timers,
   UART;
 
 const
@@ -17,12 +17,15 @@ var
   Value: TIRValue;
 begin
   UARTConsole.Init(9600);
-  IRData.Init(IR_PIN_PORT);
+  IRData.Init(IR_PIN_PORT);   
   //
-  InterruptsEnable;
+  Timer0.OutputModes := [];
+  Timer0.CLKMode := tclkm64;
+  //
+  IEnable;
   UARTConsole.WriteLnString('start');
   repeat
     Value := IRData.Read;
-    UARTConsole.WriteLnString('Key: ' + GetKeyName(Value.Command));
+    UARTConsole.WriteLnFormat('Key: %s', [GetKeyName(Value.Command)]);
   until False;
 end.
