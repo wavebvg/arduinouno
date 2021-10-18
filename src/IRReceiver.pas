@@ -9,22 +9,22 @@ uses
   ArduinoTools;
 
 const
-  IR_DELTA_TIME = 16 * 150;                                   //  2400 $0960
-  IR_META_DATA_TIME = 9000;                                   //  9000 $2328
+  IR_DELTA_TIME = 16 * 150;
+  IR_META_DATA_TIME = 9000;
   //
-  IR_META_DATA_TIME_MIN = IR_META_DATA_TIME - IR_DELTA_TIME;  //  6600 $19C8
-  IR_META_DATA_TIME_MAX = IR_META_DATA_TIME + IR_DELTA_TIME;  // 11400 $2C88
-  IR_PREAMBULE_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 2;  //  3300 $0CE4
-  IR_PREAMBULE_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 2;  //  5700 $1644
-  IR_REPEAT_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 4;     //  1650 $0672
-  IR_REPEAT_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 4;     //  2850 $0B22
+  IR_META_DATA_TIME_MIN = IR_META_DATA_TIME - IR_DELTA_TIME;
+  IR_META_DATA_TIME_MAX = IR_META_DATA_TIME + IR_DELTA_TIME;
+  IR_PREAMBULE_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 2;
+  IR_PREAMBULE_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 2;
+  IR_REPEAT_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 4;
+  IR_REPEAT_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 4;
   //
-  IR_VALUE_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;      //   412 $019C
-  IR_VALUE_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;      //   712 $02C8
-  IR_SPACE0_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;     //   412 $019C
-  IR_SPACE0_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;     //   712 $02C8
-  IR_SPACE1_DATA_TIME_MIN = IR_META_DATA_TIME_MIN * 3 div 16; //  1237 $04D5
-  IR_SPACE1_DATA_TIME_MAX = IR_META_DATA_TIME_MAX * 3 div 16; //  2137 $0859
+  IR_VALUE_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;
+  IR_VALUE_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;
+  IR_SPACE0_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;
+  IR_SPACE0_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;
+  IR_SPACE1_DATA_TIME_MIN = IR_META_DATA_TIME_MIN * 3 div 16;
+  IR_SPACE1_DATA_TIME_MAX = IR_META_DATA_TIME_MAX * 3 div 16;
 //
 
 type
@@ -123,9 +123,9 @@ label
   more_rst_max, more_pst_min, more_pst_max;
 asm
          PUSH    R16 {Reg for consts}
-         //if ADataTime < IR_VALUE_DATA_TIME_MIN {.$019C} then
-         CPI     R24, 156
-         LDI     R16, 1
+         //if ADataTime < IR_VALUE_DATA_TIME_MIN then
+         CPI     R24, LO8(IR_VALUE_DATA_TIME_MIN)
+         LDI     R16, HI8(IR_VALUE_DATA_TIME_MIN)
          CPC     R25, R16
          BRSH     more_vdt_min
          //begin
@@ -134,26 +134,26 @@ asm
          //end
          //else
          more_vdt_min:
-         //if ADataTime < IR_VALUE_DATA_TIME_MAX {.$02C8} then 
-         CPI     R24, 200
-         LDI     R16, 2
+         //if ADataTime < IR_VALUE_DATA_TIME_MAX then
+         CPI     R24, LO8(IR_VALUE_DATA_TIME_MAX)
+         LDI     R16, HI8(IR_VALUE_DATA_TIME_MAX)
          CPC     R25, R16
          BRLO    less_vdt_max
          RJMP    more_vdt_max
          less_vdt_max:
          //begin
-         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MIN {.$019C} then  
-         CPI     R22, 156
-         LDI     R16, 1
+         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MIN then
+         CPI     R22, LO8(IR_SPACE0_DATA_TIME_MIN)
+         LDI     R16, HI8(IR_SPACE0_DATA_TIME_MIN)
          CPC     R23, R16
          BRSH     more_sdt_min
          //    Result := ireUndefined
          RJMP     undefined
          //  else
          more_sdt_min:
-         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MAX {.$02C8} then 
-         CPI     R22, 200
-         LDI     R16, 2
+         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MAX then
+         CPI     R22, LO8(IR_SPACE0_DATA_TIME_MAX)
+         LDI     R16, HI8(IR_SPACE0_DATA_TIME_MAX)
          CPC     R23, R16
          BRLO    less_s0dt_max
          RJMP    more_s0dt_max
@@ -163,80 +163,80 @@ asm
          RJMP    exit
          //  else
          more_s0dt_max:
-         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MIN {.$04D5} then  
-         CPI     R22, 213
-         LDI     R16, 4
+         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MIN then
+         CPI     R22, LO8(IR_SPACE1_DATA_TIME_MIN)
+         LDI     R16, HI8(IR_SPACE1_DATA_TIME_MIN)
          CPC     R23, R16
          BRSH    more_s1dt_min
-         //    Result := ireUndefined     
+         //    Result := ireUndefined
          RJMP     undefined
          //  else
          more_s1dt_min:
-         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MAX {.$0859} then  
-         CPI     R22, 89
-         LDI     R16, 8
+         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MAX then
+         CPI     R22, LO8(IR_SPACE1_DATA_TIME_MAX)
+         LDI     R16, HI8(IR_SPACE1_DATA_TIME_MAX)
          CPC     R23, R16
          BRSH    more_s1dt_max
-         //    Result := ireData1  
+         //    Result := ireData1
          LDI     R24, ireData1
          RJMP    exit
          //  else
          more_s1dt_max:
          //    Result := ireUndefined;
-         JMP     undefined
+         RJMP     undefined
          //end
          //else
          more_vdt_max:
-         //if ADataTime < IR_META_DATA_TIME_MIN {.$19C8} then      
-         CPI     R24, 200
-         LDI     R16, 25
+         //if ADataTime < IR_META_DATA_TIME_MIN then
+         CPI     R24, LO8(IR_META_DATA_TIME_MIN)
+         LDI     R16, HI8(IR_META_DATA_TIME_MIN)
          CPC     R25, R16
          BRSH    more_mdt_max
          //begin
-         //  Result := ireUndefined;  
+         //  Result := ireUndefined;
          RJMP     undefined
          //end
          //else
          more_mdt_max:
-         //if ADataTime < IR_META_DATA_TIME_MAX {.$2C88} then
-         CPI     R24, 136
-         LDI     R16, 44
+         //if ADataTime < IR_META_DATA_TIME_MAX then
+         CPI     R24, LO8(IR_META_DATA_TIME_MAX)
+         LDI     R16, HI8(IR_META_DATA_TIME_MAX)
          CPC     R25, R16
          BRLO    less_mdt_max
          RJMP    undefined
          less_mdt_max:
          //begin
-         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN {.$0672} then
-         CPI     R22, 114
-         LDI     R16, 6
+         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN then
+         CPI     R22, LO8(IR_REPEAT_SPACE_TIME_MIN)
+         LDI     R16, HI8(IR_REPEAT_SPACE_TIME_MIN)
          CPC     R23, R16
          BRSH    more_rst_min
          //    Result := ireUndefined
          RJMP     undefined
          //  else
          more_rst_min:
-         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX {.$0B22} then
-         CPI     R22, 34
-         LDI     R16, 11
+         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX then
+         CPI     R22, LO8(IR_REPEAT_SPACE_TIME_MAX)
+         LDI     R16, HI8(IR_REPEAT_SPACE_TIME_MAX)
          CPC     R23, R16
          BRSH    more_rst_max
-         //    Result := ireRepeat    
+         //    Result := ireRepeat
          LDI     R24, ireRepeat
          RJMP    exit
          //  else
          more_rst_max:
-         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN {.$0CE4} then  
-         CPI     R22, 228
-         LDI     R16, 12
+         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN then
+         CPI     R22, LO8(IR_PREAMBULE_SPACE_TIME_MIN)
+         LDI     R16, HI8(IR_PREAMBULE_SPACE_TIME_MIN)
          CPC     R23, R16
          BRSH    more_pst_min
-         //    Result := ireUndefined   
+         //    Result := ireUndefined
          RJMP     undefined
          //  else
          more_pst_min:
-         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX {.$1644} then
-         CPI     R22, 68
-         LDI     R16, 22
+         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX then
+         CPI     R22, LO8(IR_PREAMBULE_SPACE_TIME_MAX)
+         LDI     R16, HI8(IR_PREAMBULE_SPACE_TIME_MAX)
          CPC     R23, R16
          BRSH    undefined
          //    Result := irePreamble
@@ -272,17 +272,17 @@ var
   asm
            //VValue := 0;
            STD     VValue, R1
-           //VValueIndex := 0;   
+           //VValueIndex := 0;
            STD     VValueIndex, R1
            //VInSpace := False;
            STD     VInSpace, R1
            //VTime := 0;
            STD     VTime, R1
            STD     VTime + 1, R1
-           //VDataTime := 0;  
+           //VDataTime := 0;
            STD     VDataTime, R1
            STD     VDataTime + 1, R1
-           //VStage := irsUndefined; 
+           //VStage := irsUndefined;
            STD     VStage, R1
            //Result := Default(TIRValue);
            STD     Result, R1
@@ -299,9 +299,9 @@ begin
   repeat
     if VStage = irsInvalid then
     begin
-      UARTConsole.WriteLnFormat('Date time %d, space time %d, event %d', [VDataTime, VTime, Ord(VEvent)]);
-      Reset;
+      UARTConsole.WriteLnFormat('Date time %d, space time %d, event %d', [VDataTime, VTime, Ord(VEvent)]);    
       SleepMicroSecs(108000);
+      Reset;
     end;
     VInSignal := DigitalRead(Pin);
     VCounter := Timer0_Counter;
