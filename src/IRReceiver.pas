@@ -9,22 +9,22 @@ uses
   ArduinoTools;
 
 const
-  IR_DELTA_TIME = 16 * 150;
-  IR_META_DATA_TIME = 9000;
+  IR_DELTA_TIME = 16 * 150;                                   //  2400 $0960
+  IR_META_DATA_TIME = 9000;                                   //  9000 $2328
   //
-  IR_META_DATA_TIME_MIN = IR_META_DATA_TIME - IR_DELTA_TIME;
-  IR_META_DATA_TIME_MAX = IR_META_DATA_TIME + IR_DELTA_TIME;
-  IR_PREAMBULE_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 2;
-  IR_PREAMBULE_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 2;
-  IR_REPEAT_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 4;
-  IR_REPEAT_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 4;
+  IR_META_DATA_TIME_MIN = IR_META_DATA_TIME - IR_DELTA_TIME;  //  6600 $19C8
+  IR_META_DATA_TIME_MAX = IR_META_DATA_TIME + IR_DELTA_TIME;  // 11400 $2C88
+  IR_PREAMBULE_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 2;  //  3300 $0CE4
+  IR_PREAMBULE_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 2;  //  5700 $1644
+  IR_REPEAT_SPACE_TIME_MIN = IR_META_DATA_TIME_MIN div 4;     //  1650 $0672
+  IR_REPEAT_SPACE_TIME_MAX = IR_META_DATA_TIME_MAX div 4;     //  2850 $0B22
   //
-  IR_VALUE_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;
-  IR_VALUE_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;
-  IR_SPACE0_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;
-  IR_SPACE0_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;
-  IR_SPACE1_DATA_TIME_MIN = IR_META_DATA_TIME_MIN * 3 div 16;
-  IR_SPACE1_DATA_TIME_MAX = IR_META_DATA_TIME_MAX * 3 div 16;
+  IR_VALUE_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;      //   412 $019C
+  IR_VALUE_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;      //   712 $02C8
+  IR_SPACE0_DATA_TIME_MIN = IR_META_DATA_TIME_MIN div 16;     //   412 $019C
+  IR_SPACE0_DATA_TIME_MAX = IR_META_DATA_TIME_MAX div 16;     //   712 $02C8
+  IR_SPACE1_DATA_TIME_MIN = IR_META_DATA_TIME_MIN * 3 div 16; //  1237 $04D5
+  IR_SPACE1_DATA_TIME_MAX = IR_META_DATA_TIME_MAX * 3 div 16; //  2137 $0859
 //
 
 type
@@ -48,6 +48,9 @@ type
     function Read: TIRValue;
   end;
 
+function CalcEvent(const ADataTime, ASpaceTime: Word): TIREvent;
+function CalcEvent1(const ADataTime, ASpaceTime: Word): TIREvent;
+
 implementation
 
 uses
@@ -62,81 +65,233 @@ begin
   FLastValue := Default(TIRValue);
 end;
 
+function CalcEvent1(const ADataTime, ASpaceTime: Word): TIREvent;
+begin
+  if ADataTime < IR_VALUE_DATA_TIME_MIN then
+  begin
+    Result := ireUndefined;
+  end
+  else
+  if ADataTime < IR_VALUE_DATA_TIME_MAX then
+  begin
+    if ASpaceTime < IR_SPACE0_DATA_TIME_MIN then
+      Result := ireUndefined
+    else
+    if ASpaceTime < IR_SPACE0_DATA_TIME_MAX then
+      Result := ireData0
+    else
+    if ASpaceTime < IR_SPACE1_DATA_TIME_MIN then
+      Result := ireUndefined
+    else
+    if ASpaceTime < IR_SPACE1_DATA_TIME_MAX then
+      Result := ireData1
+    else
+      Result := ireUndefined;
+  end
+  else
+  if ADataTime < IR_META_DATA_TIME_MIN then
+  begin
+    Result := ireUndefined;
+  end
+  else
+  if ADataTime < IR_META_DATA_TIME_MAX then
+  begin
+    if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN then
+      Result := ireUndefined
+    else
+    if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX then
+      Result := ireRepeat
+    else
+    if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN then
+      Result := ireUndefined
+    else
+    if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX then
+      Result := irePreamble
+    else
+      Result := ireUndefined;
+  end
+  else
+  begin
+    Result := ireUndefined;
+  end;
+end;
+
+function CalcEvent(const ADataTime{R24, R25}, ASpaceTime: Word){R22, R23}: TIREvent; assembler;
+label
+  exit, undefined, more_vdt_min, less_vdt_max, more_vdt_max, more_sdt_min, less_s0dt_max,
+  more_s0dt_max, more_s1dt_min, more_s1dt_max, more_mdt_max, less_mdt_max, more_rst_min,
+  more_rst_max, more_pst_min, more_pst_max;
+asm
+         PUSH    R16 {Reg for consts}
+         //if ADataTime < IR_VALUE_DATA_TIME_MIN {.$019C} then
+         CPI     R24, 156
+         LDI     R16, 1
+         CPC     R25, R16
+         BRSH     more_vdt_min
+         //begin
+         //  Result := ireUndefined;
+         RJMP     undefined
+         //end
+         //else
+         more_vdt_min:
+         //if ADataTime < IR_VALUE_DATA_TIME_MAX {.$02C8} then 
+         CPI     R24, 200
+         LDI     R16, 2
+         CPC     R25, R16
+         BRLO    less_vdt_max
+         RJMP    more_vdt_max
+         less_vdt_max:
+         //begin
+         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MIN {.$019C} then  
+         CPI     R22, 156
+         LDI     R16, 1
+         CPC     R23, R16
+         BRSH     more_sdt_min
+         //    Result := ireUndefined
+         RJMP     undefined
+         //  else
+         more_sdt_min:
+         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MAX {.$02C8} then 
+         CPI     R22, 200
+         LDI     R16, 2
+         CPC     R23, R16
+         BRLO    less_s0dt_max
+         RJMP    more_s0dt_max
+         less_s0dt_max:
+         //    Result := ireData0
+         LDI     R24, ireData0
+         RJMP    exit
+         //  else
+         more_s0dt_max:
+         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MIN {.$04D5} then  
+         CPI     R22, 213
+         LDI     R16, 4
+         CPC     R23, R16
+         BRSH    more_s1dt_min
+         //    Result := ireUndefined     
+         RJMP     undefined
+         //  else
+         more_s1dt_min:
+         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MAX {.$0859} then  
+         CPI     R22, 89
+         LDI     R16, 8
+         CPC     R23, R16
+         BRSH    more_s1dt_max
+         //    Result := ireData1  
+         LDI     R24, ireData1
+         RJMP    exit
+         //  else
+         more_s1dt_max:
+         //    Result := ireUndefined;
+         JMP     undefined
+         //end
+         //else
+         more_vdt_max:
+         //if ADataTime < IR_META_DATA_TIME_MIN {.$19C8} then      
+         CPI     R24, 200
+         LDI     R16, 25
+         CPC     R25, R16
+         BRSH    more_mdt_max
+         //begin
+         //  Result := ireUndefined;  
+         RJMP     undefined
+         //end
+         //else
+         more_mdt_max:
+         //if ADataTime < IR_META_DATA_TIME_MAX {.$2C88} then
+         CPI     R24, 136
+         LDI     R16, 44
+         CPC     R25, R16
+         BRLO    less_mdt_max
+         RJMP    undefined
+         less_mdt_max:
+         //begin
+         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN {.$0672} then
+         CPI     R22, 114
+         LDI     R16, 6
+         CPC     R23, R16
+         BRSH    more_rst_min
+         //    Result := ireUndefined
+         RJMP     undefined
+         //  else
+         more_rst_min:
+         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX {.$0B22} then
+         CPI     R22, 34
+         LDI     R16, 11
+         CPC     R23, R16
+         BRSH    more_rst_max
+         //    Result := ireRepeat    
+         LDI     R24, ireRepeat
+         RJMP    exit
+         //  else
+         more_rst_max:
+         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN {.$0CE4} then  
+         CPI     R22, 228
+         LDI     R16, 12
+         CPC     R23, R16
+         BRSH    more_pst_min
+         //    Result := ireUndefined   
+         RJMP     undefined
+         //  else
+         more_pst_min:
+         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX {.$1644} then
+         CPI     R22, 68
+         LDI     R16, 22
+         CPC     R23, R16
+         BRSH    undefined
+         //    Result := irePreamble
+         LDI     R24, irePreamble
+         RJMP    exit
+         //  else
+         //    Result := ireUndefined;
+         //end
+         //else
+         //begin
+         //  Result := ireUndefined;
+         //end;
+         undefined:
+         CLR     R24
+         exit:
+         CLR     R25
+         POP     R16
+end;
+
 function TIRReceiver.Read: TIRValue;
 var
+  VLastCounter, VCounter: Byte;
   VInSignal: Boolean;
   VInSpace: Boolean;
   VStage: TIRStage;
   VValue: Byte;
   VValueIndex: Byte;
-  VLastCounter, VCounter: Byte;
   VTime: Word;
   VDataTime: Word;
   VEvent: TIREvent;
-  n: Longint;
 
-  procedure Reset; inline;
-  begin
-    n := 0;
-    VValue := 0;
-    VValueIndex := 0;
-    VInSpace := False;
-    VTime := 0;
-    VDataTime := 0;
-    VStage := irsUndefined;        
-    Result := Default(TIRValue);
-    VLastCounter := Timer0_Counter;
-  end;
-
-  function CalcEvent: TIREvent; inline;
-  begin
-    if VDataTime < IR_VALUE_DATA_TIME_MIN then
-    begin
-      Result := ireUndefined;
-    end
-    else
-    if VDataTime < IR_VALUE_DATA_TIME_MAX then
-    begin
-      if VTime < IR_SPACE0_DATA_TIME_MIN then
-        Result := ireUndefined
-      else
-      if VTime < IR_SPACE0_DATA_TIME_MAX then
-        Result := ireData0
-      else
-      if VTime < IR_SPACE1_DATA_TIME_MIN then
-        Result := ireUndefined
-      else
-      if VTime < IR_SPACE1_DATA_TIME_MAX then
-        Result := ireData1
-      else
-        Result := ireUndefined;
-    end
-    else
-    if VDataTime < IR_META_DATA_TIME_MIN then
-    begin
-      Result := ireUndefined;
-    end
-    else
-    if VDataTime < IR_META_DATA_TIME_MAX then
-    begin
-      if VTime < IR_REPEAT_SPACE_TIME_MIN then
-        Result := ireUndefined
-      else
-      if VTime < IR_REPEAT_SPACE_TIME_MAX then
-        Result := ireRepeat
-      else
-      if VTime < IR_PREAMBULE_SPACE_TIME_MIN then
-        Result := ireUndefined
-      else
-      if VTime < IR_PREAMBULE_SPACE_TIME_MAX then
-        Result := irePreamble
-      else
-        Result := ireUndefined;
-    end
-    else
-    begin
-      Result := ireUndefined;
-    end;
+  procedure Reset; assembler;
+  asm
+           //VValue := 0;
+           STD     VValue, R1
+           //VValueIndex := 0;   
+           STD     VValueIndex, R1
+           //VInSpace := False;
+           STD     VInSpace, R1
+           //VTime := 0;
+           STD     VTime, R1
+           STD     VTime + 1, R1
+           //VDataTime := 0;  
+           STD     VDataTime, R1
+           STD     VDataTime + 1, R1
+           //VStage := irsUndefined; 
+           STD     VStage, R1
+           //Result := Default(TIRValue);
+           STD     Result, R1
+           STD     Result + 1, R1
+           //VLastCounter := Timer0_Counter;
+           PUSH    R18
+           IN      R18,38
+           STD     VLastCounter, R18
+           POP     R18
   end;
 
 begin
@@ -144,7 +299,7 @@ begin
   repeat
     if VStage = irsInvalid then
     begin
-      UARTConsole.WriteLnFormat('Date time %d, space time %d, event %d (%d)', [VDataTime, VTime, Ord(VEvent), n]);
+      UARTConsole.WriteLnFormat('Date time %d, space time %d, event %d', [VDataTime, VTime, Ord(VEvent)]);
       Reset;
       SleepMicroSecs(108000);
     end;
@@ -153,7 +308,6 @@ begin
     VLastCounter := VCounter - VLastCounter;
     VTime := VTime + VLastCounter + VLastCounter + VLastCounter + VLastCounter;
     VLastCounter := VCounter;
-    Inc(n);
     if VInSignal then
     begin
       if VInSpace then
@@ -161,7 +315,6 @@ begin
         VInSpace := False;
         VDataTime := VTime;
         VTime := 0;
-        n := 0;
       end;
     end
     else
@@ -170,7 +323,7 @@ begin
       begin
         if VDataTime > 0 then
         begin
-          VEvent := CalcEvent;
+          VEvent := CalcEvent(VDataTime, VTime);
           case VEvent of
             ireUndefined:
             begin
@@ -249,7 +402,6 @@ begin
         end;
         VInSpace := True;
         VTime := 0;
-        n := 0;
       end;
     end;
   until VStage = irsComplete;

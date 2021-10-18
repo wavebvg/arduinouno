@@ -17,11 +17,11 @@ var
   Value: TIRValue;
 begin
   UARTConsole.Init(9600);
-  IRData.Init(IR_PIN_PORT);   
-  //
+  IRData.Init(IR_PIN_PORT);
+
   Timer0.OutputModes := [];
   Timer0.CLKMode := tclkm64;
-  //
+
   IEnable;
   UARTConsole.WriteLnString('start');
   repeat

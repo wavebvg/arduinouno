@@ -33,12 +33,11 @@
             </SyntaxOptions>
           </Parsing>
           <CodeGeneration>
-            <SmartLinkUnit Value="True"/>
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
             <Optimizations>
-              <OptimizationLevel Value="2"/>
+              <OptimizationLevel Value="0"/>
             </Optimizations>
           </CodeGeneration>
           <Linking>
@@ -47,7 +46,7 @@
             </Debugging>
           </Linking>
           <Other>
-            <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al -a -s"/>
+            <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al"/>
             <ExecuteAfter>
               <CompileReasons Compile="False"/>
             </ExecuteAfter>
@@ -146,7 +145,7 @@
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
-      <TargetProcessor Value="avr5"/>
+      <TargetProcessor Value="AVR5"/>
       <TargetCPU Value="avr"/>
       <TargetOS Value="embedded"/>
     </CodeGeneration>
