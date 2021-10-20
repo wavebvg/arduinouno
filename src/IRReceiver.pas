@@ -46,6 +46,7 @@ type
     constructor Init(const APin: byte);
 
     function Read: TIRValue;
+    function Read1: TIRValue;
   end;
 
 function CalcEvent(const ADataTime, ASpaceTime: Word): TIREvent;
@@ -263,17 +264,19 @@ var
   VInSpace: Boolean;
   VStage: TIRStage;
   VValue: Byte;
-  VValueIndex: Byte;
+  VValueMask: Byte;
   VTime: Word;
   VDataTime: Word;
   VEvent: TIREvent;
 
   procedure Reset; assembler;
   asm
+           PUSH    R18
            //VValue := 0;
            STD     VValue, R1
-           //VValueIndex := 0;
-           STD     VValueIndex, R1
+           //VValueMask := 1; 
+           LDI     R18,1
+           STD     VValueMask, R18
            //VInSpace := False;
            STD     VInSpace, R1
            //VTime := 0;
@@ -288,18 +291,16 @@ var
            STD     Result, R1
            STD     Result + 1, R1
            //VLastCounter := Timer0_Counter;
-           PUSH    R18
            IN      R18,38
            STD     VLastCounter, R18
            POP     R18
   end;
 
 begin
-  Reset;
   repeat
     if VStage = irsInvalid then
     begin
-      UARTConsole.WriteLnFormat('Date time %d, space time %d, event %d', [VDataTime, VTime, Ord(VEvent)]);    
+      UARTConsole.WriteLnFormat('Date time %d, space time %d, event %d', [VDataTime, VTime, Ord(VEvent)]);
       SleepMicroSecs(108000);
       Reset;
     end;
@@ -335,7 +336,7 @@ begin
               if VStage = irsUndefined then
               begin
                 VStage := irsAddress;
-                VValueIndex := 0;
+                VValueMask := 1;
                 VValue := 0;
               end
               else
@@ -354,12 +355,12 @@ begin
               else
               begin
                 if VEvent = ireData1 then
-                  sbi(@VValue, VValueIndex)
+                  VValue := VValue or VValueMask
                 else
-                  cbi(@VValue, VValueIndex);
-                if VValueIndex = 7 then
+                  VValue := VValue and not VValueMask;
+                if VValueMask = 128 then
                 begin
-                  VValueIndex := 0;
+                  VValueMask := 1;
                   case VStage of
                     irsAddress:
                       Result.Address := VValue;
@@ -383,7 +384,7 @@ begin
                   Inc(VStage);
                 end
                 else
-                  Inc(VValueIndex);
+                  VValueMask := VValueMask shl 1;
               end;
             ireRepeat:
               if VStage = irsUndefined then
@@ -406,6 +407,297 @@ begin
     end;
   until VStage = irsComplete;
   FLastValue := Result;
+end;
+
+function TIRReceiver.Read1: TIRValue;
+label
+  exit, loop, hasvalid, falsesignal, checkcomplete, complete, nozerodata, zerodata, event_undefined,
+  event_preamble, event_data, event_repeat, event_end, notinspace, goaddress, goreset, godata,
+  aftersetdata, set0data, nextvalue;
+  //var
+  //VLastCounter, VCounter: Byte;
+  //VInSignal: Boolean; {R17}
+  //VInSpace: Boolean; {R21}
+  //VStage: TIRStage; {R16}
+  //VValue: Byte; {R26}
+  //VValueIndex: Byte; {R27}
+  //VTime: Word; {R22,R23}
+  //VDataTime: Word; {R12,R13}
+  //VEvent: TIREvent; {R24 temp}
+  //Result: TIRValue; {R30,R31}
+
+  procedure Reset; assembler;
+  asm
+           //VValue := 0;
+           CLR     R26
+           //VValueIndex := 1;
+           LDI     R27, 1
+           //VInSpace := False;
+           CLR     R21
+           //VTime := 0;
+           CLR     R22
+           CLR     R23
+           //VDataTime := 0;
+           CLR     R12
+           CLR     R13
+           //VStage := irsUndefined; 
+           CLR     R16
+           //Result := Default(TIRValue);
+           CLR     R30
+           CLR     R31
+           //VLastCounter := Timer0_Counter;
+           IN      R19,38
+  end;
+
+begin
+  asm
+           PUSH    R16 {VStage}
+           PUSH    R17 {VInSignal}
+           PUSH    R18 {Pin cash}
+           PUSH    R19 {VLastCounter}
+           PUSH    R20 {VCounter}
+           PUSH    R21 {VInSpace}
+           PUSH    R12 {VTime}
+           PUSH    R13 {VTime}
+           PUSH    R22 {VDataTime}
+           PUSH    R23 {VDataTime}
+           PUSH    XL  {VValue}
+           PUSH    XH  {VValueIndex}
+           PUSH    YL  {Self}
+           PUSH    YH  {Self}
+           PUSH    ZL  {Result}
+           PUSH    ZH  {Result}
+           MOVW    YL, R24
+           PUSH    R24
+           PUSH    R25
+           LDD     R18, Y+2
+           //  Reset;
+           RCALL   Reset;
+           loop:
+           //  if VStage = irsInvalid then
+           CPI     R16, irsInvalid
+           BRNE    hasvalid
+           //  begin
+           goreset:
+           //    SleepMicroSecs(108000);
+           LDI     R24, LO8(108000)
+           LDI     R25, HI8(108000)
+           RCALL   SleepMicroSecs
+           //    Reset;
+           RCALL   Reset;
+           //  end;
+           hasvalid:
+           //  VInSignal := DigitalRead(Pin);
+           MOV     R24, R18
+           CALL    DigitalRead
+           MOV     R17, R24
+           //  VCounter := Timer0_Counter;
+           IN      R20, 38
+           //  VLastCounter := VCounter - VLastCounter;
+           SUB     R20, R19
+           //  VTime := VTime + VLastCounter + VLastCounter + VLastCounter + VLastCounter;
+           ADD     R22, R19
+           ADC     R23, R1
+           ADD     R22, R19
+           ADC     R23, R1
+           ADD     R22, R19
+           ADC     R23, R1
+           ADD     R22, R19
+           ADC     R23, R1
+           //  VLastCounter := VCounter;
+           MOV     R19, R20
+           //  if VInSignal then
+           CPI     R16, 0
+           BREQ    falsesignal
+           //  begin
+           //    if VInSpace then 
+           CPSE     R21, R1
+           RJMP    checkcomplete
+           //    begin
+           //      VInSpace := False;
+           LDI     R21, 1
+           //      VDataTime := VTime;
+           MOVW    R12, R22
+           //      VTime := 0;
+           CLR     R22
+           CLR     R23
+           RJMP    checkcomplete
+           //    end;
+           //  end
+           //  else   
+           falsesignal:
+           //  begin
+           //    if not VInSpace then
+           CPI     R21, 0
+           BREQ    notinspace
+           RJMP    checkcomplete
+           //    begin
+           notinspace:
+           //      if VDataTime <> 0 then
+           CP      R12, R1
+           CPC     R13, R1
+           BRNE    nozerodata
+           RJMP    zerodata
+           //      begin
+           nozerodata:
+           //        VEvent := CalcEvent(VDataTime, VTime);
+           MOVW    R24, R12
+           CALL    CalcEvent
+           //        case VEvent of
+           CPI      R24, ireUndefined
+           BREQ    event_undefined
+           CPI      R24, irePreamble
+           BREQ    event_preamble
+           CPI      R24, ireData0
+           BREQ    event_data
+           CPI      R24, ireData1
+           BREQ    event_data
+           CPI      R24, ireRepeat
+           BREQ    event_repeat
+           //          ireUndefined: 
+           event_undefined:
+           //          begin
+           //            VStage := irsInvalid;
+           //            Continue;
+           RJMP    goreset
+           //          end;
+           //          irePreamble:
+           event_preamble:
+           //            if VStage = irsUndefined then
+           CPSE    R16, R1
+           RJMP    goreset
+           //            begin
+           //              VStage := irsAddress;   
+           LDI     R16, irsAddress
+           //              VValue := 0;
+           CLR     R26
+           //              VValueIndex := 1;
+           LDS     R27, 1
+           RJMP    checkcomplete
+           //            end
+           //            else
+           //            begin
+           //              VStage := irsInvalid;
+           //              Continue;
+           //            end;
+           //          ireData0, ireData1:
+           event_data:
+           //            if VStage = irsUndefined then   
+           CP      R16, R1
+           BRNE    godata
+           //            begin
+           //              VStage := irsInvalid;
+           //              Continue;
+           RJMP    goreset
+           //            end
+           //            else
+           //            begin
+           godata:
+           //              if VEvent = ireData1 then
+           CPI     R24, ireData1
+           BRNE    set0data
+           //                VValue := VValue or VValueIndex
+           OR      R26, R27
+           RJMP    aftersetdata
+           //              else
+           set0data:
+           //                VValue := VValue and not VValueIndex
+           COM      R27
+           AND      R26, R27
+           COM      R27
+           aftersetdata:
+           //              if VValueIndex <> 128 then
+           CPI     R27, 128
+           BREQ    nextvalue
+           //                Inc(VValueIndex)
+           LSL     R27
+           //              else
+           //              begin
+           nextvalue:
+           //                VValueIndex := 1;  
+           LDI     R27, 1
+           //                case VStage of
+           //                  irsAddress:
+           //                    Result.Address := VValue;
+           //                  irsAddressInvert:
+           //                    if Result.Address xor VValue <> $FF then
+           //                    begin
+           //                      VStage := irsInvalid;
+           //                      Continue;
+           RJMP    goreset
+           //                    end;
+           //                  irsCommand:
+           //                    Result.Command := VValue;
+           //                  irsCommandInvert:
+           //                    if Result.Command xor VValue <> $FF then
+           //                    begin
+           //                      VStage := irsInvalid;
+           //                      Continue;
+           RJMP    goreset
+           //                    end;
+           //                end;
+           //                Inc(VStage);
+           //              end;
+           //            end;   
+           RJMP    checkcomplete
+           //          ireRepeat:
+           event_repeat:
+           //            if VStage = irsUndefined then
+           //            begin
+           //              Result := FLastValue;  
+           LDS     R24, Y+2
+           LDS     R25, Y+3
+           //              Exit;
+           RJMP    Exit
+           //            end
+           //            else
+           //            begin
+           //              VStage := irsInvalid;
+           //              Continue;
+           RJMP    goreset
+           //            end;
+           //        end;
+           event_end:
+           //        VDataTime := 0;   
+           CLR     R12
+           CLR     R13
+           //      end;
+           zerodata:
+           //      VInSpace := True;
+           //      VTime := 0; 
+           CLR     R22
+           CLR     R23
+           //    end;
+           //  end;
+           checkcomplete:
+           CPI     R16, irsComplete
+           BREQ    complete
+           RJMP     loop
+           complete:
+           STD     Y+2, ZL
+           STD     Y+3, ZH
+           MOVW    R24, ZL
+           exit:
+           POP     R16
+           POP     R17
+           POP     R18
+           POP     YL
+           POP     YH
+           POP     R24
+           POP     R25
+           POP     R19
+           POP     R12
+           POP     R13
+           POP     R20
+           POP     R21
+           POP     R22
+           POP     R23
+           POP     XL
+           POP     XH
+           POP     ZL
+           POP     ZH
+  end;
+
 end;
 
 end.

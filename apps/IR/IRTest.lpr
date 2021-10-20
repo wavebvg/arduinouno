@@ -7,6 +7,7 @@ uses
   KeyMap,
   IRReceiver,
   Timers,
+  PWM,
   UART;
 
 const
@@ -29,15 +30,15 @@ begin
   TestValues(IR_META_DATA_TIME div 16, IR_META_DATA_TIME div 16);
   TestValues(IR_META_DATA_TIME div 16, IR_META_DATA_TIME * 3 div 16);    
   TestValues(IR_META_DATA_TIME, IR_META_DATA_TIME div 4);
-  //IRData.Init(IR_PIN_PORT);
+  IRData.Init(IR_PIN_PORT);
 
-  //Timer0.OutputModes := [];
-  //Timer0.CLKMode := tclkm64;
+  Timer0.OutputModes := [];
+  Timer0.CLKMode := tclkm64;
   //
-  //IEnable;
-  //UARTConsole.WriteLnString('start');
+  IEnable;
+  UARTConsole.WriteLnString('start');
   repeat
-  //  Value := IRData.Read;
-  //  UARTConsole.WriteLnFormat('Key: %s', [GetKeyName(Value.Command)]);
+    Value := IRData.Read;
+    UARTConsole.WriteLnFormat('Key: %s', [GetKeyName(Value.Command)]);
   until False;
 end.
