@@ -1,7 +1,6 @@
 unit ArduinoTools;
 
 {$mode objfpc}{$H-}{$Z1}
-{.$DEFINE DIV1024}
 
 interface      
 
@@ -74,7 +73,6 @@ const
 type
   TAVRPort = (avrpUndefined, avrpA, avrpB, avrpC, avrpD, avrpE, avrpF, avrpG, avrpH,
     avrpNone, avrpJ, avrpK, avrpL);
-  TAVRTimer = (avrtNo, avrt0A, avrt0B, avrt1A, avrt1B, avrt2A, avrt2B);
   TAVRPinMode = (avrmOutput, avrmInput);
 
 const
@@ -97,19 +95,19 @@ const
 
   { PortToOutput }
   PortToOutput: array[TAVRPort] of Pbyte = (
-    {avrpUndefined} Pbyte(255),
-    {        avrpA} Pbyte(255),
+    {avrpUndefined} nil,
+    {        avrpA} nil,
     {        avrpB} @PORTB,
     {        avrpC} @PORTC,
     {        avrpD} @PORTD,
-    {        avrpE} Pbyte(255),
-    {        avrpF} Pbyte(255),
-    {        avrpG} Pbyte(255),
-    {        avrpH} Pbyte(255),
-    {     avrpNone} Pbyte(255),
-    {        avrpJ} Pbyte(255),
-    {        avrpK} Pbyte(255),
-    {        avrpL} Pbyte(255)
+    {        avrpE} nil,
+    {        avrpF} nil,
+    {        avrpG} nil,
+    {        avrpH} nil,
+    {     avrpNone} nil,
+    {        avrpJ} nil,
+    {        avrpK} nil,
+    {        avrpL} nil
     );
 
   { PortToInput }
@@ -213,7 +211,6 @@ procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
 function DigitalRead(const APin: Byte): Boolean;
 procedure DigitalWrite(const APin: Byte; const AValue: Boolean);
 procedure SleepMicroSecs(const ATime: Longword);
-function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
 function IntToStr(const AValue: Longint): TIntStr;
 function IntToHex(AValue: LongInt; const ADigits: Byte = 8): TIntStr; overload;
 function IntToHex(AValue: Pointer): TIntStr; overload;
@@ -433,9 +430,7 @@ var
   VValue: LongInt;
 begin
   if AValue = 0 then
-  begin
-    Result := '0';
-  end
+    Result := '0'
   else
   if AValue = Low(Longint) then
   begin
@@ -498,11 +493,21 @@ begin
 end;
 
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);
+var
+  VPort: TAVRPort;
+  VBitMask: Byte;
 begin
-  if AMode = avrmOutput then
-    sbi(PortToMode[DigitalPinToPort[APin]], DigitalPinToPortIndex[APin])
-  else
-    cbi(PortToMode[DigitalPinToPort[APin]], DigitalPinToPortIndex[APin]);
+  VPort := DigitalPinToPort[APin];
+  VBitMask := DigitalPinToBitMask[APin];
+  case AMode of
+    avrmOutput:
+      PortToMode[VPort]^ := PortToMode[VPort]^ or VBitMask;
+    avrmInput:
+    begin
+      PortToMode[VPort]^ := PortToMode[VPort]^ and not VBitMask;
+      PortToOutput[VPort]^ := PortToOutput[VPort]^ and not VBitMask;
+    end;
+  end;
 end;
 
 {$IFDEF PCTEST}           
@@ -762,53 +767,21 @@ label
   (* ~ 32/16 мкс возможный минимум запуска sleep *)
 asm
          // CALL                       // 4 + 4
-{$IFDEF DIV1024}
-         // DEC ATime DIV 1024               // 29...33
-         // PUSH
-         PUSH    R18                   // 2
-         PUSH    R19                   // 2  
-         PUSH    R17                   // 2
-         // BYTE 0
-         MOV     R17, R23              // 1
-         LSR     R17                   // 1
-         LSR     R17                   // 1
-         // BYTE 1
-         MOV     R18, R24              // 1
-         SBRC    R18, 0                // 1|2
-         ORI     R17, 64               // 1
-         LSR     R18                   // 1
-         SBRC    R18, 0                // 1|2
-         ORI     R17, 128              // 1
-         LSR     R18                   // 1
-         // BYTE 2
-         MOV     R19, R25              // 1
-         SBRC    R19, 0                // 1|2
-         ORI     R18, 64               // 1
-         LSR     R19                   // 1
-         SBRC    R19, 0                // 1|2
-         ORI     R18, 128              // 1
-         LSR     R19                   // 1
-         // MINUS
-         SBC     R22, R17              // 1
-         SBC     R23, R18              // 1
-         SBC     R24, R19              // 1
-         SBCI    R25, 0                // 1
-         // POP                          
-         POP     R19                   // 2
-         POP     R18                   // 2
-         POP     R17                   // 2
-{$ENDIF}
-         // Wait start                       
-         CP      R1, R22               // 1
-         CPC     R1, R23               // 1
-         CPC     R1, R24               // 1
-         CPC     R1, R25               // 1
-         BREQ    compl                 // 1|2    
-{$IFDEF DIV1024}
-         SUBI    r22, 4                // 1
-{$ELSE}
+         // Wait start                        
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         NOP                           // 1
+         CPC    R25, R1                // 1   
+         CPC    R24, R1                // 1
+         CPC    R23, R1                // 1
+         PUSH   R18                    // 2
+         LDI    R18, 3                 // 1
+         CPC    R22, R18               // 1
+         POP    R18                    // 2
+         BRLO   compl                  // 1|2
          SUBI    r22, 2                // 1
-{$ENDIF}
          SBCI    r23, 0                // 1
          SBCI    r24, 0                // 1
          SBCI    r25, 0                // 1
@@ -834,65 +807,6 @@ asm
          // RET                        // 4
 end;
 {$ENDIF}
-
-function CountPulse(const APort: Pbyte; const ABit, AStateMask: Byte; AMaxLoops: Word): Cardinal;
-begin
-  Result := 0;
-  while APort^ and ABit = AStateMask do
-  begin
-    Dec(AMaxLoops);
-    if AMaxLoops = 0 then
-      Exit;
-  end;
-
-  // wait for the pulse to start
-  while APort^ and ABit <> AStateMask do
-  begin
-    Dec(AMaxLoops);
-    if AMaxLoops = 0 then
-      Exit;
-  end;
-
-  // wait for the pulse to stop
-  while APort^ and ABit = AStateMask do
-  begin
-    Inc(Result);
-    if Result = AMaxLoops then
-    begin
-      Result := 0;
-      Exit;
-    end;
-  end;
-end;
-
-function PulseIn(const APin: Byte; const AState: Boolean; const ATimeOut: Cardinal): Cardinal;
-var
-  VBit, VStateMask: Byte;
-  VPort: TAVRPort;
-  VMaxLoops: Word;
-  VWidth: Word;
-begin
-  // cache the port and bit of the pin in order to speed up the
-  // pulse width measuring loop and achieve finer resolution.  calling
-  // digitalRead() instead yields much coarser resolution.
-  VBit := DigitalPinToBitMask[APin];
-  VPort := DigitalPinToPort[APin];
-  if AState then
-    VStateMask := VBit
-  else
-    VStateMask := 0;
-  // convert the timeout from microseconds to a number of times through
-  // the initial loop; it takes approximately 16 clock cycles per iteration
-  VMaxLoops := ATimeOut * ClockCyclesPerMicrosecond div 16;
-
-  VWidth := CountPulse(PortToInput[VPort], VBit, VStateMask, VMaxLoops);
-
-  // prevent clockCyclesToMicroseconds to return bogus values if countPulseASM timed out
-  if VWidth > 0 then
-    Result := (VWidth * 16 + 16) div ClockCyclesPerMicrosecond
-  else
-    Result := 0;
-end;
 
 { TCustomPinInput }
 

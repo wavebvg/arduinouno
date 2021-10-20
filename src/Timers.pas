@@ -170,12 +170,66 @@ var
   Timer1: TTimer1;
   Timer2: TTimer2;
 
-function CalcWordTime(const AOldTime: PWord): Word;
+function CalcWordTime(const AOldTime: PWord): Word;    
+function PulseIn(const APin: Byte; const AState: Boolean; ATimeOut: Cardinal = 1000000): Cardinal;
 
 implementation
 
 uses
   ArduinoTools;
+
+function PulseIn(const APin: Byte; const AState: Boolean; ATimeOut: Cardinal): Cardinal;
+var
+  VBitMask, VStateMask: Byte;
+  VPort: Pbyte;
+  VCounter, VLastCounter: Byte;
+begin
+  Result := $FFFF;
+  VLastCounter := Timer0_Counter;
+  ATimeOut := ATimeOut div 4;
+  VBitMask := DigitalPinToBitMask[APin];
+  VPort := PortToInput[DigitalPinToPort[APin]];
+  //
+  if AState then
+    VStateMask := VBitMask
+  else
+    VStateMask := 0;
+  //
+  while VPort^ and VBitMask = VStateMask do
+  begin
+    VCounter := Timer0_Counter;
+    VLastCounter := VCounter - VLastCounter;
+    if ATimeOut <= VLastCounter then
+      Exit;
+    ATimeOut := ATimeOut - VLastCounter;
+    VLastCounter := VCounter;
+  end;
+  //
+  while VPort^ and VBitMask <> VStateMask do
+  begin
+    VCounter := Timer0_Counter;
+    VLastCounter := VCounter - VLastCounter;
+    if ATimeOut <= VLastCounter then
+      Exit;
+    ATimeOut := ATimeOut - VLastCounter;
+    VLastCounter := VCounter;
+  end;
+  //
+  while VPort^ and VBitMask = VStateMask do
+  begin
+    VCounter := Timer0_Counter;
+    VLastCounter := VCounter - VLastCounter;
+    Result := Result + VLastCounter;
+    VLastCounter := VCounter;
+    if ATimeOut <= Result then
+    begin
+      Result := $FFFF;
+      Exit;
+    end;
+  end;
+  //
+  Result := Result * 4;
+end;
          
 {$IFDEF PCTEST}    
 function CalcWordTime(const AOldTime{R24;R25}: PWord): Word;
