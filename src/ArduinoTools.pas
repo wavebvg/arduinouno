@@ -641,7 +641,7 @@ end;
 procedure DigitalWrite(const APin{R24}: Byte; const AValue{R22}: Boolean); assembler;
 {Total: 41}
 label
-  exit, vtrue, vfalse;
+  exit, vfalse;
 asm
   // CALL                                              {4}
          PUSH    R18  {VBitMask}                       {1}
@@ -687,56 +687,6 @@ asm
          //
          POP     R29                                   {1}
          POP     R28                                   {1}
-         POP     R27                                   {1}
-         POP     R26                                   {1}
-         POP     R18                                   {1}
-         // RET                                        {4}
-end;
-procedure DigitalWriteOld(const APin: Byte; const AValue: Boolean); assembler;
-{Total: 75}
-label
-  exit;
-asm
-         // CALL                                       {4}
-         PUSH    R18  {AValue}                         {1}
-         PUSH    R26  {X} {DigitalPinToPort} {Addr} {1}
-         PUSH    R27  {X} {DigitalPinToPort} {Addr} {1}
-         MOV     R18, R22							                 {1}
-         PUSH    R22  {Bit}                            {1}
-  // VBit := DigitalPinToPortIndex[APin];
-         LDI	   R26, LO8(DigitalPinToPortIndex)        {1}
-         LDI	   R27, HI8(DigitalPinToPortIndex)        {1}
-         ADD     R26, R24                              {1}
-         ADC     R27, R1                               {1}
-         LD      R22, X                                {2}
-  // VPort := DigitalPinToPort[APin];
-         LDI	   R26, LO8(DigitalPinToPort)         {1}
-         LDI	   R27, HI8(DigitalPinToPort)         {1}
-         ADD     R26, R24                              {1}
-         ADC     R27, R1                               {1}
-         PUSH    R24                                   {1}
-         LD      R24, X                                {2}
-         LSL     R24                                   {1}
-  // VPortAddr := PortToOutput[VPort];
-         LDI	   R26, LO8(PortToOutput)             {1}
-         LDI     R27, HI8(PortToOutput)             {1}
-         ADD     R26, R24                              {1}
-         ADC     R27, R1                               {1}
-         LD      R24, X+                               {2}
-         LD      R25, X                                {2}
-  //if AValue then
-         SBRC    r18, 0                                {1|2}
-    //  sbi(VPort, VMask);
-         RCALL   sbi                                   {3+28}
-         NOP                                           {1}
-  //if not AValue then
-         SBRS    r18, 0                                {1|2}
-    //  cbi(VPort, VMask);
-         RCALL    cbi                                  {3+29}
-        //
-         exit:
-         POP     R24                                   {1}
-         POP     R22                                   {1}
          POP     R27                                   {1}
          POP     R26                                   {1}
          POP     R18                                   {1}

@@ -2,80 +2,82 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Debug"/>
     <Units>
       <Unit>
-        <Filename Value="MotorTest.lpr"/>
+        <Filename Value="RGBTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="20"/>
-        <CursorPos X="34" Y="30"/>
-        <UsageCount Value="178"/>
+        <CursorPos X="19" Y="21"/>
+        <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="62"/>
-        <CursorPos X="28" Y="76"/>
-        <UsageCount Value="131"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="391"/>
+        <CursorPos X="51" Y="406"/>
+        <UsageCount Value="154"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/IR.pas"/>
+        <Filename Value="../IR/UInterrupts.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="13"/>
-        <CursorPos X="17" Y="68"/>
-        <UsageCount Value="58"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="133"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IRRemote.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="9"/>
+        <CursorPos X="16" Y="16"/>
+        <UsageCount Value="133"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IRRemoteISR.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="52"/>
+        <CursorPos X="21" Y="55"/>
+        <UsageCount Value="133"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="27" Y="3"/>
+        <UsageCount Value="81"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/KeyMap.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="30"/>
-        <CursorPos X="15" Y="30"/>
-        <UsageCount Value="58"/>
+        <TopLine Value="43"/>
+        <CursorPos X="26" Y="79"/>
+        <UsageCount Value="81"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/PWM.pas"/>
+        <Filename Value="../../src/RGBLed.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <CursorPos X="3" Y="5"/>
-        <UsageCount Value="36"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="219"/>
+        <CursorPos X="41" Y="236"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="UInterrupts.pas"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="99"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/IRRemote.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="9"/>
-        <CursorPos X="16" Y="16"/>
-        <UsageCount Value="99"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/IRRemoteISR.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="52"/>
-        <CursorPos X="21" Y="55"/>
-        <UsageCount Value="99"/>
-      </Unit>
-      <Unit>
-        <Filename Value="KeyMap.pas"/>
+        <Filename Value="../IR/KeyMap.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="20" Y="30"/>
         <UsageCount Value="21"/>
       </Unit>
       <Unit>
-        <Filename Value="IR.pas"/>
+        <Filename Value="../IR/IR.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="7"/>
         <CursorPos X="40" Y="235"/>
@@ -211,161 +213,180 @@
       <Unit>
         <Filename Value="../../src/UARTI.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="56"/>
-        <CursorPos X="20" Y="60"/>
-        <UsageCount Value="13"/>
+        <TopLine Value="103"/>
+        <CursorPos X="35" Y="130"/>
+        <UsageCount Value="14"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/UART.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="164"/>
-        <CursorPos X="55" Y="201"/>
-        <UsageCount Value="13"/>
+        <TopLine Value="24"/>
+        <CursorPos X="26" Y="31"/>
+        <UsageCount Value="12"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/ServoI.pas"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="229"/>
-        <CursorPos X="24" Y="188"/>
-        <UsageCount Value="17"/>
-        <Loaded Value="True"/>
+        <Filename Value="../../src/IR.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2"/>
+        <CursorPos X="33" Y="69"/>
+        <UsageCount Value="16"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/Timers.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="141"/>
-        <CursorPos X="17" Y="303"/>
-        <UsageCount Value="15"/>
+        <TopLine Value="218"/>
+        <CursorPos X="25" Y="225"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
         <UnitName Value="ATmega328P"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="70"/>
+        <CursorPos X="8" Y="86"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/TimersMacro.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="57"/>
-        <CursorPos X="60" Y="63"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/PWM.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="266"/>
+        <CursorPos X="10" Y="288"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/backup/ServoI.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="147"/>
+        <CursorPos X="10" Y="166"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="208" Column="55" TopLine="76"/>
+        <Filename Value="RGBTest.lpr"/>
+        <Caret Line="20" Column="24"/>
       </Position>
       <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="201" Column="36" TopLine="178"/>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="34" Column="17" TopLine="14"/>
       </Position>
       <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="15" Column="23"/>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="69" Column="8" TopLine="44"/>
       </Position>
       <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="395" Column="36" TopLine="358"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="42" Column="13" TopLine="23"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="107" Column="17" TopLine="85"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="335" Column="16" TopLine="310"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="226" Column="21" TopLine="192"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="408" Column="12" TopLine="379"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="508" Column="35" TopLine="472"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="239" Column="30" TopLine="222"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="50" Column="10" TopLine="31"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="189" Column="16" TopLine="157"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="238" Column="25" TopLine="206"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="239" Column="30" TopLine="207"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="241" Column="25" TopLine="209"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="230" Column="41" TopLine="210"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="51" Column="10" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="50" Column="62" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="238" Column="32" TopLine="221"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="223" Column="35" TopLine="199"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="258" Column="35" TopLine="237"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="284" Column="52" TopLine="260"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="251" Column="29" TopLine="232"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="229" Column="19" TopLine="216"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/PWM.pas"/>
-        <Caret Line="5" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="23" Column="20" TopLine="3"/>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="112" Column="30" TopLine="108"/>
       </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="209" Column="56" TopLine="196"/>
+        <Caret Line="644" Column="9" TopLine="628"/>
       </Position>
       <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="102" Column="67" TopLine="75"/>
+        <Filename Value="RGBTest.lpr"/>
+        <Caret Line="21" Column="26"/>
       </Position>
       <Position>
-        <Filename Value="MotorTest.lpr"/>
-        <Caret Line="96" Column="31" TopLine="77"/>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="20" Column="30" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="70" Column="35" TopLine="61"/>
+      </Position>
+      <Position>
+        <Filename Value="RGBTest.lpr"/>
+        <Caret Line="21" Column="10"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="25" Column="39" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="49" Column="3" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="38" Column="44" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="173" Column="39" TopLine="153"/>
+      </Position>
+      <Position>
+        <Filename Value="RGBTest.lpr"/>
+        <Caret Line="21" Column="19"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="38" Column="39" TopLine="18"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="242" Column="19" TopLine="215"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="93" Column="14" TopLine="83"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="241" Column="21" TopLine="222"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="244" Column="59" TopLine="222"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="228" Column="14" TopLine="195"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="130" Column="57" TopLine="111"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="228" Column="57" TopLine="196"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="130" Column="14" TopLine="111"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="221" Column="71" TopLine="196"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="243" Column="10" TopLine="220"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="239" Column="32" TopLine="210"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="144" Column="20" TopLine="123"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="236" Column="73" TopLine="209"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="141" Column="24" TopLine="123"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/RGBLed.pas"/>
+        <Caret Line="145" Column="10" TopLine="126"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -373,4 +394,11 @@
       <Modes ActiveMode=""/>
     </RunParams>
   </ProjectSession>
+  <Debugging>
+    <Watches>
+      <Item>
+        <Expression Value="TimerCounterControlRegister_PGM"/>
+      </Item>
+    </Watches>
+  </Debugging>
 </CONFIG>

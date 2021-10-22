@@ -13,7 +13,7 @@ const
 
 
 var
-  VDuration, VDistance: Longint;
+  VDuration, VDistance: Cardinal;
 
 begin
   UARTConsole.Init(9600);
@@ -32,7 +32,7 @@ begin
     DigitalWrite(ULTRASOUND_PIN, False);
     PinMode(ULTRASOUND_PIN, avrmInput);
     VDuration := PulseIn(ULTRASOUND_PIN, True);
-    if VDuration = $FFFF then
+    if VDuration = $FFFFFFFF then
     begin
       UARTConsole.WriteLnFormat('Invalid or timeout', []);
     end

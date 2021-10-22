@@ -7,6 +7,7 @@
       <Unit>
         <Filename Value="PCMotorTest.lpr"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <CursorPos X="21" Y="18"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
@@ -35,10 +36,9 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/PWM.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="221"/>
-        <CursorPos X="24" Y="119"/>
+        <TopLine Value="59"/>
+        <CursorPos X="34" Y="8"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>

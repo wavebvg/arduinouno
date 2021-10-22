@@ -2,7 +2,7 @@ unit PWM;
 
 {$mode objfpc}{$H-}{$Z1}
 {$i TimersMacro.inc}
-{$DEFINE USE_DEBUG_COUNTER}
+{.$DEFINE USE_DEBUG_COUNTER}
 
 interface
 

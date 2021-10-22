@@ -7,7 +7,9 @@
       <Unit>
         <Filename Value="IRTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="23" Y="20"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="7"/>
+        <CursorPos X="57" Y="22"/>
         <UsageCount Value="179"/>
         <Loaded Value="True"/>
       </Unit>
@@ -48,10 +50,9 @@
       <Unit>
         <Filename Value="../../src/IRReceiver.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="367"/>
-        <CursorPos X="49" Y="387"/>
+        <TopLine Value="36"/>
+        <CursorPos X="67" Y="49"/>
         <UsageCount Value="59"/>
         <Loaded Value="True"/>
       </Unit>
@@ -254,18 +255,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="424" Column="32" TopLine="413"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="415" Column="10" TopLine="405"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <Caret Line="431" Column="23" TopLine="409"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/IRReceiver.pas"/>
         <Caret Line="565" Column="28" TopLine="541"/>
       </Position>
       <Position>
@@ -371,6 +360,18 @@
       <Position>
         <Filename Value="../../src/IRReceiver.pas"/>
         <Caret Line="363" Column="29" TopLine="338"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="410" Column="16" TopLine="386"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <Caret Line="49" Column="67" TopLine="36"/>
+      </Position>
+      <Position>
+        <Filename Value="IRTest.lpr"/>
+        <Caret Line="19" Column="26" TopLine="12"/>
       </Position>
     </JumpHistory>
     <RunParams>

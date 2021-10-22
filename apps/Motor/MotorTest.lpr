@@ -8,50 +8,75 @@ uses
   Timers,
   PWM;
 
+const
+  IN1_PIN = 6;
+  IN2_PIN = 10;
+  IN3_PIN = 5;
+  IN4_PIN = 9;
+
 var
   i: SmallInt;
 
 begin
   UARTConsole.Init(9600);
   //
+  PinMode(IN1_PIN, avrmOutput);
+  AnalogWrite(IN1_PIN, 0);
+  //
+  PinMode(IN2_PIN, avrmOutput);
+  AnalogWrite(IN2_PIN, 0);
+  //
+  PinMode(IN3_PIN, avrmOutput);
+  AnalogWrite(IN3_PIN, 0);
+  //
+  PinMode(IN4_PIN, avrmOutput);
+  AnalogWrite(IN4_PIN, 0);
+  //
   Timer0.OutputModes := [];
   Timer0.CLKMode := tclkm64;
-  //
-  Timer1.OutputModes := [];
-  Timer1.CLKMode := tclkm64;
-  //                 
-  AnalogWrite(1, 1);
-  AnalogWrite(2, 2);
-  AnalogWrite(3, 3);
-  AnalogWrite(4, 4);
-  AnalogWrite(5, 5);
-  AnalogWrite(6, 6);
-  AnalogWrite(7, 7);
-  AnalogWrite(8, 8);
-  UARTConsole.WriteLnFormat('CurrentSortedPWM: %x', [CurrentSortedPWM]);
-  UARTConsole.WriteLnFormat('PWMChanged: %d', [Ord(PWMChanged)]);
-  UARTConsole.WriteLnFormat('PWMCount: %d', [PWMCount]);
-  for i := 0 to PWMCount - 1 do
-    UARTConsole.WriteLnFormat('  PWM[%d]: %d', [PWMPins[i].Pin, PWMPins[i].Counter div CICLE_STEP_COUNT]);
   //
   UARTConsole.WriteLnString('Start');
   //
   IEnable;
-  SleepMicroSecs(1000000);
   repeat
-    IPause;
-    UARTConsole.WriteLnFormat('CurrentSortedPWM^: %d', [CurrentSortedPWM^]);
-    UARTConsole.WriteLnFormat('PWMChanged: %d', [Ord(PWMChanged)]);
-    UARTConsole.WriteLnFormat('PWMCount: %d', [PWMCount]);
-    if PWMCount > 0 then
-      for i := 0 to PWMCount - 1 do
-        UARTConsole.WriteLnFormat('  PWM[%d]: %d', [PWMPins[i].Pin, PWMPins[i].Counter div CICLE_STEP_COUNT]);
-    UARTConsole.WriteLnFormat('SortedPWMCount: %d', [SortedPWMCount]);
-    if SortedPWMCount > 0 then
-      for i := 0 to SortedPWMCount - 1 do
-        UARTConsole.WriteLnFormat('  PWM[%d]: {counter: %d, value: %d}',
-          [i, SortedPWMs[i].Counter div CICLE_STEP_COUNT, PWMCounter[i] div CICLE_STEP_COUNT]);
-    IResume;
-    UARTConsole.ReadChar;
+    UARTConsole.WriteLnString('Forward');
+    analogWrite(IN1_PIN, 100);
+    analogWrite(IN2_PIN, 0);
+    analogWrite(IN3_PIN, 0);
+    analogWrite(IN4_PIN, 100);
+    SleepMicroSecs(5000000);
+    //******** ******************************//forward
+    analogWrite(IN1_PIN, 255);
+    analogWrite(IN2_PIN, 255);
+    analogWrite(IN3_PIN, 255);
+    analogWrite(IN4_PIN, 255);
+    SleepMicroSecs(5000000);//********************************************//stop
+    analogWrite(IN1_PIN, 0);
+    analogWrite(IN2_PIN, 100);
+    analogWrite(IN3_PIN, 100);
+    analogWrite(IN4_PIN, 0);
+    SleepMicroSecs(5000000);//*********************************************//back
+    analogWrite(IN1_PIN, 255);
+    analogWrite(IN2_PIN, 255);
+    analogWrite(IN3_PIN, 255);
+    analogWrite(IN4_PIN, 255);
+    SleepMicroSecs(5000000);
+    //******* ***************************************//stop
+    analogWrite(IN1_PIN, 200);
+    analogWrite(IN2_PIN, 0);
+    analogWrite(IN3_PIN, 200);
+    analogWrite(IN4_PIN, 0);
+    SleepMicroSecs(5000000);
+    //*******************************************//left
+    analogWrite(IN1_PIN, 255);
+    analogWrite(IN2_PIN, 255);
+    analogWrite(IN3_PIN, 255);
+    analogWrite(IN4_PIN, 255);
+    SleepMicroSecs(5000000); //*******************************************//stop
+    analogWrite(IN1_PIN, 0);
+    analogWrite(IN2_PIN, 200);
+    analogWrite(IN3_PIN, 0);
+    analogWrite(IN4_PIN, 200);
+    SleepMicroSecs(5000000);//*** ***************************************//right
   until False;
 end.

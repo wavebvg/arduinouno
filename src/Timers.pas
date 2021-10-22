@@ -184,7 +184,7 @@ var
   VPort: Pbyte;
   VCounter, VLastCounter: Byte;
 begin
-  Result := $FFFF;
+  Result := $FFFFFFFF;
   VLastCounter := Timer0_Counter;
   ATimeOut := ATimeOut div 4;
   VBitMask := DigitalPinToBitMask[APin];
@@ -214,7 +214,8 @@ begin
     ATimeOut := ATimeOut - VLastCounter;
     VLastCounter := VCounter;
   end;
-  //
+  //      
+  Result := 0;
   while VPort^ and VBitMask = VStateMask do
   begin
     VCounter := Timer0_Counter;
@@ -223,12 +224,13 @@ begin
     VLastCounter := VCounter;
     if ATimeOut <= Result then
     begin
-      Result := $FFFF;
+      Result := $FFFFFFFF;
       Exit;
     end;
   end;
   //
-  Result := Result * 4;
+  if Result <> $FFFFFFFF then
+    Result := Result * 4;
 end;
          
 {$IFDEF PCTEST}    
