@@ -113,144 +113,195 @@ begin
   end;
 end;
 
-function CalcEvent(const ADataTime{R24, R25}, ASpaceTime: Word){R22, R23}: TIREvent; assembler;
-label
-  exit, undefined, more_vdt_min, less_vdt_max, more_vdt_max, more_sdt_min, less_s0dt_max,
-  more_s0dt_max, more_s1dt_min, more_s1dt_max, more_mdt_max, less_mdt_max, more_rst_min,
-  more_rst_max, more_pst_min, more_pst_max;
-asm
-         PUSH    R16 {Reg for consts}
-         //if ADataTime < IR_VALUE_DATA_TIME_MIN then
-         CPI     R24, LO8(IR_VALUE_DATA_TIME_MIN)
-         LDI     R16, HI8(IR_VALUE_DATA_TIME_MIN)
-         CPC     R25, R16
-         BRSH     more_vdt_min
-         //begin
-         //  Result := ireUndefined;
-         RJMP     undefined
-         //end
-         //else
-         more_vdt_min:
-         //if ADataTime < IR_VALUE_DATA_TIME_MAX then
-         CPI     R24, LO8(IR_VALUE_DATA_TIME_MAX)
-         LDI     R16, HI8(IR_VALUE_DATA_TIME_MAX)
-         CPC     R25, R16
-         BRLO    less_vdt_max
-         RJMP    more_vdt_max
-         less_vdt_max:
-         //begin
-         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MIN then
-         CPI     R22, LO8(IR_SPACE0_DATA_TIME_MIN)
-         LDI     R16, HI8(IR_SPACE0_DATA_TIME_MIN)
-         CPC     R23, R16
-         BRSH     more_sdt_min
-         //    Result := ireUndefined
-         RJMP     undefined
-         //  else
-         more_sdt_min:
-         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MAX then
-         CPI     R22, LO8(IR_SPACE0_DATA_TIME_MAX)
-         LDI     R16, HI8(IR_SPACE0_DATA_TIME_MAX)
-         CPC     R23, R16
-         BRLO    less_s0dt_max
-         RJMP    more_s0dt_max
-         less_s0dt_max:
-         //    Result := ireData0
-         LDI     R24, ireData0
-         RJMP    exit
-         //  else
-         more_s0dt_max:
-         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MIN then
-         CPI     R22, LO8(IR_SPACE1_DATA_TIME_MIN)
-         LDI     R16, HI8(IR_SPACE1_DATA_TIME_MIN)
-         CPC     R23, R16
-         BRSH    more_s1dt_min
-         //    Result := ireUndefined
-         RJMP     undefined
-         //  else
-         more_s1dt_min:
-         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MAX then
-         CPI     R22, LO8(IR_SPACE1_DATA_TIME_MAX)
-         LDI     R16, HI8(IR_SPACE1_DATA_TIME_MAX)
-         CPC     R23, R16
-         BRSH    more_s1dt_max
-         //    Result := ireData1
-         LDI     R24, ireData1
-         RJMP    exit
-         //  else
-         more_s1dt_max:
-         //    Result := ireUndefined;
-         RJMP     undefined
-         //end
-         //else
-         more_vdt_max:
-         //if ADataTime < IR_META_DATA_TIME_MIN then
-         CPI     R24, LO8(IR_META_DATA_TIME_MIN)
-         LDI     R16, HI8(IR_META_DATA_TIME_MIN)
-         CPC     R25, R16
-         BRSH    more_mdt_max
-         //begin
-         //  Result := ireUndefined;
-         RJMP     undefined
-         //end
-         //else
-         more_mdt_max:
-         //if ADataTime < IR_META_DATA_TIME_MAX then
-         CPI     R24, LO8(IR_META_DATA_TIME_MAX)
-         LDI     R16, HI8(IR_META_DATA_TIME_MAX)
-         CPC     R25, R16
-         BRLO    less_mdt_max
-         RJMP    undefined
-         less_mdt_max:
-         //begin
-         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN then
-         CPI     R22, LO8(IR_REPEAT_SPACE_TIME_MIN)
-         LDI     R16, HI8(IR_REPEAT_SPACE_TIME_MIN)
-         CPC     R23, R16
-         BRSH    more_rst_min
-         //    Result := ireUndefined
-         RJMP     undefined
-         //  else
-         more_rst_min:
-         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX then
-         CPI     R22, LO8(IR_REPEAT_SPACE_TIME_MAX)
-         LDI     R16, HI8(IR_REPEAT_SPACE_TIME_MAX)
-         CPC     R23, R16
-         BRSH    more_rst_max
-         //    Result := ireRepeat
-         LDI     R24, ireRepeat
-         RJMP    exit
-         //  else
-         more_rst_max:
-         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN then
-         CPI     R22, LO8(IR_PREAMBULE_SPACE_TIME_MIN)
-         LDI     R16, HI8(IR_PREAMBULE_SPACE_TIME_MIN)
-         CPC     R23, R16
-         BRSH    more_pst_min
-         //    Result := ireUndefined
-         RJMP     undefined
-         //  else
-         more_pst_min:
-         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX then
-         CPI     R22, LO8(IR_PREAMBULE_SPACE_TIME_MAX)
-         LDI     R16, HI8(IR_PREAMBULE_SPACE_TIME_MAX)
-         CPC     R23, R16
-         BRSH    undefined
-         //    Result := irePreamble
-         LDI     R24, irePreamble
-         RJMP    exit
-         //  else
-         //    Result := ireUndefined;
-         //end
-         //else
-         //begin
-         //  Result := ireUndefined;
-         //end;
-         undefined:
-         CLR     R24
-         exit:
-         CLR     R25
-         POP     R16
+//function CalcEvent(const ADataTime{R24, R25}, ASpaceTime: Word){R22, R23}: TIREvent; assembler;
+//label
+//  exit, undefined, more_vdt_min, less_vdt_max, more_vdt_max, more_sdt_min, less_s0dt_max,
+//  more_s0dt_max, more_s1dt_min, more_s1dt_max, more_mdt_max, less_mdt_max, more_rst_min,
+//  more_rst_max, more_pst_min, more_pst_max;
+//asm
+//         PUSH    R16 {Reg for consts}
+//         //if ADataTime < IR_VALUE_DATA_TIME_MIN then
+//         CPI     R24, LO8(IR_VALUE_DATA_TIME_MIN)
+//         LDI     R16, HI8(IR_VALUE_DATA_TIME_MIN)
+//         CPC     R25, R16
+//         BRSH     more_vdt_min
+//         //begin
+//         //  Result := ireUndefined;
+//         RJMP     undefined
+//         //end
+//         //else
+//         more_vdt_min:
+//         //if ADataTime < IR_VALUE_DATA_TIME_MAX then
+//         CPI     R24, LO8(IR_VALUE_DATA_TIME_MAX)
+//         LDI     R16, HI8(IR_VALUE_DATA_TIME_MAX)
+//         CPC     R25, R16
+//         BRLO    less_vdt_max
+//         RJMP    more_vdt_max
+//         less_vdt_max:
+//         //begin
+//         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MIN then
+//         CPI     R22, LO8(IR_SPACE0_DATA_TIME_MIN)
+//         LDI     R16, HI8(IR_SPACE0_DATA_TIME_MIN)
+//         CPC     R23, R16
+//         BRSH     more_sdt_min
+//         //    Result := ireUndefined
+//         RJMP     undefined
+//         //  else
+//         more_sdt_min:
+//         //  if ASpaceTime < IR_SPACE0_DATA_TIME_MAX then
+//         CPI     R22, LO8(IR_SPACE0_DATA_TIME_MAX)
+//         LDI     R16, HI8(IR_SPACE0_DATA_TIME_MAX)
+//         CPC     R23, R16
+//         BRLO    less_s0dt_max
+//         RJMP    more_s0dt_max
+//         less_s0dt_max:
+//         //    Result := ireData0
+//         LDI     R24, ireData0
+//         RJMP    exit
+//         //  else
+//         more_s0dt_max:
+//         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MIN then
+//         CPI     R22, LO8(IR_SPACE1_DATA_TIME_MIN)
+//         LDI     R16, HI8(IR_SPACE1_DATA_TIME_MIN)
+//         CPC     R23, R16
+//         BRSH    more_s1dt_min
+//         //    Result := ireUndefined
+//         RJMP     undefined
+//         //  else
+//         more_s1dt_min:
+//         //  if ASpaceTime < IR_SPACE1_DATA_TIME_MAX then
+//         CPI     R22, LO8(IR_SPACE1_DATA_TIME_MAX)
+//         LDI     R16, HI8(IR_SPACE1_DATA_TIME_MAX)
+//         CPC     R23, R16
+//         BRSH    more_s1dt_max
+//         //    Result := ireData1
+//         LDI     R24, ireData1
+//         RJMP    exit
+//         //  else
+//         more_s1dt_max:
+//         //    Result := ireUndefined;
+//         RJMP     undefined
+//         //end
+//         //else
+//         more_vdt_max:
+//         //if ADataTime < IR_META_DATA_TIME_MIN then
+//         CPI     R24, LO8(IR_META_DATA_TIME_MIN)
+//         LDI     R16, HI8(IR_META_DATA_TIME_MIN)
+//         CPC     R25, R16
+//         BRSH    more_mdt_max
+//         //begin
+//         //  Result := ireUndefined;
+//         RJMP     undefined
+//         //end
+//         //else
+//         more_mdt_max:
+//         //if ADataTime < IR_META_DATA_TIME_MAX then
+//         CPI     R24, LO8(IR_META_DATA_TIME_MAX)
+//         LDI     R16, HI8(IR_META_DATA_TIME_MAX)
+//         CPC     R25, R16
+//         BRLO    less_mdt_max
+//         RJMP    undefined
+//         less_mdt_max:
+//         //begin
+//         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN then
+//         CPI     R22, LO8(IR_REPEAT_SPACE_TIME_MIN)
+//         LDI     R16, HI8(IR_REPEAT_SPACE_TIME_MIN)
+//         CPC     R23, R16
+//         BRSH    more_rst_min
+//         //    Result := ireUndefined
+//         RJMP     undefined
+//         //  else
+//         more_rst_min:
+//         //  if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX then
+//         CPI     R22, LO8(IR_REPEAT_SPACE_TIME_MAX)
+//         LDI     R16, HI8(IR_REPEAT_SPACE_TIME_MAX)
+//         CPC     R23, R16
+//         BRSH    more_rst_max
+//         //    Result := ireRepeat
+//         LDI     R24, ireRepeat
+//         RJMP    exit
+//         //  else
+//         more_rst_max:
+//         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN then
+//         CPI     R22, LO8(IR_PREAMBULE_SPACE_TIME_MIN)
+//         LDI     R16, HI8(IR_PREAMBULE_SPACE_TIME_MIN)
+//         CPC     R23, R16
+//         BRSH    more_pst_min
+//         //    Result := ireUndefined
+//         RJMP     undefined
+//         //  else
+//         more_pst_min:
+//         //  if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX then
+//         CPI     R22, LO8(IR_PREAMBULE_SPACE_TIME_MAX)
+//         LDI     R16, HI8(IR_PREAMBULE_SPACE_TIME_MAX)
+//         CPC     R23, R16
+//         BRSH    undefined
+//         //    Result := irePreamble
+//         LDI     R24, irePreamble
+//         RJMP    exit
+//         //  else
+//         //    Result := ireUndefined;
+//         //end
+//         //else
+//         //begin
+//         //  Result := ireUndefined;
+//         //end;
+//         undefined:
+//         CLR     R24
+//         exit:
+//         CLR     R25
+//         POP     R16
+//end;
+
+function CalcEvent(const ADataTime, ASpaceTime: Word): TIREvent;
+begin
+  if ADataTime < IR_VALUE_DATA_TIME_MIN then
+  begin
+    Result := ireUndefined;
+  end
+  else
+  if ADataTime < IR_VALUE_DATA_TIME_MAX then
+  begin
+    if ASpaceTime < IR_SPACE0_DATA_TIME_MIN then
+      Result := ireUndefined
+    else
+    if ASpaceTime < IR_SPACE0_DATA_TIME_MAX then
+      Result := ireData0
+    else
+    if ASpaceTime < IR_SPACE1_DATA_TIME_MIN then
+      Result := ireUndefined
+    else
+    if ASpaceTime < IR_SPACE1_DATA_TIME_MAX then
+      Result := ireData1
+    else
+      Result := ireUndefined;
+  end
+  else
+  if ADataTime < IR_META_DATA_TIME_MIN then
+  begin
+    Result := ireUndefined;
+  end
+  else
+  if ADataTime < IR_META_DATA_TIME_MAX then
+  begin
+    if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN then
+      Result := ireUndefined
+    else
+    if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX then
+      Result := ireRepeat
+    else
+    if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN then
+      Result := ireUndefined
+    else
+    if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX then
+      Result := irePreamble
+    else
+      Result := ireUndefined;
+  end
+  else
+  begin
+    Result := ireUndefined;
+  end;
 end;
 
 function TIRReceiver.Read: TIRValue;
