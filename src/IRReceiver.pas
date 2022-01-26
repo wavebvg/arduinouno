@@ -253,57 +253,6 @@ end;
 //         POP     R16
 //end;
 
-function CalcEvent(const ADataTime, ASpaceTime: Word): TIREvent;
-begin
-  if ADataTime < IR_VALUE_DATA_TIME_MIN then
-  begin
-    Result := ireUndefined;
-  end
-  else
-  if ADataTime < IR_VALUE_DATA_TIME_MAX then
-  begin
-    if ASpaceTime < IR_SPACE0_DATA_TIME_MIN then
-      Result := ireUndefined
-    else
-    if ASpaceTime < IR_SPACE0_DATA_TIME_MAX then
-      Result := ireData0
-    else
-    if ASpaceTime < IR_SPACE1_DATA_TIME_MIN then
-      Result := ireUndefined
-    else
-    if ASpaceTime < IR_SPACE1_DATA_TIME_MAX then
-      Result := ireData1
-    else
-      Result := ireUndefined;
-  end
-  else
-  if ADataTime < IR_META_DATA_TIME_MIN then
-  begin
-    Result := ireUndefined;
-  end
-  else
-  if ADataTime < IR_META_DATA_TIME_MAX then
-  begin
-    if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN then
-      Result := ireUndefined
-    else
-    if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX then
-      Result := ireRepeat
-    else
-    if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN then
-      Result := ireUndefined
-    else
-    if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX then
-      Result := irePreamble
-    else
-      Result := ireUndefined;
-  end
-  else
-  begin
-    Result := ireUndefined;
-  end;
-end;
-
 function TIRReceiver.Read: TIRValue;
 var
   VLastCounter, VCounter: Byte;
@@ -316,12 +265,63 @@ var
   VDataTime: Word;
   VEvent: TIREvent;
 
-  procedure Reset; assembler;
+  function CalcEvent(const ADataTime, ASpaceTime: Word): TIREvent;
+  begin
+    if ADataTime < IR_VALUE_DATA_TIME_MIN then
+    begin
+      Result := ireUndefined;
+    end
+    else
+    if ADataTime < IR_VALUE_DATA_TIME_MAX then
+    begin
+      if ASpaceTime < IR_SPACE0_DATA_TIME_MIN then
+        Result := ireUndefined
+      else
+      if ASpaceTime < IR_SPACE0_DATA_TIME_MAX then
+        Result := ireData0
+      else
+      if ASpaceTime < IR_SPACE1_DATA_TIME_MIN then
+        Result := ireUndefined
+      else
+      if ASpaceTime < IR_SPACE1_DATA_TIME_MAX then
+        Result := ireData1
+      else
+        Result := ireUndefined;
+    end
+    else
+    if ADataTime < IR_META_DATA_TIME_MIN then
+    begin
+      Result := ireUndefined;
+    end
+    else
+    if ADataTime < IR_META_DATA_TIME_MAX then
+    begin
+      if ASpaceTime < IR_REPEAT_SPACE_TIME_MIN then
+        Result := ireUndefined
+      else
+      if ASpaceTime < IR_REPEAT_SPACE_TIME_MAX then
+        Result := ireRepeat
+      else
+      if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MIN then
+        Result := ireUndefined
+      else
+      if ASpaceTime < IR_PREAMBULE_SPACE_TIME_MAX then
+        Result := irePreamble
+      else
+        Result := ireUndefined;
+    end
+    else
+    begin
+      Result := ireUndefined;
+    end;
+  end;
+
+  procedure Reset1; assembler;
   asm
            PUSH    R18
            //VValue := 0;
            STD     VValue, R1
-           //VValueMask := 1; 
+           //VValueMask := 1;
            LDI     R18,1
            STD     VValueMask, R18
            //VInSpace := False;
@@ -343,7 +343,20 @@ var
            POP     R18
   end;
 
+  procedure Reset;
+  begin
+    VValue := 0;
+    VValueMask := 1;
+    VInSpace := False;
+    VTime := 0;
+    VDataTime := 0;
+    VStage := irsUndefined;
+    Result := Default(TIRValue);
+    VLastCounter := Timer0_Counter;
+  end;
+
 begin
+  Reset;
   repeat
     if VStage = irsInvalid then
     begin
@@ -429,6 +442,7 @@ begin
                       end;
                   end;
                   Inc(VStage);
+                  VValue := 0;
                 end
                 else
                   VValueMask := VValueMask shl 1;
