@@ -1,7 +1,7 @@
 object FormDesktopControl: TFormDesktopControl
-  Left = 713
+  Left = 719
   Height = 240
-  Top = 263
+  Top = 268
   Width = 320
   Caption = 'Desktop control'
   ClientHeight = 240

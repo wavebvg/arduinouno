@@ -17,7 +17,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="992"/>
+      <BuildNr Value="993"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -113,14 +113,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/Servo.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/TimedServo.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/TimedServoISR.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>

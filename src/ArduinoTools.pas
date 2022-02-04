@@ -200,7 +200,7 @@ const
 type
   TIntStr = packed record 
     Str: array[1..11] of Char;
-    Length: Byte;
+    Length: SmallInt;
   end;
 
 procedure sbi(const AAddr: Pbyte; const ABit: Byte);
@@ -407,7 +407,8 @@ begin
 end;
 
 operator := (const AValue: TIntStr): shortstring; inline;
-begin                
+begin
+  Result := '';
   Move(AValue.Str[1], Result[1], AValue.Length + 1);
   SetLength(Result, AValue.Length)    ;
 end;
@@ -479,6 +480,7 @@ function IntToHex(AValue: LongInt; const ADigits: Byte): TIntStr;
 var
   i: Byte;
 begin
+  Result := Default(TIntStr);
   SetLength(Result, ADigits);
   for i := 1 to ADigits do
   begin
@@ -489,7 +491,7 @@ end;
 
 function IntToHex(AValue: Pointer): TIntStr; overload;
 begin
-  Result := IntToHex(Word(AValue), 4);
+  Result := IntToHex(UIntPtr(AValue), 4);
 end;
 
 procedure PinMode(const APin: Byte; const AMode: TAVRPinMode);

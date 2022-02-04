@@ -7,8 +7,7 @@
       <Unit>
         <Filename Value="EEPROMTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="19" Y="25"/>
+        <CursorPos X="4" Y="22"/>
         <UsageCount Value="159"/>
         <Loaded Value="True"/>
       </Unit>
@@ -16,7 +15,8 @@
         <Filename Value="../../src/EEPROM.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
-        <CursorPos X="35" Y="16"/>
+        <TopLine Value="18"/>
+        <CursorPos X="3" Y="19"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit>
@@ -46,10 +46,12 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/UARTI.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="15"/>
-        <CursorPos X="16" Y="29"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="101"/>
+        <CursorPos X="43" Y="123"/>
         <UsageCount Value="38"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="UInterrupts.pas"/>
@@ -223,9 +225,9 @@
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
         <UnitName Value="ATmega328P"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="317"/>
-        <CursorPos X="8" Y="339"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="109"/>
+        <CursorPos X="3" Y="130"/>
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit>
@@ -266,34 +268,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="28">
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="416" Column="13" TopLine="391"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="432" Column="24" TopLine="405"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="434" Column="24" TopLine="407"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="435" Column="13" TopLine="408"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="562" Column="6" TopLine="534"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="627" Column="27" TopLine="613"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="658" Column="32" TopLine="645"/>
-      </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="661" Column="14" TopLine="645"/>
@@ -381,6 +355,38 @@
       <Position>
         <Filename Value="../../src/UART.pas"/>
         <Caret Line="21" Column="21"/>
+      </Position>
+      <Position>
+        <Filename Value="EEPROMTest.lpr"/>
+        <Caret Line="22" Column="4"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/EEPROM.pas"/>
+        <Caret Line="19" Column="3" TopLine="18"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UARTI.pas"/>
+        <Caret Line="96" Column="44" TopLine="75"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UARTI.pas"/>
+        <Caret Line="97" Column="41" TopLine="75"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="130" Column="15" TopLine="109"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UARTI.pas"/>
+        <Caret Line="96" Column="47" TopLine="75"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UARTI.pas"/>
+        <Caret Line="123" Column="44" TopLine="101"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
+        <Caret Line="130" Column="3" TopLine="109"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -8,8 +8,8 @@
         <Filename Value="IRSensorTest.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="11"/>
-        <CursorPos X="17" Y="24"/>
+        <TopLine Value="6"/>
+        <CursorPos X="27" Y="30"/>
         <UsageCount Value="161"/>
         <Loaded Value="True"/>
       </Unit>
@@ -24,7 +24,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/IR.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
@@ -268,7 +267,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="27">
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="503" Column="66" TopLine="481"/>
@@ -296,10 +295,6 @@
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="503" Column="66" TopLine="484"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="156" Column="22" TopLine="158"/>
       </Position>
       <Position>
         <Filename Value="IRSensorTest.lpr"/>
@@ -364,10 +359,6 @@
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="212" Column="11" TopLine="199"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="636" Column="24" TopLine="673"/>
       </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>

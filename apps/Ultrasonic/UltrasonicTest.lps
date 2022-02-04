@@ -18,13 +18,12 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="4"/>
         <TopLine Value="777"/>
-        <CursorPos X="13" Y="809"/>
+        <CursorPos X="13" Y="801"/>
         <UsageCount Value="136"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../IR/UInterrupts.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
@@ -33,7 +32,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemote.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="16" Y="16"/>
@@ -41,7 +39,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/IRRemoteISR.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="52"/>
         <CursorPos X="21" Y="55"/>

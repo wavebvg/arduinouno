@@ -58,7 +58,7 @@ type
     procedure SetCompareBEvent(const AEvent: TTimerInterruptEvent);
     procedure SetCompareBProc(const AProc: TTimerInterruptProc);
     procedure ClearCompareBEvent;
-    property CounterModes: TTimerCounterModes read GetCounterModes;
+    property CounterModes: TTimerCounterModes read GetCounterModes write SetCounterModes;
     property OutputModes: TTimerOutputModes read GetOutputModes write SetOutputModes;
     property CTCMode: Boolean read GetCTCMode write SetCTCMode;
   end;
@@ -303,11 +303,11 @@ asm
          MOVW    R26, R24
          LD      R30, X+
          LD      R31, X+
-         //if VEvent.Code <> nil then
+         //if VMethod.Code <> nil then
          CP      R30, R1
          CPC     R31, R1
          BREQ    exit
-         //TTimerInterruptProc(VEvent.Code)()
+         //TTimerInterruptProc(VMethod.Code)()
          PUSH    R18
          PUSH    R19
          PUSH    R20
@@ -493,12 +493,12 @@ end;
 
 function TTimer0.GetCTCMode: Boolean;
 begin
-  Result := TCCR0B and (1 shr WGM02) > 0;
+  Result := TCCR0B and (1 shl WGM02) > 0;
 end;
 
 procedure TTimer0.SetCTCMode(const AValue: Boolean);
 begin
-  TCCR0B := TCCR0B and not (1 shr WGM02) or (Byte(AValue) shr WGM02);
+  TCCR0B := TCCR0B and not (1 shl WGM02) or (Byte(AValue) shr WGM02);
 end;
 
 function TTimer0.GetCLKMode: TTimerCLKMode;
@@ -545,7 +545,7 @@ end;
 
 function TTimer1.GetNoiseCanceler: Boolean;
 begin
-  Result := TCCR1B and (1 shr ICNC1) > 0;
+  Result := TCCR1B and (1 shl ICNC1) > 0;
 end;
 
 function TTimer1.GetValueA: Word;
@@ -565,7 +565,7 @@ end;
 
 procedure TTimer1.SetNoiseCanceler(const AValue: Boolean);
 begin
-  TCCR1B := TCCR1B and not (1 shr ICNC1) or (Byte(AValue) shr ICNC1);
+  TCCR1B := TCCR1B and not Byte(Byte(not AValue) shl ICNC1);
 end;
 
 procedure TTimer1.SetValueA(const AValue: Word);
@@ -580,12 +580,12 @@ end;
 
 function TTimer1.GetCTCMode: Boolean;
 begin
-  Result := TCCR1B and (1 shr WGM12) > 0;
+  Result := TCCR1B and (1 shl WGM12) > 0;
 end;
 
 procedure TTimer1.SetCTCMode(const AValue: Boolean);
 begin
-  TCCR1B := TCCR1B and not (1 shr WGM12) or (Byte(AValue) shr WGM12){ or (Byte(AValue) shr WGM13)};
+  TCCR1B := TCCR1B and not Byte(Byte(not AValue) shl WGM12){ or (Byte(AValue) shr WGM13)};
 end;
 
 function TTimer1.GetCLKMode: TTimerCLKMode;
@@ -627,7 +627,7 @@ end;
 
 function TTimer2.GetAsyncMode: Boolean;
 begin
-  Result := ASSR and (1 shr AS2) > 0;
+  Result := ASSR and (1 shl AS2) > 0;
 end;
 
 function TTimer2.GetCLKMode: TTimer2CLKMode;
@@ -647,12 +647,12 @@ end;
 
 function TTimer2.GetCTCMode: Boolean;
 begin
-  Result := TCCR2B and (1 shr WGM22) > 0;
+  Result := TCCR2B and (1 shl WGM22) > 0;
 end;
 
 function TTimer2.GetExternalMode: Boolean;
 begin
-  Result := ASSR and (1 shr EXCLK) > 0;
+  Result := ASSR and (1 shl EXCLK) > 0;
 end;
 
 function TTimer2.GetOutputModes: TTimerOutputModes;
@@ -672,19 +672,19 @@ end;
 
 procedure TTimer2.SetAsyncMode(const AValue: Boolean);
 begin
-  ASSR := ASSR and not (1 shr AS2) or (Byte(AValue) shr AS2);
+  ASSR := ASSR and not Byte(Byte(not AValue) shl AS2);
 end;
 
 procedure TTimer2.SetCLKMode(const AValue: TTimer2CLKMode);
 begin
-  while ASSR and (1 shr TCR2BUB) > 0 do
+  while ASSR and (1 shl TCR2BUB) > 0 do
   ;
   TCCR2B := TCCR2B and %11111000 or Byte(AValue);
 end;
 
 procedure TTimer2.SetCounter(const AValue: Byte);
 begin
-  while ASSR and (1 shr TCN2UB) > 0 do
+  while ASSR and (1 shl TCN2UB) > 0 do
   ;
   TCNT2 := AValue;
 end;
@@ -696,12 +696,12 @@ end;
 
 procedure TTimer2.SetCTCMode(const AValue: Boolean);
 begin
-  TCCR2B := TCCR2B and not (1 shr WGM22) or (Byte(AValue) shr WGM22);
+  TCCR2B := TCCR2B and not Byte(Byte(not AValue) shl WGM22);
 end;
 
 procedure TTimer2.SetExternalMode(const AValue: Boolean);
 begin
-  ASSR := ASSR and not (1 shr EXCLK) or (Byte(AValue) shr EXCLK);
+  ASSR := ASSR and not Byte(Byte(not AValue) shl EXCLK);
 end;
 
 procedure TTimer2.SetOutputModes(const AValue: TTimerOutputModes);
@@ -711,14 +711,14 @@ end;
 
 procedure TTimer2.SetValueA(const AValue: Byte);
 begin
-  while ASSR and (1 shr OCR2AUB) > 0 do
+  while ASSR and (1 shl OCR2AUB) > 0 do
   ;
   OCR2A := AValue;
 end;
 
 procedure TTimer2.SetValueB(const AValue: Byte);
 begin
-  while ASSR and (1 shr OCR2BUB) > 0 do
+  while ASSR and (1 shl OCR2BUB) > 0 do
   ;
   OCR2B := AValue;
 end;
@@ -734,8 +734,8 @@ asm
          PUSH    R24
          PUSH    R25
          //
-         LDI     R24,LO8(Timer0+34)
-         LDI     R25,HI8(Timer0+34)
+         LDI     R24,LO8(Timer0.FCompareAEvent)
+         LDI     R25,HI8(Timer0.FCompareAEvent)
          RCALL   AbstractTimerDoCompareEvent
          //        
          POP     R25
@@ -746,9 +746,9 @@ procedure TIMER0_COMPB_ISR; public Name 'TIMER0_COMPB_ISR'; interrupt; assembler
 asm
          PUSH    R24
          PUSH    R25
-         //
-         LDI     R24,LO8(Timer0+38)
-         LDI     R25,HI8(Timer0+38)
+         //                  
+         LDI     R24,LO8(Timer0.FCompareBEvent)
+         LDI     R25,HI8(Timer0.FCompareBEvent)
          RCALL   AbstractTimerDoCompareEvent
          //
          POP     R25
@@ -763,9 +763,9 @@ end;
 procedure TIMER1_COMPA_ISR; public Name 'TIMER1_COMPA_ISR'; interrupt; assembler;
 asm
          PUSH    R24
-         PUSH    R25
-         LDI     R24,LO8(Timer1+34)
-         LDI     R25,HI8(Timer1+34)
+         PUSH    R25           
+         LDI     R24,LO8(Timer1.FCompareAEvent)
+         LDI     R25,HI8(Timer1.FCompareAEvent)
          RCALL   AbstractTimerDoCompareEvent
          POP     R25
          POP     R24
@@ -774,9 +774,9 @@ end;
 procedure TIMER1_COMPB_ISR; public Name 'TIMER1_COMPB_ISR'; interrupt; assembler;
 asm
          PUSH    R24
-         PUSH    R25
-         LDI     R24,LO8(Timer1+38)
-         LDI     R25,HI8(Timer1+38)
+         PUSH    R25         
+         LDI     R24,LO8(Timer1.FCompareBEvent)
+         LDI     R25,HI8(Timer1.FCompareBEvent)
          RCALL   AbstractTimerDoCompareEvent
          POP     R25
          POP     R24
@@ -790,9 +790,9 @@ end;
 procedure TIMER2_COMPA_ISR; public Name 'TIMER2_COMPA_ISR'; interrupt; assembler;
 asm
          PUSH    R24
-         PUSH    R25
-         LDI     R24,LO8(Timer2+34)
-         LDI     R25,HI8(Timer2+34)
+         PUSH    R25       
+         LDI     R24,LO8(Timer2.FCompareAEvent)
+         LDI     R25,HI8(Timer2.FCompareAEvent)
          RCALL   AbstractTimerDoCompareEvent
          POP     R25
          POP     R24
@@ -801,9 +801,9 @@ end;
 procedure TIMER2_COMPB_ISR; public Name 'TIMER2_COMPB_ISR'; interrupt; assembler;
 asm
          PUSH    R24
-         PUSH    R25
-         LDI     R24,LO8(Timer2+38)
-         LDI     R25,HI8(Timer2+38)
+         PUSH    R25         
+         LDI     R24,LO8(Timer2.FCompareBEvent)
+         LDI     R25,HI8(Timer2.FCompareBEvent)
          RCALL   AbstractTimerDoCompareEvent
          POP     R25
          POP     R24

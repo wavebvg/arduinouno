@@ -33,7 +33,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/TimedServo.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
@@ -42,7 +41,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/TimedServoISR.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>

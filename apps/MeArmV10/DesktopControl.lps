@@ -7,11 +7,10 @@
       <Unit>
         <Filename Value="DesktopControl.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="43" Y="16"/>
         <UsageCount Value="23"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="UFormDesktopControl.pas"/>
@@ -19,15 +18,16 @@
         <ComponentName Value="FormDesktopControl"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <TopLine Value="99"/>
-        <CursorPos Y="108"/>
+        <CursorPos X="36" Y="109"/>
         <UsageCount Value="23"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/UServoCommands.pas"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <CursorPos X="3" Y="10"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
@@ -35,10 +35,9 @@
       <Unit>
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
         <UnitName Value="LazSerial"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="472"/>
-        <CursorPos Y="481"/>
+        <CursorPos X="51" Y="485"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit>
@@ -59,10 +58,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="UFormDesktopControl.pas"/>
-        <Caret Line="29" Column="38" TopLine="12"/>
-      </Position>
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
         <Caret Line="30" Column="35" TopLine="12"/>
@@ -178,6 +173,10 @@
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
         <Caret Line="108" TopLine="99"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
+        <Caret Line="485" Column="51" TopLine="472"/>
       </Position>
     </JumpHistory>
     <RunParams>

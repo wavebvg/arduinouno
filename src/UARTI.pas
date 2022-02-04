@@ -93,7 +93,7 @@ procedure TUARTI.ReadBuffer(ABuffer: PChar; ASize: Byte);
 begin
   if ASize = 0 then
     Exit;
-  UCSR0B := UCSR0B and not (1 shl RXCIE0);
+  UCSR0B := UCSR0B and Byte(not (1 shl RXCIE0));
   while (uartfReadNotEmpty in Flags) and (ASize > 0) do
   begin
     ABuffer^ := ReadData[ReadStart];

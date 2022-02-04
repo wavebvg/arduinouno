@@ -7,15 +7,15 @@
       <Unit>
         <Filename Value="IRSensorTest.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="12"/>
-        <CursorPos X="18" Y="24"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="5"/>
+        <CursorPos X="17" Y="24"/>
         <UsageCount Value="161"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <TopLine Value="629"/>
         <CursorPos X="26" Y="690"/>
@@ -268,11 +268,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="179" Column="24" TopLine="174"/>
-      </Position>
+    <JumpHistory HistoryIndex="27">
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="503" Column="66" TopLine="481"/>
@@ -300,10 +296,6 @@
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="503" Column="66" TopLine="484"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="156" Column="22" TopLine="158"/>
       </Position>
       <Position>
         <Filename Value="IRSensorTest.lpr"/>
@@ -371,10 +363,6 @@
       </Position>
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <Caret Line="636" Column="24" TopLine="673"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="215" Column="25" TopLine="201"/>
       </Position>
       <Position>
@@ -388,6 +376,10 @@
       <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="214" Column="66" TopLine="201"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ArduinoTools.pas"/>
+        <Caret Line="690" Column="26" TopLine="629"/>
       </Position>
     </JumpHistory>
     <RunParams>
