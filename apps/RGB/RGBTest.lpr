@@ -1,40 +1,30 @@
 program RGBTest;
 
 {$mode objfpc}{$H-}{$Z1}
-{$i ../../src/TimersMacro.inc}
 
 uses
   ArduinoTools,
-  UART,
   RGBLed;
 
 const
   RGB_PIN = 2;
 
 var
-  Led: TRGBLed;
-  c: Char;
+  Led: TRGBLeds;
   Color: TRGBColor;
 
 begin
-  UARTConsole.Init(9600);  
-  //
-  UARTConsole.WriteLnString('start');
-  //
-  Led.Init(RGB_PIN, 6);
-  //Color := Led.Color;
-  Color := Default(TRGBColor);
-  repeat
-    c := UARTConsole.ReadChar;
-    case c of
-      'r':
-        Color.R := Color.R + 10;
-      'g':
-        Color.G := Color.G + 10;
-      'b':
-        Color.B := Color.B + 10;
-    end;
-    UARTConsole.WriteLnFormat('RGB (%d:%d:%d)', [Color.R, Color.G, Color.B]);
-    //Led.Color := Color;
-  until False;
+  //Led.Init(RGB_PIN, 6);
+  Color.R := 255;
+  Color.G := 0;
+  Color.B := 0;
+  Led.AllColors := Color;
+  Color.R := 0;
+  Color.G := 255;
+  Color.B := 0;
+  Led.AllColors := Color;
+  Color.R := 0;
+  Color.G := 0;
+  Color.B := 255;
+  Led.AllColors := Color;
 end.

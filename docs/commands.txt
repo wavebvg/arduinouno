@@ -13,6 +13,7 @@ avr-objdump -S /media/fa/FA-FLASH/projects/git/arduinouno/apps/IR/bin/IRTest.elf
 qemu-system-avr -machine uno -bios TimersTest.elf -s -S
 
 avr-gdb -ex "target remote localhost:1212" -ex "load" /media/fa/FA-FLASH/projects/git/arduinouno/apps/IR/bin/IRTest.elf
+avr-gdb -ex "target remote localhost:1212" -ex "load" /media/fa/FA-FLASH/projects/git/arduinouno/apps/RGB/bin/RGBTest.elf
 
 target remote :1234
 
