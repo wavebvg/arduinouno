@@ -8,9 +8,7 @@ uses
   IRReceiver,
   Timers,
   PWM,
-  UART,
-  IRReceiverI,
-  CustomIRReceiver;
+  UART;
 
 const
   IR_PIN_PORT = 11;

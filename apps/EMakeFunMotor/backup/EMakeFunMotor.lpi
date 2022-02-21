@@ -10,7 +10,7 @@
         <Runnable Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="IRTest"/>
+      <Title Value="EMakeFunMotor"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -20,7 +20,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/IRTest"/>
+            <Filename Value="bin/EMakeFunMotor"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -57,7 +57,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="bin/IRTest"/>
+            <Filename Value="bin/EMakeFunMotor"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -100,7 +100,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="IRTest.lpr"/>
+        <Filename Value="EMakeFunMotor.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
@@ -115,12 +115,16 @@
         <Filename Value="../../src/KeyMap.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../src/PWM.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="bin/IRTest"/>
+      <Filename Value="bin/EMakeFunMotor"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

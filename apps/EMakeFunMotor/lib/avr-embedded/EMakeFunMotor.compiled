@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="/media/fa/FA-FLASH/bin/fpc" Date="1643614251"/>
+  <Params Value=" -Tembedded -Pavr -CpAVR5 -MObjFPC -Scgi -CX -O1 -XX -l -vewnhibq -Fi/media/fa/FA-FLASH/projects/git/arduinouno/apps/EMakeFunMotor/lib/avr-embedded -Fu/media/fa/FA-FLASH/projects/git/arduinouno/src -Fu/media/fa/FA-FLASH/projects/git/arduinouno/apps/EMakeFunMotor/ -FU/media/fa/FA-FLASH/projects/git/arduinouno/apps/EMakeFunMotor/lib/avr-embedded/ -FE/media/fa/FA-FLASH/projects/git/arduinouno/apps/EMakeFunMotor/bin/ -o/media/fa/FA-FLASH/projects/git/arduinouno/apps/EMakeFunMotor/bin/EMakeFunMotor -Wpatmega328p -XPavr-embedded- -al EMakeFunMotor.lpr"/>
+</CONFIG>
