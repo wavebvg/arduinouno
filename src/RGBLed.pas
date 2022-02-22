@@ -63,6 +63,7 @@ type
   public
     constructor Init(const APin: byte; const ACount: Word);
     //
+    procedure Update;
     procedure BeginUpdate;
     procedure EndUpdate;
     //
@@ -80,7 +81,12 @@ begin
   inherited Init(APin);
   FCount := ACount;
   FColors := Default(TRGBColors);
-  InternalUpdate;
+end;
+
+procedure TRGBLeds.Update;
+begin
+  if FUpdateIndex = 0 then
+    InternalUpdate;
 end;
 
 procedure TRGBLeds.BeginUpdate;
@@ -106,7 +112,7 @@ end;
 function TRGBLeds.GetColor(const AIndex: Integer): TRGBColor;
 begin
   Result := FColors[AIndex];
-  InternalUpdate;
+  Update;
 end;
 
 procedure TRGBLeds.SetAllColor(AValue: TRGBColor);
@@ -115,7 +121,7 @@ var
 begin
   for i := 0 to Count - 1 do
     FColors[i] := AValue;
-  InternalUpdate;
+  Update;
 end;
 
 procedure TRGBLeds.SetColor(const AIndex: Integer; AValue: TRGBColor);
@@ -125,7 +131,7 @@ end;
 
 procedure TRGBLeds.InternalUpdate;
 label
-  loop, complete, Next, next_byte;
+  loop, complete, resume_byte, next_byte, sleep2;
 var
   VPortAddr{Y+4 (+2)}: Pbyte;
   VLMask{Y+6 (+1)}, VHMask{Y+7 (+1)}: Byte;
@@ -140,7 +146,7 @@ begin
   if VPortAddr^ <> VLMask then
   begin
     VPortAddr^ := VLMask;
-    SleepMicroSecs(50000);
+    //SleepMicroSecs(50000);
   end;
   asm
            PUSH    R10     {HMask}
@@ -171,21 +177,22 @@ begin
            LDD     R11, Y+7
            //
            LD      R17, X+
-           DEC     R18
            LDI     R16, 8
            //
            loop:                                 { [1]         [0]}
            NOP                      {1}
            ST      Z,  R11          {2}
-           RJMP    0                {2}           { 0+2}       { 0+2}
-           NOP                      {1}           { 2+1}       { 2+1}   
-           next:
+           NOP                      {1}           { 0+1}       { 0+1}
+           NOP                      {1}           { 1+1}       { 1+1}
+           NOP                      {1}           { 2+1}       { 2+1}
+           resume_byte:
            SBRS    R17, 7           {1|2}         { 3+2}       { 3+1}
            ST      Z, R10           {2}           { 5+0}       { 4+2} {6!}
            SBRC    R17, 7           {1|2}         { 5+1}       { 0+2}
-           RJMP    0                {2}           { 6+2}       { 2+0}
-           SBRS    R16, 1           {1|2}         { 8+2}       { 2+2}
-           RJMP    next_byte        {1}           {10+0}       { 4+0}
+           RJMP    sleep2           {2}           { 6+2}       { 2+0}
+           sleep2:
+           CPI R16, 1               {1}           { 8+1}       { 2+1}
+           BREQ next_byte           {1|2}         { 9+1}       { 3+1}
            NOP                      {2}           {10+1}       { 4+1}
            LSL     R17              {1}           {11+1}       { 5+1}
            ST      Z, R10           {2}           {12+2} {14!} { 6+2}
@@ -195,12 +202,12 @@ begin
            next_byte:                             {11+0}       { 5+0}
            LDI     R16, 8           {1}           {11+1}       { 5+1}
            ST      Z, R10           {2}           {12+2} {14!} { 6+2}
-           LD      R17, X+          {2}           { 0+2}       { 8+2}
-           DEC     R18              {1}           { 2+1}       {10+1}
-           BREQ    complete         {1|2}         { 3+1}       {11+1}
+           LD      R17, X+          {2}           { 0+2}       { 8+2}  
+           DEC     R18              {1}           { 4+1}       {11+1}
+           BREQ    complete         {1|2}         { 2+1}       {10+1}
            ST      Z,  R11          {2}           { 4+2} {6!}  {12+2} {14!}
            LSL     R17              {1}           { 0+1}       { 0+1}
-           RJMP    next             {2}           { 1+2}       { 1+2}
+           RJMP    resume_byte      {2}           { 1+2}       { 1+2}
            //
            complete:
 

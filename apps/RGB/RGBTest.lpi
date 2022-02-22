@@ -29,6 +29,7 @@
           </SearchPaths>
           <Parsing>
             <SyntaxOptions>
+              <IncludeAssertionCode Value="True"/>
               <UseAnsiStrings Value="False"/>
             </SyntaxOptions>
           </Parsing>
@@ -38,10 +39,14 @@
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
+            <Optimizations>
+              <OptimizationLevel Value="0"/>
+            </Optimizations>
             <SmallerCode Value="True"/>
           </CodeGeneration>
           <Linking>
             <Debugging>
+              <DebugInfoType Value="dsDwarf2Set"/>
               <UseLineInfoUnit Value="False"/>
               <UseExternalDbgSyms Value="True"/>
             </Debugging>
@@ -77,6 +82,9 @@
             <TargetProcessor Value="AVR5"/>
             <TargetCPU Value="avr"/>
             <TargetOS Value="embedded"/>
+            <Optimizations>
+              <OptimizationLevel Value="0"/>
+            </Optimizations>
           </CodeGeneration>
           <Linking>
             <Debugging>
@@ -107,14 +115,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/IRReceiver.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/KeyMap.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
