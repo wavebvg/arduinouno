@@ -23,8 +23,8 @@ begin
 {$ENDIF EMIL}
   repeat
     Color.R := 255;
-    Color.G := 1;
-    Color.B := 1;
+    Color.G := 0;
+    Color.B := 0;
 {$IFNDEF EMIL}
     UARTConsole.WriteLnString('Red');
 {$ENDIF EMIL}

@@ -1,0 +1,100 @@
+object FormDesktopControl: TFormDesktopControl
+  Left = 719
+  Height = 240
+  Top = 268
+  Width = 320
+  Caption = 'Desktop control'
+  ClientHeight = 240
+  ClientWidth = 320
+  OnCloseQuery = FormCloseQuery
+  LCLVersion = '2.3.0.0'
+  object TrackBarServo1: TTrackBar
+    Tag = 1
+    Left = 16
+    Height = 38
+    Top = 64
+    Width = 280
+    Max = 180
+    OnChange = TrackBarServoXChange
+    Position = 0
+    ShowSelRange = False
+    Enabled = False
+    TabOrder = 0
+  end
+  object TrackBarServo2: TTrackBar
+    Tag = 2
+    Left = 16
+    Height = 38
+    Top = 104
+    Width = 280
+    Max = 180
+    OnChange = TrackBarServoXChange
+    Position = 0
+    Enabled = False
+    TabOrder = 1
+  end
+  object TrackBarServo3: TTrackBar
+    Tag = 3
+    Left = 16
+    Height = 38
+    Top = 144
+    Width = 280
+    Max = 180
+    OnChange = TrackBarServoXChange
+    Position = 0
+    Enabled = False
+    TabOrder = 2
+  end
+  object TrackBarServo4: TTrackBar
+    Tag = 4
+    Left = 16
+    Height = 38
+    Top = 184
+    Width = 280
+    Max = 180
+    OnChange = TrackBarServoXChange
+    Position = 0
+    Enabled = False
+    TabOrder = 3
+  end
+  object ToggleBoxConnect: TToggleBox
+    Left = 16
+    Height = 25
+    Top = 12
+    Width = 88
+    Caption = 'Подключить'
+    OnChange = ToggleBoxConnectChange
+    TabOrder = 4
+  end
+  object ButtonRefresh: TButton
+    Left = 112
+    Height = 25
+    Top = 12
+    Width = 88
+    Caption = 'Прочитать'
+    OnClick = ButtonRefreshClick
+    TabOrder = 5
+  end
+  object ButtonSave: TButton
+    Left = 208
+    Height = 25
+    Top = 12
+    Width = 88
+    Caption = 'Сохранить'
+    OnClick = ButtonSaveClick
+    TabOrder = 6
+  end
+  object Serial: TLazSerial
+    Active = False
+    BaudRate = br__9600
+    DataBits = db8bits
+    Parity = pNone
+    FlowControl = fcNone
+    StopBits = sbOne
+    Device = '/dev/ttyACM0'
+    RcvLineCRLF = False
+    OnRxData = SerialRxData
+    Left = 8
+    Top = 8
+  end
+end
