@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<?application progid="SMath Studio Desktop" version="0.99.7822.147"?>
+<?application progid="SMath Studio Desktop" version="1.0.8253.4763"?>
 <worksheet xmlns="http://smath.info/schemas/worksheet/1.0">
   <settings ppi="96">
     <identity>
       <id>9fe59c5c-81c2-4bdb-adb8-db719d6c046d</id>
-      <revision>89</revision>
+      <revision>90</revision>
     </identity>
     <calculation>
       <precision>10</precision>
@@ -12,6 +12,7 @@
       <trailingZeros>true</trailingZeros>
       <significantDigitsMode>true</significantDigitsMode>
       <roundingMode>1</roundingMode>
+      <approximateEqualAccuracy>0</approximateEqualAccuracy>
       <fractions>decimal</fractions>
     </calculation>
     <pageModel active="true" viewMode="0" printGrid="false" printAreas="true" simpleEqualsOnly="false" printBackgroundImages="true">
@@ -22,9 +23,9 @@
       <backgrounds />
     </pageModel>
     <dependencies>
-      <assembly name="SMath Studio Desktop" version="0.99.7822.147" guid="a37cba83-b69c-4c71-9992-55ff666763bd" />
-      <assembly name="MathRegion" version="1.11.7822.147" guid="02f1ab51-215b-466e-a74d-5d8b1cf85e8d" />
-      <assembly name="SpecialFunctions" version="1.12.7822.147" guid="2814e667-4e12-48b1-8d51-194e480eabc5" />
+      <assembly name="SMath Studio Desktop" version="1.0.8253.4763" guid="a37cba83-b69c-4c71-9992-55ff666763bd" />
+      <assembly name="MathRegion" version="1.11.8253.4763" guid="02f1ab51-215b-466e-a74d-5d8b1cf85e8d" />
+      <assembly name="SpecialFunctions" version="1.12.8253.4763" guid="2814e667-4e12-48b1-8d51-194e480eabc5" />
     </dependencies>
   </settings>
   <regions type="content">
@@ -127,7 +128,7 @@
         </result>
       </math>
     </region>
-    <region left="351" top="189" width="414" height="102" color="#000000" fontSize="12">
+    <region left="351" top="189" width="414" height="103" color="#000000" fontSize="12">
       <math optimize="2">
         <description active="true" position="Top" lang="eng">
           <content>
@@ -157,7 +158,7 @@
         </input>
       </math>
     </region>
-    <region left="9" top="198" width="105" height="54" color="#000000" fontSize="12">
+    <region left="9" top="207" width="105" height="54" color="#000000" fontSize="12">
       <math>
         <description active="true" position="Top" lang="eng">
           <content>
@@ -175,7 +176,7 @@
         </input>
       </math>
     </region>
-    <region left="9" top="270" width="231" height="62" color="#000000" fontSize="12">
+    <region left="9" top="279" width="231" height="62" color="#000000" fontSize="12">
       <math>
         <description active="true" position="Top" lang="eng">
           <content>
@@ -196,7 +197,7 @@
         </result>
       </math>
     </region>
-    <region left="9" top="351" width="281" height="55" color="#000000" fontSize="12">
+    <region left="9" top="360" width="281" height="55" color="#000000" fontSize="12">
       <math>
         <description active="true" position="Top" lang="eng">
           <content>
@@ -217,7 +218,7 @@
         </result>
       </math>
     </region>
-    <region left="9" top="432" width="320" height="64" color="#000000" fontSize="12">
+    <region left="9" top="441" width="320" height="64" color="#000000" fontSize="12">
       <math optimize="2">
         <description active="true" position="Top" lang="eng">
           <content>

@@ -8,8 +8,8 @@
         <Filename Value="IRSensorTest.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="5"/>
-        <CursorPos X="17" Y="24"/>
+        <TopLine Value="6"/>
+        <CursorPos X="27" Y="30"/>
         <UsageCount Value="161"/>
         <Loaded Value="True"/>
       </Unit>
@@ -24,7 +24,6 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/IR.pas"/>
-        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>

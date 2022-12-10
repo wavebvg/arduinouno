@@ -2,7 +2,14 @@ unit RGBLed;
 
 {$mode objfpc}{$H-}{$Z1}
 
-interface
+interface  
+
+// WS281X
+//  TOTAL 1.25us (20)
+//    T0H 0.375us (6)         ±150ns
+//    T0L 0.875us (14)        ±150ns
+//    T1H 0.875us (14)        ±150ns
+//    T1L 0.375us (6)         ±150ns
 
 // WS2811
 // TOTAL 2.5us   (40)
@@ -24,13 +31,6 @@ interface
 //    T0L 0.85us (13,6 ~ 14)  ±150ns
 //    T1H 0.8us  (12,8 ~ 13)  ±150ns
 //    T1L 0.45us (7,2  ~ 7)   ±150ns
-
-// WS281X
-//  TOTAL 1.25us (20)
-//    T0H 0.375us (6)   ±150ns
-//    T0L 0.875us (14)  ±150ns
-//    T1H 0.875us (14)  ±150ns
-//    T1L 0.375us (6)   ±150ns
 
 // RES low voltage time Above 50μs
 
@@ -131,7 +131,7 @@ end;
 
 procedure TRGBLeds.InternalUpdate;
 label
-  loop, complete, resume_byte, next_byte, sleep2;
+  loop, complete, resume, read_byte, sleep0;
 var
   VPortAddr{Y+4 (+2)}: Pbyte;
   VLMask{Y+6 (+1)}, VHMask{Y+7 (+1)}: Byte;
@@ -146,7 +146,7 @@ begin
   if VPortAddr^ <> VLMask then
   begin
     VPortAddr^ := VLMask;
-    //SleepMicroSecs(50000);
+    SleepMicroSecs(50000);
   end;
   asm
            PUSH    R10     {HMask}
@@ -157,7 +157,7 @@ begin
            PUSH    XL      {Current ColorAddr}
            PUSH    XH      {Current ColorAddr}
            PUSH    ZL      {POUT}
-           PUSH    ZH   {POUT}
+           PUSH    ZH      {POUT}
 
            { R18 <= ByteCount }
            LDD     R18, Y+8
@@ -180,26 +180,26 @@ begin
            LDI     R16, 8
            //
            loop:                                 { [1]         [0]}
-           NOP                      {1}
-           ST      Z,  R11          {2}
+           NOP                      {1}              {+0 +1 = +1}
+           ST      Z,  R11          {2}              {+1 +2 = +3}
            NOP                      {1}           { 0+1}       { 0+1}
            NOP                      {1}           { 1+1}       { 1+1}
            NOP                      {1}           { 2+1}       { 2+1}
-           resume_byte:
+           resume:
            SBRS    R17, 7           {1|2}         { 3+2}       { 3+1}
            ST      Z, R10           {2}           { 5+0}       { 4+2} {6!}
            SBRC    R17, 7           {1|2}         { 5+1}       { 0+2}
-           RJMP    sleep2           {2}           { 6+2}       { 2+0}
-           sleep2:
+           RJMP    sleep0           {2}           { 6+2}       { 2+0}
+           sleep0:
            CPI R16, 1               {1}           { 8+1}       { 2+1}
-           BREQ next_byte           {1|2}         { 9+1}       { 3+1}
+           BREQ read_byte           {1|2}         { 9+1}       { 3+1}
            NOP                      {2}           {10+1}       { 4+1}
            LSL     R17              {1}           {11+1}       { 5+1}
            ST      Z, R10           {2}           {12+2} {14!} { 6+2}
            DEC     R16              {1}           { 0+1}       { 8+1}
-           JMP     loop             {2}           { 1+3} {6!}  { 9+3} {14!}
+           JMP     loop             {2}           { 1+2} {6!}  { 9+2} {14!}
            //
-           next_byte:                             {11+0}       { 5+0}
+           read_byte:                             {11+0}       { 5+0}
            LDI     R16, 8           {1}           {11+1}       { 5+1}
            ST      Z, R10           {2}           {12+2} {14!} { 6+2}
            LD      R17, X+          {2}           { 0+2}       { 8+2}  
@@ -207,7 +207,7 @@ begin
            BREQ    complete         {1|2}         { 2+1}       {10+1}
            ST      Z,  R11          {2}           { 4+2} {6!}  {12+2} {14!}
            LSL     R17              {1}           { 0+1}       { 0+1}
-           RJMP    resume_byte      {2}           { 1+2}       { 1+2}
+           RJMP    resume           {2}           { 1+2}       { 1+2}
            //
            complete:
 

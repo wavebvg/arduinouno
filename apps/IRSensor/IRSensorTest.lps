@@ -23,14 +23,6 @@
         <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../src/IR.pas"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="41"/>
-      </Unit>
-      <Unit>
         <Filename Value="../../src/KeyMap.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
@@ -45,6 +37,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="91"/>
         <CursorPos X="68" Y="117"/>
+        <UsageCount Value="41"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IR.pas"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
         <UsageCount Value="41"/>
       </Unit>
       <Unit>

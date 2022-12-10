@@ -8,28 +8,43 @@
         <Filename Value="servo.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="43"/>
-        <CursorPos X="16" Y="51"/>
-        <UsageCount Value="110"/>
+        <TopLine Value="66"/>
+        <CursorPos X="9" Y="9"/>
+        <UsageCount Value="112"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="299"/>
         <CursorPos X="17" Y="308"/>
-        <UsageCount Value="91"/>
+        <UsageCount Value="93"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/Servo.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="18"/>
-        <CursorPos X="17" Y="27"/>
-        <UsageCount Value="91"/>
+        <CursorPos X="29" Y="31"/>
+        <UsageCount Value="93"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/TimersMacro.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="5"/>
+        <CursorPos X="36" Y="11"/>
+        <UsageCount Value="66"/>
         <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/UServoCommands.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2"/>
+        <CursorPos X="16" Y="12"/>
+        <UsageCount Value="61"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/TimedServo.pas"/>
@@ -46,22 +61,6 @@
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
         <UsageCount Value="91"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/TimersMacro.inc"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
-        <CursorPos X="36" Y="11"/>
-        <UsageCount Value="64"/>
-        <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../src/UServoCommands.pas"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2"/>
-        <CursorPos X="16" Y="12"/>
-        <UsageCount Value="59"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/servo.pas"/>
@@ -88,17 +87,17 @@
       <Unit>
         <Filename Value="../../src/ServoI.pas"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="18"/>
-        <CursorPos X="17" Y="27"/>
-        <UsageCount Value="41"/>
+        <TopLine Value="209"/>
+        <CursorPos X="19" Y="224"/>
+        <UsageCount Value="42"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/Timers.pas"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="309"/>
         <CursorPos X="23" Y="244"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -106,16 +105,16 @@
         <EditorIndex Value="1"/>
         <TopLine Value="43"/>
         <CursorPos X="3" Y="51"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/rtl/embedded/avr/atmega328p.pp"/>
         <UnitName Value="ATmega328P"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="55"/>
         <CursorPos X="3" Y="63"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -126,47 +125,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="servo.lpr"/>
-        <Caret Line="48" Column="43" TopLine="32"/>
-      </Position>
-      <Position>
-        <Filename Value="servo.lpr"/>
-        <Caret Line="13" Column="14"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ServoI.pas"/>
-        <Caret Line="64" Column="24" TopLine="49"/>
-      </Position>
-      <Position>
-        <Filename Value="servo.lpr"/>
-        <Caret Line="37" Column="28" TopLine="20"/>
-      </Position>
-      <Position>
-        <Filename Value="servo.lpr"/>
-        <Caret Line="98" Column="36" TopLine="67"/>
-      </Position>
-      <Position>
-        <Filename Value="servo.lpr"/>
-        <Caret Line="51" Column="39" TopLine="32"/>
-      </Position>
-      <Position>
-        <Filename Value="servo.lpr"/>
-        <Caret Line="75" Column="29" TopLine="55"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/ServoI.pas"/>
-        <Caret Line="57" Column="13" TopLine="40"/>
-      </Position>
-      <Position>
-        <Filename Value="servo.lpr"/>
-        <Caret Line="115" Column="53" TopLine="86"/>
-      </Position>
-      <Position>
-        <Filename Value="servo.lpr"/>
-        <Caret Line="49" Column="16" TopLine="40"/>
-      </Position>
+    <JumpHistory HistoryIndex="25">
       <Position>
         <Filename Value="servo.lpr"/>
         <Caret Line="79" Column="16" TopLine="69"/>
@@ -216,14 +175,6 @@
         <Caret Line="258" Column="3" TopLine="256"/>
       </Position>
       <Position>
-        <Filename Value="../../src/Servo.pas"/>
-        <Caret Line="27" Column="17" TopLine="18"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/Servo.pas"/>
-        <Caret Line="51" Column="3" TopLine="49"/>
-      </Position>
-      <Position>
         <Filename Value="../../src/ArduinoTools.pas"/>
         <Caret Line="308" Column="17" TopLine="299"/>
       </Position>
@@ -244,8 +195,40 @@
         <Caret Line="27" Column="17" TopLine="18"/>
       </Position>
       <Position>
-        <Filename Value="../../src/Servo.pas"/>
-        <Caret Line="27" Column="17" TopLine="18"/>
+        <Filename Value="servo.lpr"/>
+        <Caret Line="21" Column="43" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ServoI.pas"/>
+        <Caret Line="21" Column="3" TopLine="14"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ServoI.pas"/>
+        <Caret Line="5" Column="27"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ServoI.pas"/>
+        <Caret Line="50" Column="26" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ServoI.pas"/>
+        <Caret Line="54" Column="26" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ServoI.pas"/>
+        <Caret Line="199" Column="26" TopLine="173"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ServoI.pas"/>
+        <Caret Line="206" Column="26" TopLine="180"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ServoI.pas"/>
+        <Caret Line="241" Column="26" TopLine="215"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/ServoI.pas"/>
+        <Caret Line="255" Column="26" TopLine="229"/>
       </Position>
     </JumpHistory>
     <RunParams>

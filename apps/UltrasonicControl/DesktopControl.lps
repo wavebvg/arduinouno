@@ -7,7 +7,7 @@
       <Unit>
         <Filename Value="DesktopControl.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <CursorPos X="43" Y="16"/>
         <UsageCount Value="24"/>
         <Loaded Value="True"/>
@@ -26,7 +26,7 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/UServoCommands.pas"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <CursorPos X="3" Y="10"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
@@ -34,7 +34,7 @@
       <Unit>
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
         <UnitName Value="LazSerial"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="282"/>
         <CursorPos X="98" Y="288"/>
         <UsageCount Value="11"/>
@@ -57,7 +57,7 @@
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/packages/fcl-process/src/processbody.inc"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="168"/>
         <CursorPos X="10" Y="185"/>
         <UsageCount Value="10"/>
@@ -65,17 +65,16 @@
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/packages/MyDAC/DAParamsFrame.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="83"/>
         <CursorPos X="83" Y="108"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../../fpc/default/src/packages/fcl-db/src/base/db.pas"/>
         <UnitName Value="DB"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="80"/>
         <CursorPos X="9" Y="115"/>
         <UsageCount Value="10"/>
@@ -85,14 +84,14 @@
         <Filename Value="../../../../../fpc/lazarus/src/ide/keymapping.pp"/>
         <UnitName Value="KeyMapping"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <TopLine Value="18"/>
         <CursorPos X="32" Y="45"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="27">
+    <JumpHistory HistoryIndex="25">
       <Position>
         <Filename Value="../../src/UServoCommands.pas"/>
         <Caret Line="8" Column="53"/>
@@ -196,14 +195,6 @@
       <Position>
         <Filename Value="UFormDesktopControl.pas"/>
         <Caret Line="50" Column="43" TopLine="31"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/MyDAC/DAParamsFrame.pas"/>
-        <Caret Line="110" Column="3" TopLine="83"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../../fpc/packages/MyDAC/DAParamsFrame.pas"/>
-        <Caret Line="108" Column="83" TopLine="83"/>
       </Position>
     </JumpHistory>
     <RunParams>
