@@ -9,7 +9,7 @@ unit gattlib;
 interface
 
 const
-  GattLibName = './libgattlib.so';
+  GattLibName = '/media/fa/FA-FLASH/projects/git/arduinouno/apps/gattlib/bin/x86_64-linux/libgattlib.so';
   GattLibName1 = 'libgattlib.so';
 
 const

@@ -4,7 +4,7 @@ object FormGattLibTest: TFormGattLibTest
   Top = 362
   Width = 572
   Caption = 'FormGattLibTest'
-  ClientHeight = 438
+  ClientHeight = 461
   ClientWidth = 572
   Menu = MainMenu
   OnClose = FormClose
@@ -12,16 +12,16 @@ object FormGattLibTest: TFormGattLibTest
   LCLVersion = '2.3.0.0'
   object PanelBody: TPanel
     Left = 0
-    Height = 438
+    Height = 461
     Top = 0
     Width = 572
     Align = alClient
-    ClientHeight = 438
+    ClientHeight = 461
     ClientWidth = 572
     TabOrder = 0
     object PageControl: TPageControl
       Left = 1
-      Height = 389
+      Height = 412
       Top = 48
       Width = 570
       ActivePage = TabSheetBLEScan
@@ -33,8 +33,8 @@ object FormGattLibTest: TFormGattLibTest
       end
       object TabSheetBLEScan: TTabSheet
         Caption = 'BLE scan'
-        ClientHeight = 360
-        ClientWidth = 560
+        ClientHeight = 377
+        ClientWidth = 564
         object ListBoxBLEEnvironment: TListBox
           Left = 0
           Height = 344
@@ -44,6 +44,7 @@ object FormGattLibTest: TFormGattLibTest
           Font.Name = 'Ubuntu Mono'
           Font.Style = [fsBold]
           ItemHeight = 0
+          OnDblClick = ListBoxBLEEnvironmentDblClick
           ParentFont = False
           TabOrder = 0
           TopIndex = -1
@@ -92,8 +93,8 @@ object FormGattLibTest: TFormGattLibTest
         AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = ComboBoxAdapters
         Left = 158
-        Height = 15
-        Top = 16
+        Height = 17
+        Top = 15
         Width = 45
         Anchors = [akTop, akRight]
         BorderSpacing.Right = 2

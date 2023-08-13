@@ -43,13 +43,15 @@ implementation
 const
   UCSZ01 = 2;
   URSEL0 = 7;
+  BLE_PDU_SIZE = 23;
+  BLE_PDU_3B_SIZE = 3;
 
 { TUART }
 
 procedure TUART.DoBLECompatible;
 begin
   Inc(FBLECompatibleCounter);
-  if FBLECompatibleCounter = 20 then
+  if FBLECompatibleCounter = BLE_PDU_SIZE - BLE_PDU_3B_SIZE then
   begin
     FBLECompatibleCounter := 0;
     SleepMicroSecs(FBLECompatibleTime * 1000);

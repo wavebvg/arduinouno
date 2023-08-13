@@ -17,7 +17,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="994"/>
+      <BuildNr Value="995"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -87,6 +87,10 @@
             <LinkSmart Value="True"/>
           </Linking>
           <Other>
+            <Verbosity>
+              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
+            </Verbosity>
+            <WriteFPCLogo Value="False"/>
             <CustomOptions Value="-Wpatmega328p -XPavr-embedded- -al"/>
             <ExecuteAfter>
               <CompileReasons Compile="False"/>

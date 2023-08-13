@@ -18,10 +18,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UFormTerminal"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="676"/>
-        <CursorPos X="32" Y="685"/>
+        <CursorPos X="20" Y="217"/>
         <UsageCount Value="58"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -34,8 +32,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UFormDialogPreferences"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="80"/>
-        <CursorPos X="41" Y="88"/>
+        <TopLine Value="99"/>
+        <CursorPos X="34" Y="110"/>
         <UsageCount Value="51"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -220,8 +218,8 @@
         <Filename Value="../../../../../fpc/packages/TLazSerial/lazserial.pas"/>
         <UnitName Value="LazSerial"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="280"/>
-        <CursorPos X="23" Y="283"/>
+        <TopLine Value="421"/>
+        <CursorPos X="3" Y="424"/>
         <UsageCount Value="14"/>
       </Unit>
       <Unit>
@@ -281,68 +279,31 @@
         <CursorPos X="31" Y="339"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../src/UARTI.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="105"/>
+        <CursorPos X="26" Y="18"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/UART.pas"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="25"/>
+        <CursorPos X="46" Y="34"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../src/IRReceiver.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="199"/>
+        <CursorPos X="21" Y="218"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uformdialogpreferences.pas"/>
-        <Caret Line="33" Column="21" TopLine="20"/>
-      </Position>
-      <Position>
-        <Filename Value="uformdialogpreferences.pas"/>
-        <Caret Line="38" Column="18" TopLine="20"/>
-      </Position>
-      <Position>
-        <Filename Value="uformdialogpreferences.pas"/>
-        <Caret Line="51" Column="14" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uformdialogpreferences.pas"/>
-        <Caret Line="64" Column="62" TopLine="43"/>
-      </Position>
-      <Position>
-        <Filename Value="uformdialogpreferences.pas"/>
-        <Caret Line="124" Column="19" TopLine="103"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="588" Column="28" TopLine="571"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="106" Column="15" TopLine="95"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="250" Column="65" TopLine="240"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="253" Column="76" TopLine="240"/>
-      </Position>
-      <Position>
-        <Filename Value="uformdialogpreferences.pas"/>
-        <Caret Line="117" Column="106" TopLine="96"/>
-      </Position>
-      <Position>
-        <Filename Value="uformdialogpreferences.pas"/>
-        <Caret Line="116" Column="106" TopLine="95"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="250" Column="64" TopLine="246"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="124" Column="25" TopLine="119"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="331" Column="41" TopLine="328"/>
-      </Position>
-      <Position>
-        <Filename Value="uformterminal.pas"/>
-        <Caret Line="333" Column="9" TopLine="324"/>
-      </Position>
+    <JumpHistory HistoryIndex="27">
       <Position>
         <Filename Value="uformterminal.pas"/>
         <Caret Line="107" Column="20" TopLine="97"/>
@@ -402,6 +363,58 @@
       <Position>
         <Filename Value="uformdialogpreferences.pas"/>
         <Caret Line="88" Column="51" TopLine="81"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="19" Column="21" TopLine="189"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="203" Column="23" TopLine="189"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="23" Column="15" TopLine="4"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="708" Column="40" TopLine="681"/>
+      </Position>
+      <Position>
+        <Filename Value="uformterminal.pas"/>
+        <Caret Line="208" Column="3" TopLine="204"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="52" Column="22" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="16" Column="26"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="51" Column="28" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="52" Column="27" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="54" Column="26" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="16" Column="26"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="51" Column="28" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/UART.pas"/>
+        <Caret Line="52" Column="27" TopLine="21"/>
       </Position>
     </JumpHistory>
     <RunParams>

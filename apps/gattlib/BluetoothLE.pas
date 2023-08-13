@@ -105,8 +105,7 @@ type
     property ManufacturerData: TByteDynArray read GetManufacturerData;
   end;
 
-  TBLEDeviceDiscoveredEvent = procedure(Sender: TObject; const AMAC, AName: String;
-    const AData: IBLEAdvertisementData) of object;
+  TBLEDeviceDiscoveredEvent = procedure(Sender: TObject; const AMAC, AName: String; const AData: IBLEAdvertisementData) of object;
 
   TBLEConnection = class;
 
@@ -119,6 +118,8 @@ type
     FActiveConnections: TObjectList;
     FActiveConnectionsLock: TCriticalSection;
     FOnDeviceDiscovered: TBLEDeviceDiscoveredEvent;
+    FOnScanComplete: TNotifyEvent;
+    FScanAddyStoneEnabled: Boolean;
     FScanEnabled: Boolean;
     FScanTimeout: Integer;
     function GetActive: Boolean;
@@ -129,6 +130,7 @@ type
     procedure SetDevice(AValue: String);
     procedure DoDeviceDiscovered(const AMAC, AName: String; const AData: IBLEAdvertisementData);
     procedure SetScanEnabled(AValue: Boolean);
+    procedure DoScanComplete;
   protected
     property DeviceName: PChar read GetDeviceName;
     procedure RemoveActiveConnection(const AConnection: TBLEConnection);
@@ -148,6 +150,7 @@ type
     property ScanEnabled: Boolean read FScanEnabled write SetScanEnabled;
     property ScanTimeout: Integer read FScanTimeout write FScanTimeout;
     property OnDeviceDiscovered: TBLEDeviceDiscoveredEvent read FOnDeviceDiscovered write FOnDeviceDiscovered;
+    property OnScanComplete: TNotifyEvent read FOnScanComplete write FOnScanComplete;
   end;
 
   TBLEService = class;
@@ -169,9 +172,9 @@ type
     function GetDiscoverCharacteristics: TBLECharacteristics;
     function GetDiscoverDescriptors: TBLEDescriptors;
     function GetDiscoverPrimary: TBLEPrimaryServices;
-{$IFDEF IsResolve_75}
+    {$IFDEF IsResolve_75}
     function GetRSSI: SmallInt;
-{$ENDIF}
+    {$ENDIF}
     procedure SetActive(AValue: Boolean);
     procedure SetAdapter(AValue: TBLEAdapter);
     procedure SetDisconnected;
@@ -185,8 +188,7 @@ type
     procedure DoInternalIndicate(const AUUID: PBLEUUID; const AData: Pbyte; const ADataLength: Integer);
     procedure InternalDisconnect(const AForce: Boolean);
   protected
-    procedure Notification(AComponent: TComponent; Operation: TOperation);
-      override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -197,9 +199,9 @@ type
     property DiscoverCharacteristics: TBLECharacteristics read GetDiscoverCharacteristics;
     property DiscoverDescriptors: TBLEDescriptors read GetDiscoverDescriptors;
     property AdvertisementData: IBLEAdvertisementData read GetAdvertisementData;
-{$IFDEF IsResolve_75}
+    {$IFDEF IsResolve_75}
     property RSSI: SmallInt read GetRSSI;
-{$ENDIF}
+    {$ENDIF}
   published
     property Adapter: TBLEAdapter read FAdapter write SetAdapter;
     property MAC: String read FMAC write SetMAC;
@@ -233,8 +235,7 @@ type
     procedure DoIndicationData(const AData: TByteDynArray);
     procedure InternalDeattach(const AForce: Boolean);
   protected
-    procedure Notification(AComponent: TComponent; Operation: TOperation);
-      override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
     destructor Destroy; override;
     procedure Attach;
@@ -453,8 +454,7 @@ begin
     end;
 end;
 
-procedure BLEAdapterDiscoveredDevice(adapter: Pointer; const addr: PChar; const Name: PChar;
-  user_data: Pointer); cdecl;
+procedure BLEAdapterDiscoveredDevice(adapter: Pointer; const addr: PChar; const Name: PChar; user_data: Pointer); cdecl;
 var
   VAdapter: TBLEAdapter;
 begin
@@ -463,8 +463,8 @@ begin
 end;
 
 procedure BLEAdapterDiscoveredDeviceWithData(adapter: Pointer; const addr: PChar; const Name: PChar;
-  advertisement_data: pgattlib_advertisement_data_t; advertisement_data_count: SizeUInt;
-  manufacturer_id: Word; manufacturer_data: Pbyte; manufacturer_data_size: SizeUInt; user_data: Pointer); cdecl;
+  advertisement_data: pgattlib_advertisement_data_t; advertisement_data_count: SizeUInt; manufacturer_id: Word;
+  manufacturer_data: Pbyte; manufacturer_data_size: SizeUInt; user_data: Pointer); cdecl;
 var
   VAdapter: TBLEAdapter;
   VDiscoveredDevice: IBLEAdvertisementData;
@@ -489,8 +489,7 @@ begin
   VConnection.SetDisconnected;
 end;
 
-procedure BLEConnectionNotification(const uuid: PBLEUUID; const Data: Pbyte; const data_length: SizeUInt;
-  user_data: Pointer); cdecl;
+procedure BLEConnectionNotification(const uuid: PBLEUUID; const Data: Pbyte; const data_length: SizeUInt; user_data: Pointer); cdecl;
 var
   VConnection: TBLEConnection;
 begin
@@ -498,8 +497,7 @@ begin
   VConnection.DoInternalNotify(uuid, Data, data_length);
 end;
 
-procedure BLEConnectionIndication(const uuid: PBLEUUID; const Data: Pbyte; const data_length: SizeUInt;
-  user_data: Pointer); cdecl;
+procedure BLEConnectionIndication(const uuid: PBLEUUID; const Data: Pbyte; const data_length: SizeUInt; user_data: Pointer); cdecl;
 var
   VConnection: TBLEConnection;
 begin
@@ -524,9 +522,8 @@ begin
   Result := FManufacturerId;
 end;
 
-constructor TBLEAdvertisementData.Create(const AData: pgattlib_advertisement_data_t;
-  const ADataLength: Integer; const AManufacturerId: Word; const AManufacturerData: Pbyte;
-  const AManufacturerDataLength: Integer);
+constructor TBLEAdvertisementData.Create(const AData: pgattlib_advertisement_data_t; const ADataLength: Integer;
+  const AManufacturerId: Word; const AManufacturerData: Pbyte; const AManufacturerDataLength: Integer);
 var
   i: Integer;
 begin
@@ -700,9 +697,16 @@ begin
     Active := True;
     CheckResult(gattlib_adapter_scan_enable(FAdapterHandle, @BLEAdapterDiscoveredDevice, ScanTimeout, Self),
       'gattlib_adapter_scan_enable');
+    DoScanComplete;
   end
   else
     CheckResult(gattlib_adapter_scan_disable(FAdapterHandle), 'gattlib_adapter_scan_disable');
+end;
+
+procedure TBLEAdapter.DoScanComplete;
+begin
+  if Assigned(FOnScanComplete) then
+    FOnScanComplete(Self);
 end;
 
 procedure TBLEAdapter.AddActiveConnection(const AConnection: TBLEConnection);
@@ -756,6 +760,7 @@ begin
     while ActiveConnectionCount > 0 do
       ActiveConnections[0].Disconnect;
     CheckLoadGattLib;
+    ScanEnabled := False;
     CheckResult(gattlib_adapter_close(FAdapterHandle), 'close adapter');
     FAdapterHandle := nil;
   end;
@@ -771,9 +776,9 @@ var
 begin
   Active := True;
   CheckLoadGattLib;
-  CheckResult(gattlib_get_advertisement_data_from_mac(FAdapterHandle, Pansichar(AMAC),
-    @advertisement_data, @advertisement_data_count, @manufacturer_id, @manufacturer_data, @manufacturer_data_size),
-    'close gattlib_get_advertisement_data_from_mac_func');
+  CheckResult(gattlib_get_advertisement_data_from_mac(FAdapterHandle, PAnsiChar(AMAC), @advertisement_data,
+    @advertisement_data_count, @manufacturer_id, @manufacturer_data, @manufacturer_data_size),
+    'gattlib_get_advertisement_data_from_mac');
   Result := TBLEAdvertisementData.Create(advertisement_data, advertisement_data_count,
     manufacturer_id, manufacturer_data, manufacturer_data_size);
 end;
@@ -781,7 +786,7 @@ end;
 function TBLEAdapter.GetRSSI(const AMAC: String): SmallInt;
 begin
   CheckLoadGattLib;
-  CheckResult(gattlib_get_rssi_from_mac(FAdapterHandle, Pansichar(AMAC), @Result), 'gattlib_get_rssi_from_mac');
+  CheckResult(gattlib_get_rssi_from_mac(FAdapterHandle, PAnsiChar(AMAC), @Result), 'gattlib_get_rssi_from_mac');
 end;
 
 { TBLEConnection }
@@ -924,7 +929,7 @@ begin
   DoBeforeConnect;
   Adapter.Active := True;
   try
-    FConnectionHandle := gattlib_connect(Adapter.FAdapterHandle, Pansichar(MAC),
+    FConnectionHandle := gattlib_connect(Adapter.FAdapterHandle, PAnsiChar(MAC),
       GATTLIB_CONNECTION_OPTIONS_LEGACY_DEFAULT);
   except
     FConnectionHandle := nil;
@@ -1024,8 +1029,8 @@ var
 begin
   Active := True;
   CheckLoadGattLib;
-  CheckResult(gattlib_get_advertisement_data(FConnectionHandle, @advertisement_data,
-    @advertisement_data_count, @manufacturer_id, @manufacturer_data, @manufacturer_data_size),
+  CheckResult(gattlib_get_advertisement_data(FConnectionHandle, @advertisement_data, @advertisement_data_count,
+    @manufacturer_id, @manufacturer_data, @manufacturer_data_size),
     'close gattlib_get_advertisement_data_from_mac_func');
   Result := TBLEAdvertisementData.Create(advertisement_data, advertisement_data_count,
     manufacturer_id, manufacturer_data, manufacturer_data_size);
@@ -1180,8 +1185,8 @@ begin
         'gattlib_write_char_by_uuid');
     end
     else
-      CheckResult(gattlib_write_without_response_char_by_uuid(Connection.FConnectionHandle,
-        @FUUIDData, VData, VPacketSize), 'gattlib_write_without_response_char_by_uuid');
+      CheckResult(gattlib_write_without_response_char_by_uuid(Connection.FConnectionHandle, @FUUIDData, VData, VPacketSize),
+        'gattlib_write_without_response_char_by_uuid');
     Dec(ASize, VPacketSize);
     Inc(VData, VPacketSize);
   until ASize = 0;
